@@ -1,9 +1,9 @@
 import {
   VerticalTimeline,
-  VerticalTimelineElement
+  VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import { experience, COLORS } from "../../../utils/constants";
-import { Work, School } from "@material-ui/icons";
+import { Work, School } from "@mui/icons-material";
 
 export default () => {
   const timelineContent = experience.map((position, i) => {

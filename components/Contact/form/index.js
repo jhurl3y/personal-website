@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import { contactStrings } from "../../../utils/strings";
 import { validEmailRegex } from "../../../utils/helpers";
 import { getFormspreeUrl } from "../../../utils/helpers";
@@ -12,7 +12,7 @@ const noErrors = {
   firstName: "",
   lastName: "",
   email: "",
-  message: ""
+  message: "",
 };
 
 export default () => {
@@ -36,23 +36,23 @@ export default () => {
     }
   };
 
-  const handleError = errorMessage => {
+  const handleError = (errorMessage) => {
     if (errorMessage.includes("empty")) {
       setErrorFields({
         firstName: "Can't be empty.",
         lastName: "Can't be empty.",
         email: "Can't be empty.",
-        message: "Can't be empty."
+        message: "Can't be empty.",
       });
     } else if (errorMessage.includes("email")) {
       setErrorFields({
         ...noErrors,
-        email: "Oops invalid email."
+        email: "Oops invalid email.",
       });
     }
   };
 
-  const validateFields = fields => {
+  const validateFields = (fields) => {
     return new Promise((resolve, reject) => {
       let errors = {};
 
@@ -100,32 +100,32 @@ export default () => {
     });
   };
 
-  const handleBlur = fieldName => {
+  const handleBlur = (fieldName) => {
     if (status !== "error") {
       return;
     }
 
     validateFields([fieldName])
       .then(() => {
-        setErrorFields(errorFields => {
+        setErrorFields((errorFields) => {
           return {
             ...errorFields,
-            [fieldName]: ""
+            [fieldName]: "",
           };
         });
       })
-      .catch(errors => {
+      .catch((errors) => {
         setStatus("error");
-        setErrorFields(errorFields => {
+        setErrorFields((errorFields) => {
           return {
             ...errorFields,
-            ...errors
+            ...errors,
           };
         });
       });
   };
 
-  const submitForm = e => {
+  const submitForm = (e) => {
     e.preventDefault();
     const form = e.target;
     const data = new FormData(form);
@@ -151,11 +151,11 @@ export default () => {
         };
         xhr.send(data);
       })
-      .catch(errors => {
+      .catch((errors) => {
         setStatus("error");
         setErrorFields({
           ...noErrors,
-          ...errors
+          ...errors,
         });
       });
   };
@@ -180,10 +180,10 @@ export default () => {
               error={status === "error" && errorFields.firstName !== ""}
               helperText={status === "error" ? errorFields.firstName : ""}
               value={firstName}
-              onChange={e => handleFieldChange("firstName", e.target.value)}
+              onChange={(e) => handleFieldChange("firstName", e.target.value)}
               onBlur={() => handleBlur("firstName")}
               InputProps={{
-                className: classes.input
+                className: classes.input,
               }}
             />
           </Grid>
@@ -197,10 +197,10 @@ export default () => {
               error={status === "error" && errorFields.lastName !== ""}
               helperText={status === "error" ? errorFields.lastName : ""}
               value={lastName}
-              onChange={e => handleFieldChange("lastName", e.target.value)}
+              onChange={(e) => handleFieldChange("lastName", e.target.value)}
               onBlur={() => handleBlur("lastName")}
               InputProps={{
-                className: classes.input
+                className: classes.input,
               }}
             />
           </Grid>
@@ -214,10 +214,10 @@ export default () => {
               error={status === "error" && errorFields.email !== ""}
               helperText={status === "error" ? errorFields.email : ""}
               value={email}
-              onChange={e => handleFieldChange("email", e.target.value)}
+              onChange={(e) => handleFieldChange("email", e.target.value)}
               onBlur={() => handleBlur("email")}
               InputProps={{
-                className: classes.input
+                className: classes.input,
               }}
             />
           </Grid>
@@ -233,10 +233,10 @@ export default () => {
               error={status === "error" && errorFields.message !== ""}
               helperText={status === "error" ? errorFields.message : ""}
               value={message}
-              onChange={e => handleFieldChange("message", e.target.value)}
+              onChange={(e) => handleFieldChange("message", e.target.value)}
               onBlur={() => handleBlur("message")}
               InputProps={{
-                className: classes.input
+                className: classes.input,
               }}
             />
           </Grid>

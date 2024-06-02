@@ -1,6 +1,6 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   container: {
     height: "100%",
     color: theme.colors.white,
@@ -8,13 +8,13 @@ export default makeStyles(theme => ({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: theme.colors.darkBlue,
-    flexDirection: "column"
+    flexDirection: "column",
   },
   heading: {
-    margin: theme.spacing(9, 0, 8, 0)
+    margin: theme.spacing(9, 0, 8, 0),
   },
   skills: {
-    paddingBottom: theme.spacing(9)
+    paddingBottom: theme.spacing(9),
   },
   cv: {
     display: "flex",
@@ -22,7 +22,7 @@ export default makeStyles(theme => ({
     alignItems: "center",
     color: theme.colors.black,
     "& > span": {
-      marginLeft: theme.spacing(3)
-    }
-  }
+      marginLeft: theme.spacing(3),
+    },
+  },
 }));

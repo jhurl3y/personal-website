@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from "react";
-import { Chart } from "react-charts";
+// import { Chart } from "react-charts";
 import Styles from "./styles";
 
 export default ({
@@ -76,7 +76,7 @@ export default ({
 
   return (
     <div className={classes.chart}>
-      <Chart
+      {/* <Chart
         data={[
           {
             label,
@@ -88,7 +88,7 @@ export default ({
         primaryCursor={primaryCursor}
         secondaryCursor={secondaryCursor}
         getSeriesStyle={getSeriesStyle}
-      />
+      /> */}
     </div>
   );
 };

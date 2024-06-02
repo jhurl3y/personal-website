@@ -1,19 +1,19 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   mobileNavigation: {
     display: "none",
-    marginLeft: "auto"
+    marginLeft: "auto",
   },
   menuItem: {
     color: theme.colors.black,
-    textDecoration: "none"
+    textDecoration: "none",
   },
   darkMenuIcon: { color: theme.colors.black },
   lightMenuIcon: { color: theme.colors.white },
   [theme.breakpoints.down("xs")]: {
     mobileNavigation: {
-      display: "block"
-    }
-  }
+      display: "block",
+    },
+  },
 }));

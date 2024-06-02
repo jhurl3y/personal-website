@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Fade from "react-reveal/Fade";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import { Fade } from "react-awesome-reveal";
 import RightRail from "./rightRail";
 import { getFadeDuration, getSpotifyPlaylist } from "../../utils/helpers";
 import { aboutStrings } from "../../utils/strings";

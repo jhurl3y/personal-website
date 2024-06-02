@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import Styles from "./styles";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import { fetchGarmin, filterObject } from "../../../utils/helpers";
 import SummaryTable from "./summaryTable";
 import SummaryPie from "./summaryPie";

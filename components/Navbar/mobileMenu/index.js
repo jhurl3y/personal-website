@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import IconButton from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuIcon from "@material-ui/icons/Menu";
+import { useState } from "react";
+import IconButton from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MenuIcon from "@mui/icons-material/Menu";
 import SmoothAnchor from "../smoothAnchor";
 import Styles from "./styles";
 
@@ -10,7 +10,7 @@ export default ({ pages, dark }) => {
   const classes = Styles();
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 

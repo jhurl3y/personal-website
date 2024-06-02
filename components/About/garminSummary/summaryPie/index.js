@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PieChart } from "react-minimal-pie-chart";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import { aboutStrings } from "../../../../utils/strings";
 import {
   COLORS,

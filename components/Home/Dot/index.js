@@ -1,4 +1,4 @@
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { COLORS } from "../../../utils/constants";
 
 export default ({ i, highlight, onDotClick, classes }) => (
@@ -10,7 +10,7 @@ export default ({ i, highlight, onDotClick, classes }) => (
     <span
       className={classes.dot}
       style={{
-        backgroundColor: `${highlight ? COLORS.white : COLORS.mediumGrey}`
+        backgroundColor: `${highlight ? COLORS.white : COLORS.mediumGrey}`,
       }}
     >
       {""}

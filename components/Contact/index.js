@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Fade from "react-reveal/Fade";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import { Fade } from "react-awesome-reveal";
 import Styles from "./styles";
 import Map from "../Map";
 import { LOCATIONS } from "../../utils/constants";
 import Details from "./details";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import Form from "./form";
 import { getFadeDuration } from "../../utils/helpers";
 import { contactStrings } from "../../utils/strings";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@mui/material/styles";
 import { MAP_ZOOM, MAP_STYLES } from "../../utils/constants";
 
 const StyledButton = withStyles((theme) => ({

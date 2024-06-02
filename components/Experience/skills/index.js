@@ -1,5 +1,5 @@
-import Fade from "react-reveal/Fade";
-import Grid from "@material-ui/core/Grid";
+import { Fade } from "react-awesome-reveal";
+import Grid from "@mui/material/Grid";
 import Card from "./card";
 import Styles from "./styles";
 import { SKILLS } from "../../../utils/constants";

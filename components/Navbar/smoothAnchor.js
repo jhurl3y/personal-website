@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Link from "@material-ui/core/Link";
+import Link from "@mui/material/Link";
 import SmoothScroll from "smoothscroll-polyfill";
 
 class SmoothAnchor extends Component {
@@ -37,7 +37,7 @@ class SmoothAnchor extends Component {
 
     window.scroll({
       top: offsetTop - offset(),
-      behavior: "smooth"
+      behavior: "smooth",
     });
 
     if (this.props.onClick) {
@@ -53,10 +53,10 @@ class SmoothAnchor extends Component {
     // the handleScroll function to run again and update the page
     // appropriately. Will come back to this and fix properly.
     if (this.props.extraScroll) {
-      setTimeout(function() {
+      setTimeout(function () {
         window.scroll({
           top: offsetTop,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }, 200);
     }

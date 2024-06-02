@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LogoDark from "../../public/static/assets/icons/hurley-dark.svg";
 import LogoLight from "../../public/static/assets/icons/hurley-white.svg";
-import Container from "@material-ui/core/Container";
+import Container from "@mui/material/Container";
 import Transition from "../Transition";
 import PrettyLink from "./prettyLink";
 import MobileMenu from "./mobileMenu";
