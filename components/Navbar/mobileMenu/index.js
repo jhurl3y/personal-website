@@ -11,7 +11,7 @@ export default ({ pages, dark }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(eventTarget);
   };
 
   const handleClose = () => {

@@ -1,131 +1,97 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import React, { forwardRef, useRef, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import Layout from "../components/layout";
+import { makeStyles } from "@mui/styles";
+import Home from "../components/Home";
+import About from "../components/About";
+import Experience from "../components/Experience";
+import Contact from "../components/Contact";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { PAGES } from "../utils/constants";
+import Typography from "@mui/material/Typography";
+import { metaStrings } from "../utils/strings";
+import CookieConsent from "react-cookie-consent";
+// import "../src/styles.css";
 
-export default function Home() {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "100%",
+    backgroundColor: theme.colors.black,
+  },
+}));
+
+const Section = forwardRef(({ children, id, offset }, ref) => {
+  let styles = offset
+    ? {
+        marginTop: `-${offset}px`,
+        paddingTop: `${offset}px`,
+      }
+    : {};
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family:
-            Menlo,
-            Monaco,
-            Lucida Console,
-            Liberation Mono,
-            DejaVu Sans Mono,
-            Bitstream Vera Sans Mono,
-            Courier New,
-            monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            Segoe UI,
-            Roboto,
-            Oxygen,
-            Ubuntu,
-            Cantarell,
-            Fira Sans,
-            Droid Sans,
-            Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
+    <div ref={ref} id={id} style={styles}>
+      {children}
     </div>
   );
-}
+});
+
+const Component = () => {
+  const classes = useStyles();
+  const navRef = useRef(null);
+  const homeRef = useRef(null);
+  const aboutRef = useRef(null);
+  const experienceRef = useRef(null);
+  const contactRef = useRef(null);
+  const [navHeight, setNavHeight] = useState(0);
+
+  useEffect(() => {
+    setNavHeight(navRef.clientHeight);
+
+    // disable radio button keydown event
+    window.addEventListener("keydown", () => null);
+
+    return () => {
+      window.removeEventListener("keydown", () => null);
+    };
+  }, []);
+
+  return (
+    <Layout className={classes.root} title={metaStrings.title}>
+      <Navbar
+        dark={false}
+        pages={PAGES}
+        navRef={navRef}
+        stickyRefs={[homeRef, aboutRef, experienceRef, contactRef]}
+      />
+      <CookieConsent
+        cookieName="jh_cookie_consent"
+        containerClasses="cookie-banner-container"
+        contentClasses="cookie-banner-content"
+        buttonClasses="cookie-banner-button"
+        location="bottom"
+        buttonText="X"
+      >
+        {metaStrings.cookies}
+      </CookieConsent>
+      <Section id="home" ref={homeRef}>
+        <Typography variant="h1" align="center" style={{ display: "none" }}>
+          {metaStrings.title}
+        </Typography>
+        <Home />
+      </Section>
+      <Section id="about" ref={aboutRef} offset={navHeight}>
+        <About />
+      </Section>
+      <Section id="experience" ref={experienceRef} offset={navHeight}>
+        <Experience />
+      </Section>
+      <Section id="contact" ref={contactRef} offset={navHeight}>
+        <Contact />
+      </Section>
+      <Footer />
+    </Layout>
+  );
+};
+
+export default Component;

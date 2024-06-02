@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 import Linkedin from "../../public/static/assets/icons/linkedin.svg";
 import Github from "../../public/static/assets/icons/github.svg";
 import Twitter from "../../public/static/assets/icons/twitter.svg";
+import Image from "next/image";
 import { footerStrings } from "../../utils/strings";
 import Styles from "./styles";
 
@@ -18,17 +19,17 @@ export default () => {
             title="linkedin"
             target="_blank"
           >
-            <Linkedin width="40px" height="40px" />
+            <Image priority src={Linkedin} width="40px" height="40px" />
           </a>
           <a href="https://github.com/jhurl3y" title="github" target="_blank">
-            <Github width="40px" height="40px" />
+            <Image priority src={Github} width="40px" height="40px" />
           </a>
           <a
             href="https://twitter.com/hurley_19"
             title="twitter"
             target="_blank"
           >
-            <Twitter width="40px" height="40px" />
+            <Image priority src={Twitter} width="40px" height="40px" />
           </a>
         </div>
         <div className={classes.disclaimer}>

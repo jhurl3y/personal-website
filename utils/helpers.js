@@ -37,7 +37,7 @@ export const validEmailRegex = RegExp(
 );
 
 export const getFormspreeUrl = () => {
-  const tokens = process.env.FORMSPREE_TOKENS;
+  const tokens = process.env.NEXT_PUBLIC_FORMSPREE_TOKENS;
   const token = shuffle(tokens.split(","))[0];
 
   return `${FORMSPREE_URL}/${token}`;

@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import Form from "./form";
 import { getFadeDuration } from "../../utils/helpers";
 import { contactStrings } from "../../utils/strings";
-import { withStyles } from "@mui/material/styles";
+import { withStyles } from "@mui/styles";
 import { MAP_ZOOM, MAP_STYLES } from "../../utils/constants";
 
 const StyledButton = withStyles((theme) => ({

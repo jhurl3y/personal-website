@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Python from "../public/static/assets/icons/python.svg";
 import Ruby from "../public/static/assets/icons/ruby.svg";
 import Javascript from "../public/static/assets/icons/javascript.svg";
@@ -167,73 +168,73 @@ export const SKILLS = [
     name: "web_development",
     title: "Web Development",
     content: skillStrings.webDevelopment,
-    icon: WebDev,
+    icon: <Image priority src={WebDev} />,
   },
   {
     name: "python",
     title: "Python",
     content: skillStrings.python,
-    icon: Python,
+    icon: <Image priority src={Python} />,
   },
   {
     name: "javascript",
     title: "Javascript",
     content: skillStrings.javascript,
-    icon: Javascript,
+    icon: <Image priority src={Javascript} />,
   },
   {
     name: "ruby",
     title: "Ruby",
     content: skillStrings.ruby,
-    icon: Ruby,
+    icon: <Image priority src={Ruby} />,
   },
   {
     name: "java",
     title: "Java",
     content: skillStrings.java,
-    icon: Java,
+    icon: <Image priority src={Java} />,
   },
   {
     name: "git",
     title: "Git",
     content: skillStrings.git,
-    icon: Git,
+    icon: <Image priority src={Git} />,
   },
   {
     name: "mobile_development",
     title: "Mobile Development",
     content: skillStrings.mobile,
-    icon: Mobile,
+    icon: <Image priority src={Mobile} />,
   },
   {
     name: "algorithms",
     title: "Algorithms & Data Structures",
     content: skillStrings.algorihtms,
-    icon: Algorithms,
+    icon: <Image priority src={Algorithms} />,
   },
   {
     name: "a_b_testing",
     title: "A/B Testing",
     content: skillStrings.abTesting,
-    icon: ABTesting,
+    icon: <Image priority src={ABTesting} />,
   },
   {
     name: "sql",
     title: "SQL",
     content: skillStrings.sql,
-    icon: SQL,
+    icon: <Image priority src={SQL} />,
   },
   {
     name: "system_design",
     title: "System Design",
     content: skillStrings.systemDesign,
-    icon: SystemDesign,
+    icon: <Image priority src={SystemDesign} />,
   },
   {
     name: "testing",
     title: "Testing",
     content: skillStrings.testing,
-    icon: Testing,
+    icon: <Image priority src={Testing} />,
   },
 ];
 

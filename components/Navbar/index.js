@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LogoDark from "../../public/static/assets/icons/hurley-dark.svg";
 import LogoLight from "../../public/static/assets/icons/hurley-white.svg";
+import Image from "next/image";
 import Container from "@mui/material/Container";
 import Transition from "../Transition";
 import PrettyLink from "./prettyLink";
@@ -43,7 +44,7 @@ export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
     let newOffsets = new Array(stickyRefs.length).fill(0);
 
     stickyRefs.forEach((ref, i) => {
-      if (ref && ref.current != undefined) {
+      if (ref?.current && ref != undefined) {
         newOffsets[i] = ref.current.getBoundingClientRect().top;
       }
     });
@@ -91,8 +92,8 @@ export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
         <header>
           <nav className={classes.container}>
             <a className={classes.logo} href={`#${pages[0]}`} title={pages[0]}>
-              {dark && <LogoLight />}
-              {!dark && <LogoDark />}
+              {dark && <Image priority src={LogoLight} />}
+              {!dark && <Image priority src={LogoDark} />}
             </a>
             <Links
               selectedPage={page}

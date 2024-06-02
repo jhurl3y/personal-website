@@ -10,7 +10,7 @@ export default ({ title, content, icon }) => {
   return (
     <Card className={classes.card} raised>
       <CardContent>
-        {icon()}
+        {icon}
         <Typography
           className={classes.cardTitle}
           color="textPrimary"
