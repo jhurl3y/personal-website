@@ -9,35 +9,33 @@ import { aboutStrings } from "../../utils/strings";
 import Styles from "./styles";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { WIDGET_HEIGHT } from "../../utils/constants";
-import GarminSummary from "./garminSummary";
-import GarminLastActivity from "./garminLastActivity";
 
-const SpotifyWidget = () => (
-  <iframe
-    src={getSpotifyPlaylist()}
-    width="100%"
-    height={WIDGET_HEIGHT}
-    frameBorder="0"
-    allowtransparency="true"
-    allow="encrypted-media"
-  />
-);
-
-const TwitterWidget = () => (
-  <TwitterTimelineEmbed
-    sourceType="profile"
-    screenName="hurley_19"
-    options={{
-      height: WIDGET_HEIGHT,
-    }}
-    theme="dark"
-    noBorders
-    noFooter
-  />
-);
-
-export default () => {
+export default ({ spotify }) => {
   const classes = Styles();
+
+  const SpotifyWidget = () => (
+    <iframe
+      src={spotify}
+      width="100%"
+      height={WIDGET_HEIGHT}
+      frameBorder="0"
+      allowtransparency="true"
+      allow="encrypted-media"
+    />
+  );
+
+  const TwitterWidget = () => (
+    <TwitterTimelineEmbed
+      sourceType="profile"
+      screenName="hurley_19"
+      options={{
+        height: WIDGET_HEIGHT,
+      }}
+      theme="dark"
+      noBorders
+      noFooter
+    />
+  );
 
   // disable radio button keydown event
   useEffect(() => {
@@ -82,26 +80,18 @@ export default () => {
       </Fade>
       <Container className={classes.musicContent}>
         <Grid container spacing={6}>
-          <Grid item xs={12} sm={12} md={12} className={classes.musicItem}>
+          <Grid item xs={12} sm={12} md={6} className={classes.musicItem}>
             <Fade duration={getFadeDuration()} left>
               <SpotifyWidget />
             </Fade>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={6} className={classes.musicItem}>
+          <Grid item xs={12} sm={12} md={6} className={classes.musicItem}>
             <Fade duration={getFadeDuration()} right>
               <TwitterWidget />
             </Fade>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
-      {/* <Container className={classes.garminContent}>
-        <Fade duration={getFadeDuration()} left>
-          <GarminSummary />
-        </Fade>
-        <Fade duration={getFadeDuration()} right>
-          <GarminLastActivity />
-        </Fade>
-      </Container> */}
     </Container>
   );
 };

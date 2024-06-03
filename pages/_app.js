@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "react-vertical-timeline-component/style.min.css";
 import { metaStrings } from "../utils/strings";
+import "../src/styles.css";
 
 export default function MyApp({ Component, pageProps }) {
   // add icons

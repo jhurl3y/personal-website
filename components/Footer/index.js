@@ -19,29 +19,45 @@ export default () => {
             title="linkedin"
             target="_blank"
           >
-            <Image priority src={Linkedin} width="40px" height="40px" />
+            <Image
+              priority
+              src={Linkedin}
+              width="40px"
+              height="40px"
+              alt="linkedin"
+            />
           </a>
           <a href="https://github.com/jhurl3y" title="github" target="_blank">
-            <Image priority src={Github} width="40px" height="40px" />
+            <Image
+              priority
+              src={Github}
+              width="40px"
+              height="40px"
+              alt="github"
+            />
           </a>
           <a
             href="https://twitter.com/hurley_19"
             title="twitter"
             target="_blank"
           >
-            <Image priority src={Twitter} width="40px" height="40px" />
+            <Image
+              priority
+              src={Twitter}
+              width="40px"
+              height="40px"
+              alt="twitter"
+            />
           </a>
         </div>
         <div className={classes.disclaimer}>
-          <Typography component="subtitle1" align="center">
+          <Typography align="center">
             {footerStrings.copyright.replace(
               "{year}",
               new Date().getFullYear()
             )}
           </Typography>
-          <Typography component="subtitle1" align="center">
-            {footerStrings.rights}
-          </Typography>
+          <Typography align="center">{footerStrings.rights}</Typography>
         </div>
       </Container>
     </div>

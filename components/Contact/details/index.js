@@ -12,7 +12,7 @@ export default () => {
     <Container maxWidth="md" align="center" className={classes.contactDetails}>
       <div className={classes.emailPhoneContainer}>
         <FontAwesomeIcon icon="envelope" size="2x" className="highlight" />
-        <Typography variant="subtitle1" className={classes.emailPhone}>
+        <Typography className={classes.emailPhone}>
           <a href={`mailto:${EMAIL}`} className={classes.mailto} title="email">
             {EMAIL}
           </a>
@@ -20,7 +20,7 @@ export default () => {
       </div>
       <div className={classes.emailPhoneContainer}>
         <FontAwesomeIcon icon="phone" size="2x" className="highlight" />
-        <Typography variant="subtitle1" className={classes.emailPhone}>
+        <Typography className={classes.emailPhone}>
           <a href={`tel:${PHONE}`} className={classes.tel} title="phone">
             {PHONE}
           </a>

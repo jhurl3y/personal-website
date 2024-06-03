@@ -9,7 +9,7 @@ import Styles from "./styles";
 
 const Icon = ({ icon, text, classes }) => (
   <div>
-    <FontAwesomeIcon icon={icon} size="2x" className="highlight" />
+    {/* <FontAwesomeIcon icon={icon} size="2x" className="highlight" /> */}
     <p className={classes.skillText}>{text}</p>
   </div>
 );

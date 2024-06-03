@@ -15,7 +15,7 @@ const noErrors = {
   message: "",
 };
 
-export default () => {
+export default ({ formspree }) => {
   const classes = Styles();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -166,7 +166,7 @@ export default () => {
         noValidate
         autoComplete="off"
         onSubmit={submitForm}
-        action={getFormspreeUrl()}
+        action={formspree}
         method="POST"
       >
         <Grid container>

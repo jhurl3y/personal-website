@@ -92,8 +92,8 @@ export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
         <header>
           <nav className={classes.container}>
             <a className={classes.logo} href={`#${pages[0]}`} title={pages[0]}>
-              {dark && <Image priority src={LogoLight} />}
-              {!dark && <Image priority src={LogoDark} />}
+              {dark && <Image priority src={LogoLight} alt="logo" />}
+              {!dark && <Image priority src={LogoDark} alt="logo" />}
             </a>
             <Links
               selectedPage={page}

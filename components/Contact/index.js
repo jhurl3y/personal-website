@@ -21,7 +21,7 @@ const StyledButton = withStyles((theme) => ({
   },
 }))(Button);
 
-export default () => {
+export default ({ formspree }) => {
   const classes = Styles();
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [showDetails, setShowDetails] = useState(false);
@@ -83,7 +83,7 @@ export default () => {
           </StyledButton>
         </Container>
         <Container className={classes.formContainer} maxWidth={false}>
-          <Form />
+          <Form formspree={formspree} />
         </Container>
         <Container maxWidth="xs">
           <div className={classes.orDivider}>

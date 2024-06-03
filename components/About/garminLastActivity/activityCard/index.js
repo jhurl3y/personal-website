@@ -34,151 +34,119 @@ export default ({
             <Typography color="textPrimary">{activityName}</Typography>
           </Grid>
           <Grid item xs={6} sm={6} md={6} align="right">
-            <Typography
-              className={classes.date}
-              color="textSecondary"
-              variant="subtitle1"
-            >
+            <Typography className={classes.date} color="textSecondary">
               {new Date(startTimeGMT).toDateString()}
             </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={3}>
           <Grid item xs={6} sm={3} md={3}>
-            <Typography color="textSecondary" variant="subtitle1" align="left">
+            <Typography color="textSecondary" align="left">
               {aboutStrings.distance}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3} align="right">
-            <Typography variant="subtitle1" className={classes.rightPadding}>
+            <Typography className={classes.rightPadding}>
               {`${(distance / 1000.0).toLocaleString()} km`}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3}>
-            <Typography
-              color="textSecondary"
-              variant="subtitle1"
-              className={classes.leftPadding}
-            >
+            <Typography color="textSecondary" className={classes.leftPadding}>
               {aboutStrings.duration}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3} align="right">
-            <Typography variant="subtitle1">
+            <Typography>
               {`${(duration / 60.0).toLocaleString()} mins`}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3}>
-            <Typography color="textSecondary" variant="subtitle1">
+            <Typography color="textSecondary">
               {aboutStrings.avgSpeed}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3} align="right">
-            <Typography variant="subtitle1" className={classes.rightPadding}>
+            <Typography className={classes.rightPadding}>
               {`${(1000.0 / averageSpeed / 60.0)
                 .toFixed(2)
                 .toLocaleString()} mins/km`}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3}>
-            <Typography
-              color="textSecondary"
-              variant="subtitle1"
-              className={classes.leftPadding}
-            >
+            <Typography color="textSecondary" className={classes.leftPadding}>
               {aboutStrings.maxSpeed}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3} align="right">
-            <Typography variant="subtitle1">
+            <Typography>
               {`${(1000.0 / maxSpeed / 60.0)
                 .toFixed(2)
                 .toLocaleString()} mins/km`}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3}>
-            <Typography color="textSecondary" variant="subtitle1">
+            <Typography color="textSecondary">
               {aboutStrings.calories}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3} align="right">
-            <Typography variant="subtitle1" className={classes.rightPadding}>
+            <Typography className={classes.rightPadding}>
               {`${Math.floor(calories).toLocaleString()}`}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3}>
-            <Typography
-              color="textSecondary"
-              variant="subtitle1"
-              className={classes.leftPadding}
-            >
+            <Typography color="textSecondary" className={classes.leftPadding}>
               {aboutStrings.steps}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3} align="right">
-            <Typography variant="subtitle1">
-              {`${Math.floor(steps).toLocaleString()}`}
-            </Typography>
+            <Typography>{`${Math.floor(steps).toLocaleString()}`}</Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3}>
-            <Typography color="textSecondary" variant="subtitle1">
+            <Typography color="textSecondary">
               {aboutStrings.averageHr}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3} align="right">
-            <Typography variant="subtitle1" className={classes.rightPadding}>
+            <Typography className={classes.rightPadding}>
               {`${Math.floor(averageHR).toLocaleString()}`}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3}>
-            <Typography
-              color="textSecondary"
-              variant="subtitle1"
-              className={classes.leftPadding}
-            >
+            <Typography color="textSecondary" className={classes.leftPadding}>
               {aboutStrings.maxHr}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} md={3} align="right">
-            <Typography variant="subtitle1">
-              {`${Math.floor(maxHR).toLocaleString()}`}
-            </Typography>
+            <Typography>{`${Math.floor(maxHR).toLocaleString()}`}</Typography>
           </Grid>
           <Grid item xs={6} sm={4} md={4}>
-            <Typography
-              color="textSecondary"
-              variant="subtitle1"
-              className={classes.rightPadding}
-            >
+            <Typography color="textSecondary" className={classes.rightPadding}>
               {aboutStrings.minElevation}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={2} md={2} align="right">
-            <Typography variant="subtitle1">
+            <Typography>
               {`${(minElevation / 1000.0).toLocaleString()} km`}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={4} md={4}>
-            <Typography
-              color="textSecondary"
-              variant="subtitle1"
-              className={classes.leftPadding}
-            >
+            <Typography color="textSecondary" className={classes.leftPadding}>
               {aboutStrings.maxElevation}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={2} md={2} align="right">
-            <Typography variant="subtitle1">
+            <Typography>
               {`${(maxElevation / 1000.0).toLocaleString()} km`}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={4} md={4}>
-            <Typography color="textSecondary" variant="subtitle1">
+            <Typography color="textSecondary">
               {aboutStrings.avgStrideLength}{" "}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={2} md={2} align="right">
-            <Typography variant="subtitle1" className={classes.rightPadding}>
+            <Typography className={classes.rightPadding}>
               {`${Math.floor(avgStrideLength).toLocaleString()} m`}
             </Typography>
           </Grid>
