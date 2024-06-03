@@ -38,7 +38,7 @@ export default () => {
         <Skills />
         <Slide duration={fadeDuration} direction="left" triggerOnce>
           <Link
-            href="https://cv.jameshurley.ie/"
+            href="/cv.pdf"
             title="cv"
             target="_blank"
             className={classes.cv}
