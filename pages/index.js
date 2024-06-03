@@ -1,7 +1,5 @@
 import React, { forwardRef, useRef, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import Layout from "../components/layout";
-import { makeStyles } from "@mui/styles";
 import Home from "../components/Home";
 import About from "../components/About";
 import Experience from "../components/Experience";
@@ -13,13 +11,6 @@ import Typography from "@mui/material/Typography";
 import { metaStrings } from "../utils/strings";
 import CookieConsent from "react-cookie-consent";
 // import "../src/styles.css";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100%",
-    backgroundColor: theme.colors.black,
-  },
-}));
 
 const Section = forwardRef(({ children, id, offset }, ref) => {
   let styles = offset
@@ -37,7 +28,6 @@ const Section = forwardRef(({ children, id, offset }, ref) => {
 });
 
 const Component = () => {
-  const classes = useStyles();
   const navRef = useRef(null);
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
@@ -57,7 +47,10 @@ const Component = () => {
   }, []);
 
   return (
-    <Layout className={classes.root} title={metaStrings.title}>
+    <Layout
+      sx={{ height: "100%", backgroundColor: "background.paper" }}
+      title={metaStrings.title}
+    >
       <Navbar
         dark={false}
         pages={PAGES}
