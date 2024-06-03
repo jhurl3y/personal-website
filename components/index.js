@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef, useEffect, useState } from "react";
-import Layout from "./layout";
+import Layout from "./Layout";
 import { makeStyles } from "@mui/styles";
 import Home from "./Home";
 import About from "./About";
