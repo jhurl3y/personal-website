@@ -8,8 +8,6 @@ import { getFadeDuration, getSpotifyPlaylist } from "../../utils/helpers";
 import { aboutStrings } from "../../utils/strings";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { WIDGET_HEIGHT } from "../../utils/constants";
-import GarminSummary from "./garminSummary";
-import GarminLastActivity from "./garminLastActivity";
 
 const SpotifyWidget = () => (
   <iframe
@@ -136,14 +134,6 @@ export default () => {
             </Fade>
           </Grid>
         </Grid>
-      </Container>
-      <Container sx={{ padding: (theme) => theme.spacing(6, 0) }}>
-        <Fade duration={getFadeDuration()} left>
-          <GarminSummary />
-        </Fade>
-        <Fade duration={getFadeDuration()} right>
-          <GarminLastActivity />
-        </Fade>
       </Container>
     </Container>
   );
