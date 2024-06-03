@@ -148,7 +148,7 @@ export default () => {
           </Container>
           <RightButton onClick={goToNextSlide} />
         </Container>
-        {process.browser && (
+        {typeof window && (
           <div className={classes.dots}>
             {backgrounds.map((_, i) => (
               <Dot

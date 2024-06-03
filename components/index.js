@@ -76,7 +76,7 @@ const Component = ({ spotify, formspree }) => {
         <Typography variant="h1" align="center" style={{ display: "none" }}>
           {metaStrings.title}
         </Typography>
-        {/* <Home /> */}
+        <Home />
       </Section>
       <Section id="about" ref={aboutRef} offset={navHeight}>
         <About spotify={spotify} />
