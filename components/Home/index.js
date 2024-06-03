@@ -3,8 +3,8 @@ import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Container from "@mui/material/Container";
 import Navbar from "../Navbar";
-import Dot from "./dot";
-import Slider from "./slider";
+import Dot from "./Dot";
+import Slider from "./Slider";
 import {
   PAGES,
   LEFT_KEY,
