@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 import Container from "@mui/material/Container";
 import Navbar from "../Navbar";
 import Dot from "./dot";
@@ -48,7 +47,7 @@ export default () => {
 
   const slideWidth = () => {
     if (refs[index] && refs[index] != undefined) {
-      return refs[index].clientWidth;
+      return refs[index].current.clientWidth;
     }
     return 0;
   };
@@ -115,7 +114,7 @@ export default () => {
 
   // Same as componentDidMount; only execute on the first render
   useEffect(() => {
-    if (process.browser) {
+    if (typeof window) {
       loadBackgrounds();
     }
   }, []);
