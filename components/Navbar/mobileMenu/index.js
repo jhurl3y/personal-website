@@ -4,10 +4,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import SmoothAnchor from "../smoothAnchor";
-import Styles from "./styles";
 
 export default ({ pages, dark }) => {
-  const classes = Styles();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -19,16 +17,22 @@ export default ({ pages, dark }) => {
   };
 
   return (
-    <div className={classes.mobileNavigation}>
+    <div
+      sx={(theme) => ({
+        display: "none",
+        marginLeft: "auto",
+        [theme.breakpoints.down("xs")]: {
+          display: "block",
+        },
+      })}
+    >
       <IconButton
         aria-label="more"
         aria-controls="hamburger-menu"
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <MenuIcon
-          className={!dark ? classes.darkMenuIcon : classes.lightMenuIcon}
-        />
+        <MenuIcon sx={{ color: !dark ? "text.primary" : "text.secondary" }} />
       </IconButton>
       <Menu
         id="hamburger-menu"
@@ -42,7 +46,7 @@ export default ({ pages, dark }) => {
             key={i}
             href={`#${page}`}
             title={page}
-            className={classes.menuItem}
+            sx={{ color: "text.primary", textDecoration: "none" }}
           >
             <MenuItem key={i} onClick={handleClose}>
               {page}
