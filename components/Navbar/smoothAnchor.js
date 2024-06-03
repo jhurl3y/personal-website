@@ -33,7 +33,7 @@ class SmoothAnchor extends Component {
 
     const id = e.currentTarget.getAttribute("href").slice(1);
     const $anchor = document.getElementById(id);
-    const offsetTop = $anchor.getBoundingClientRect().top + window.pageYOffset;
+    const offsetTop = $anchor.getBoundingClientRect().top + window.scrollY - 40;
 
     window.scroll({
       top: offsetTop - offset(),

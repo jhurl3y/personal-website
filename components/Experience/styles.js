@@ -11,7 +11,7 @@ export default makeStyles((theme) => ({
     flexDirection: "column",
   },
   heading: {
-    margin: theme.spacing(9, 0, 8, 0),
+    padding: theme.spacing(9, 0, 8, 0),
   },
   skills: {
     paddingBottom: theme.spacing(9),

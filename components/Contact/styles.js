@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(0),
   },
   heading: {
-    margin: theme.spacing(9, 0, 7, 0),
+    padding: theme.spacing(9, 0, 7, 0),
   },
   textSection: {
     padding: theme.spacing(0, 4, 3, 4),

@@ -46,6 +46,10 @@ export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
     stickyRefs.forEach((ref, i) => {
       if (ref && ref.current != undefined) {
         newOffsets[i] = ref.current.getBoundingClientRect().top;
+
+        if (i > 0) {
+          newOffsets[i] = newOffsets[i] - 40;
+        }
       }
     });
 
