@@ -21,7 +21,7 @@ const StyledButton = withStyles((theme) => ({
   },
 }))(Button);
 
-export default ({ formspree }) => {
+export default ({ formspree, maps }) => {
   const classes = Styles();
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [showDetails, setShowDetails] = useState(false);
@@ -110,6 +110,7 @@ export default ({ formspree }) => {
         mapStyles={MAP_STYLES}
         title="contact-map"
         mapClasses={classes.map}
+        apiKey={maps}
       />
     </Container>
   );

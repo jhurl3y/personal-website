@@ -43,6 +43,10 @@ export const getFormspreeUrl = () => {
   return `${FORMSPREE_URL}/${token}`;
 };
 
+export const getGoogleMapsKey = () => {
+  return process.env.GOOGLE_MAPS_API_KEY;
+};
+
 export const getAge = (dateString) => {
   const today = new Date();
   const birthDate = new Date(dateString);

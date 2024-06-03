@@ -1,8 +1,25 @@
-// import { compose, withProps } from "recompose";
-// import { GoogleMap, withGoogleMap, Polyline } from "react-google-maps";
-import Styles from "./styles";
+import React, { useMemo } from "react";
+import { GoogleMap, Polyline, useJsApiLoader } from "@react-google-maps/api";
 
-export default ({
+const MapComponent = ({
+  center,
+  zoom,
+  options,
+  showPolyline,
+  polylineData,
+  polylineOptions,
+}) => (
+  <GoogleMap
+    center={center}
+    zoom={zoom}
+    options={options}
+    mapContainerStyle={{ height: "100%", width: "100%" }}
+  >
+    {showPolyline && <Polyline path={polylineData} options={polylineOptions} />}
+  </GoogleMap>
+);
+
+const MapContainer = ({
   location: { lng, lat },
   zoom,
   mapStyles = {},
@@ -11,47 +28,38 @@ export default ({
   polylineData = [],
   polylineOptions = {},
   mapClasses,
+  apiKey,
 }) => {
-  const classes = Styles();
-  const options = {
-    center: {
-      lng,
-      lat,
-    },
-    zoom: zoom,
-    defaultOptions: {
+  const center = useMemo(() => ({ lng, lat }), [lng, lat]);
+  const options = useMemo(
+    () => ({
       disableDefaultUI: true,
       disableDoubleClickZoom: true,
       scrollwheel: false,
       styles: mapStyles,
-    },
-  };
+    }),
+    [mapStyles]
+  );
 
-  // const Map = compose(
-  //   withProps({
-  //     containerElement: <div className={classes.container} />,
-  //     mapElement: <div className={classes.mapEl} />,
-  //   }),
-  //   withGoogleMap
-  // )(() => (
-  //   <GoogleMap
-  //     center={options.center}
-  //     zoom={options.zoom}
-  //     defaultOptions={options.defaultOptions}
-  //   >
-  //     {showPolyline && (
-  //       <Polyline
-  //         path={polylineData}
-  //         geodesic={true}
-  //         options={polylineOptions}
-  //       />
-  //     )}
-  //   </GoogleMap>
-  // ));
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: apiKey,
+  });
 
   return (
     <div id={title} className={mapClasses}>
-      {/* <Map /> */}
+      {isLoaded && (
+        <MapComponent
+          center={center}
+          zoom={zoom}
+          options={options}
+          showPolyline={showPolyline}
+          polylineData={polylineData}
+          polylineOptions={polylineOptions}
+        />
+      )}
     </div>
   );
 };
+
+export default MapContainer;

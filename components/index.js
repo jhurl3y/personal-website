@@ -34,7 +34,7 @@ const Section = forwardRef(({ children, id, offset }, ref) => {
   );
 });
 
-const Component = ({ spotify, formspree }) => {
+const Component = ({ spotify, formspree, maps }) => {
   const classes = useStyles();
   const navRef = useRef(null);
   const homeRef = useRef(null);
@@ -85,7 +85,7 @@ const Component = ({ spotify, formspree }) => {
         <Experience />
       </Section>
       <Section id="contact" ref={contactRef} offset={navHeight}>
-        <Contact formspree={formspree} />
+        <Contact formspree={formspree} maps={maps} />
       </Section>
       <Footer />
     </Layout>

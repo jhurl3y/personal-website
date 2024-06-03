@@ -56,7 +56,7 @@ export default makeStyles((theme) => ({
     paddingBottom: "50px",
   },
   map: {
-    height: "30vh",
+    height: "40vh",
     width: "100%",
   },
   [theme.breakpoints.down("lg")]: {
