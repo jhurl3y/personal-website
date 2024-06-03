@@ -3,7 +3,7 @@ import Head from "next/head";
 import { ThemeProvider } from "@mui/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../src/theme";
-import { library } from "@fortawesome/fontawesome-svg-core";
+const { library } = require("@fortawesome/fontawesome-svg-core");
 import {
   faCode,
   faHeartbeat,

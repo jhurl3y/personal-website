@@ -1,8 +1,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { getFormspreeUrl, getSpotifyPlaylist } from "../utils/helpers";
-
-const App = dynamic(() => import("../components"), { ssr: true });
+import App from "../components";
 
 export async function getServerSideProps() {
   return {

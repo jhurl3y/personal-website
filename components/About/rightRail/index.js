@@ -7,13 +7,6 @@ import { aboutStrings } from "../../../utils/strings";
 import { getAge } from "../../../utils/helpers";
 import Styles from "./styles";
 
-const Icon = ({ icon, text, classes }) => (
-  <div>
-    {/* <FontAwesomeIcon icon={icon} size="2x" className="highlight" /> */}
-    <p className={classes.skillText}>{text}</p>
-  </div>
-);
-
 export default () => {
   const classes = Styles();
   const { me, intro, iLike, code, sport, travel, friends } = aboutStrings;
@@ -31,16 +24,24 @@ export default () => {
           <Typography variant="h4">{iLike}</Typography>
           <Grid container spacing={2} className={classes.icons}>
             <Grid item xs={12} sm={6}>
-              <Icon icon="code" text={code} classes={classes} />
+              <FontAwesomeIcon icon="code" size="2x" className="highlight" />
+              <p className={classes.skillText}>{code}</p>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Icon icon="heartbeat" text={sport} classes={classes} />
+              <FontAwesomeIcon
+                icon="heartbeat"
+                size="2x"
+                className="highlight"
+              />
+              <p className={classes.skillText}>{sport}</p>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Icon icon="train" text={travel} classes={classes} />
+              <FontAwesomeIcon icon="train" size="2x" className="highlight" />
+              <p className={classes.skillText}>{travel}</p>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Icon icon="users" text={friends} classes={classes} />
+              <FontAwesomeIcon icon="users" size="2x" className="highlight" />
+              <p className={classes.skillText}>{friends}</p>
             </Grid>
           </Grid>
         </Container>
