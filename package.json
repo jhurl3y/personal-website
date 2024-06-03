@@ -23,7 +23,6 @@
     "react-cookie-consent": "^9.0.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "18.2.0",
-    "react-minimal-pie-chart": "^8.4.0",
     "react-twitter-embed": "^4.0.4",
     "react-vertical-timeline-component": "^3.6.0",
     "smoothscroll-polyfill": "^0.4.4"
