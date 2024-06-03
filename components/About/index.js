@@ -6,7 +6,6 @@ import { Fade } from "react-awesome-reveal";
 import RightRail from "./rightRail";
 import { getFadeDuration, getSpotifyPlaylist } from "../../utils/helpers";
 import { aboutStrings } from "../../utils/strings";
-import Styles from "./styles";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { WIDGET_HEIGHT } from "../../utils/constants";
 import GarminSummary from "./garminSummary";
@@ -37,8 +36,6 @@ const TwitterWidget = () => (
 );
 
 export default () => {
-  const classes = Styles();
-
   // disable radio button keydown event
   useEffect(() => {
     window.addEventListener("keydown", () => null);
@@ -49,17 +46,44 @@ export default () => {
   }, []);
 
   return (
-    <Container className={classes.container} maxWidth={false}>
+    <Container
+      sx={{
+        height: "100%",
+        color: "text.primary",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "background.paper",
+        flexDirection: "column",
+      }}
+      maxWidth={false}
+    >
       <Fade duration={getFadeDuration()} right>
-        <Typography variant="h2" align="center" className={classes.heading}>
+        <Typography
+          variant="h2"
+          align="center"
+          sx={{
+            margin: (theme) => theme.spacing(9, 0, 7, 0),
+            fontSize: "5rem",
+          }}
+        >
           {aboutStrings.about}
         </Typography>
       </Fade>
-      <Container className={classes.aboutContent}>
+      <Container sx={{ padding: (theme) => theme.spacing(6, 0) }}>
         <Grid container>
           <Grid item sm={12} md={6}>
             <Fade duration={getFadeDuration()} left>
-              <Container maxWidth={false} className={classes.imageContainer}>
+              <Container
+                maxWidth={false}
+                sx={(theme) => ({
+                  paddingTop: theme.spacing(6),
+                  textAlign: "center",
+                  [theme.breakpoints.down("xs")]: {
+                    display: "none",
+                  },
+                })}
+              >
                 <img
                   width={450}
                   alt="about"
@@ -76,32 +100,51 @@ export default () => {
         </Grid>
       </Container>
       <Fade duration={getFadeDuration()} left>
-        <Typography variant="h2" align="center" className={classes.subHeading}>
+        <Typography
+          variant="h2"
+          align="center"
+          sx={{ margin: (theme) => theme.spacing(0, 0, 7, 0) }}
+        >
           {aboutStrings.music}
         </Typography>
       </Fade>
-      <Container className={classes.musicContent}>
+      <Container
+        sx={(theme) => ({
+          margin: theme.spacing(6, 8, 10),
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          "& > .react-reveal": {
+            padding: theme.spacing(3, 2),
+          },
+          [theme.breakpoints.down("sm")]: {
+            flexDirection: "column",
+            margin: theme.spacing(6, 8, 7),
+          },
+        })}
+      >
         <Grid container spacing={6}>
-          <Grid item xs={12} sm={12} md={12} className={classes.musicItem}>
+          <Grid item xs={12} sm={12} md={6} sx={{ margin: "0 auto" }}>
             <Fade duration={getFadeDuration()} left>
               <SpotifyWidget />
             </Fade>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={6} className={classes.musicItem}>
+          <Grid item xs={12} sm={12} md={6} sx={{ margin: "0 auto" }}>
             <Fade duration={getFadeDuration()} right>
               <TwitterWidget />
             </Fade>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
-      {/* <Container className={classes.garminContent}>
+      <Container sx={{ padding: (theme) => theme.spacing(6, 0) }}>
         <Fade duration={getFadeDuration()} left>
           <GarminSummary />
         </Fade>
         <Fade duration={getFadeDuration()} right>
           <GarminLastActivity />
         </Fade>
-      </Container> */}
+      </Container>
     </Container>
   );
 };
