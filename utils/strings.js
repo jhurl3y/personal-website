@@ -4,8 +4,7 @@ export const aboutStrings = {
   intro:
     "Hi, I'm James! 😃 Thanks for visiting my site. I'm a {age} year old fullstack software/ML engineer living in San Francisco, CA. I grew up in the lovely city of Galway in the west and lived there most of my life. You can read a little bit more about me below, and scroll through the pictures above.",
   iLike: "What I like:",
-  code:
-    "Really passionate about all things tech. Love clean code, simple designs and playing with new tech.",
+  code: "Really passionate about all things tech. Love clean code, simple designs and playing with new tech.",
   sport:
     "I played hurling at a high level during school - love keeping fit, going to the gym and eating well.",
   travel:
@@ -130,5 +129,5 @@ export const metaStrings = {
     "Check out my personal website built with React and NextJS. Learn a bit about me, see what I'm interested in and reach out if you want to connect.",
   twitterSite: "@hurley_19",
   url: "https://jameshurley.ie",
-  cookies: "I use google analytics to enhance this site.",
+  cookies: "I use cookies to enhance this site.",
 };
