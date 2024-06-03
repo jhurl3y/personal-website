@@ -13,6 +13,7 @@ export default makeStyles((theme) => ({
   heading: {
     margin: theme.spacing(9, 0, 7, 0),
     fontSize: "5rem",
+    width: "100%",
   },
   subHeading: {
     margin: theme.spacing(0, 0, 7, 0),

@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { Fade } from "react-awesome-reveal";
+import { Slide } from "react-awesome-reveal";
 import RightRail from "./rightRail";
-import { getFadeDuration, getSpotifyPlaylist } from "../../utils/helpers";
 import { aboutStrings } from "../../utils/strings";
 import Styles from "./styles";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
-import { WIDGET_HEIGHT } from "../../utils/constants";
+import { WIDGET_HEIGHT, fadeDuration } from "../../utils/constants";
 
 export default ({ spotify }) => {
   const classes = Styles();
@@ -48,15 +47,15 @@ export default ({ spotify }) => {
 
   return (
     <Container className={classes.container} maxWidth={false}>
-      <Fade duration={getFadeDuration()} right>
+      <Slide duration={fadeDuration} direction="right" triggerOnce>
         <Typography variant="h2" align="center" className={classes.heading}>
           {aboutStrings.about}
         </Typography>
-      </Fade>
+      </Slide>
       <Container className={classes.aboutContent}>
         <Grid container>
           <Grid item sm={12} md={6}>
-            <Fade duration={getFadeDuration()} left>
+            <Slide duration={fadeDuration} direction="left" triggerOnce>
               <Container maxWidth={false} className={classes.imageContainer}>
                 <img
                   width={450}
@@ -64,26 +63,26 @@ export default ({ spotify }) => {
                   src="/static/assets/images/about.png"
                 />
               </Container>
-            </Fade>
+            </Slide>
           </Grid>
           <Grid item sm={12} md={6}>
-            <Fade duration={getFadeDuration()} right>
+            <Slide duration={fadeDuration} direction="right" triggerOnce>
               <RightRail />
-            </Fade>
+            </Slide>
           </Grid>
         </Grid>
       </Container>
-      <Fade duration={getFadeDuration()} left>
+      <Slide duration={fadeDuration} direction="left" triggerOnce>
         <Typography variant="h2" align="center" className={classes.subHeading}>
           {aboutStrings.music}
         </Typography>
-      </Fade>
+      </Slide>
       <Container className={classes.musicContent}>
         <Grid container spacing={6}>
           <Grid item xs={12} sm={12} md={12} className={classes.musicItem}>
-            <Fade duration={getFadeDuration()} left>
+            <Slide duration={fadeDuration} direction="right" triggerOnce>
               <SpotifyWidget />
-            </Fade>
+            </Slide>
           </Grid>
           {/* <Grid item xs={12} sm={12} md={6} className={classes.musicItem}>
             <Fade duration={getFadeDuration()} right>

@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { contactStrings } from "../../../utils/strings";
 import { validEmailRegex } from "../../../utils/helpers";
-import { getFormspreeUrl } from "../../../utils/helpers";
 import Styles from "./styles";
 
 const noErrors = {

@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import { Fade } from "react-awesome-reveal";
+import { Slide } from "react-awesome-reveal";
 import Styles from "./styles";
 import Map from "../Map";
 import { LOCATIONS } from "../../utils/constants";
 import Details from "./details";
 import Button from "@mui/material/Button";
 import Form from "./form";
-import { getFadeDuration } from "../../utils/helpers";
 import { contactStrings } from "../../utils/strings";
 import { withStyles } from "@mui/styles";
-import { MAP_ZOOM, MAP_STYLES } from "../../utils/constants";
+import { MAP_ZOOM, MAP_STYLES, fadeDuration } from "../../utils/constants";
 
 const StyledButton = withStyles((theme) => ({
   root: {
@@ -39,24 +38,20 @@ export default ({ formspree, maps }) => {
     setLocation(LOCATIONS.find((location) => location.name === "galway"));
   };
 
-  const handleDublin = () => {
-    setLocation(LOCATIONS.find((location) => location.name === "dublin"));
-  };
-
   const handleSF = () => {
     setLocation(LOCATIONS.find((location) => location.name === "sf"));
   };
 
   return (
     <Container className={classes.container} maxWidth={false}>
-      <Fade duration={getFadeDuration()} bottom>
+      <Slide duration={fadeDuration} direction="up" triggerOnce>
         <Typography variant="h2" align="center" className={classes.heading}>
           {contactStrings.contact}
         </Typography>
         <Container className={classes.textSection} maxWidth="xs">
           <p dangerouslySetInnerHTML={{ __html: contactStrings.intro }} />
           <p dangerouslySetInnerHTML={{ __html: contactStrings.questions }} />
-          {/* <StyledButton
+          <StyledButton
             href="#contact-map"
             className={classes.button}
             onClick={handleGalway}
@@ -65,14 +60,6 @@ export default ({ formspree, maps }) => {
             {contactStrings.galway}
           </StyledButton>
           {contactStrings.or}
-          <StyledButton
-            href="#contact-map"
-            className={classes.button}
-            onClick={handleDublin}
-            title={contactStrings.dublin}
-          >
-            {contactStrings.dublin}
-          </StyledButton> */}
           <StyledButton
             href="#contact-map"
             className={classes.button}
@@ -103,7 +90,7 @@ export default ({ formspree, maps }) => {
           )}
           {showDetails && <Details />}
         </Container>
-      </Fade>
+      </Slide>
       <Map
         location={location}
         zoom={MAP_ZOOM}

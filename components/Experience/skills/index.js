@@ -1,9 +1,9 @@
-import { Fade } from "react-awesome-reveal";
+import { Slide } from "react-awesome-reveal";
 import Grid from "@mui/material/Grid";
 import Card from "./card";
 import Styles from "./styles";
 import { SKILLS } from "../../../utils/constants";
-import { getFadeDuration } from "../../../utils/helpers";
+import { fadeDuration } from "../../../utils/constants";
 
 export default () => {
   const classes = Styles();
@@ -13,11 +13,11 @@ export default () => {
       {SKILLS.map(({ title, content, icon }, i) => {
         return (
           <Grid item xs={12} sm={6} md={3} key={i}>
-            <Fade duration={getFadeDuration()} right>
+            <Slide duration={fadeDuration} direction="right" triggerOnce>
               <div className={classes.cardContainer}>
                 <Card title={title} content={content} icon={icon} />
               </div>
-            </Fade>
+            </Slide>
           </Grid>
         );
       })}
