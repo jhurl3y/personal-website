@@ -19,7 +19,7 @@ export default makeStyles((theme) => ({
     justifyContent: "flex-end",
     width: "100%",
   },
-  [theme.breakpoints.down("xs")]: {
+  [theme.breakpoints.down("sm")]: {
     navigation: {
       display: "none",
     },

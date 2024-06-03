@@ -47,7 +47,7 @@ export default makeStyles((theme) => ({
       margin: theme.spacing(6, 8, 7),
     },
   },
-  [theme.breakpoints.down("xs")]: {
+  [theme.breakpoints.down("sm")]: {
     imageContainer: {
       display: "none",
     },

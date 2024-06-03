@@ -11,7 +11,7 @@ export default makeStyles((theme) => ({
   },
   darkMenuIcon: { color: theme.colors.black },
   lightMenuIcon: { color: theme.colors.white },
-  [theme.breakpoints.down("xs")]: {
+  [theme.breakpoints.down("sm")]: {
     mobileNavigation: {
       display: "block",
     },
