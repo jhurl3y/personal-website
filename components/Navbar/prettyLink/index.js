@@ -1,5 +1,4 @@
 import SmoothAnchor from "../smoothAnchor";
-import Styles from "./styles";
 
 export default ({
   href,
@@ -7,17 +6,19 @@ export default ({
   title = "",
   dark = true,
   active = false,
-  extraScroll = false
+  extraScroll = false,
 }) => {
-  const classes = Styles();
-
   return (
     <SmoothAnchor
       variant="body2"
       underline={active ? "always" : "hover"}
       href={href}
       title={title}
-      className={dark ? classes.darkLink : classes.lightLink}
+      sx={(theme) => ({
+        marginRight: theme.spacing(7),
+        fontSize: "1.375rem",
+        color: dark ? "#fff" : "#000",
+      })}
       extraScroll={extraScroll}
     >
       {text}
