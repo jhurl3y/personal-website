@@ -5,6 +5,8 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import SmoothAnchor from "../smoothAnchor";
 import Styles from "./styles";
+import Link from "@mui/material/Link";
+import { navbarStrings } from "../../../utils/strings";
 
 export default ({ pages, dark }) => {
   const classes = Styles();
@@ -49,6 +51,15 @@ export default ({ pages, dark }) => {
             </MenuItem>
           </SmoothAnchor>
         ))}
+        <Link
+          key={navbarStrings.blog}
+          title={navbarStrings.blog}
+          href="https://blog.jameshurley.ie"
+          target="_blank"
+          className={classes.link}
+        >
+          <MenuItem key={navbarStrings.blog}>{navbarStrings.blog}</MenuItem>
+        </Link>
       </Menu>
     </div>
   );
