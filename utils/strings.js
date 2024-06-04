@@ -131,3 +131,5 @@ export const metaStrings = {
   url: "https://jameshurley.ie",
   cookies: "I use cookies to enhance this site.",
 };
+
+export const navbarStrings = { blog: "blog" };

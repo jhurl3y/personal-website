@@ -19,6 +19,17 @@ export default makeStyles((theme) => ({
     justifyContent: "flex-end",
     width: "100%",
   },
+  link: {
+    marginRight: theme.spacing(7),
+    fontSize: "1.375rem",
+    textDecoration: "none",
+  },
+  lightLink: {
+    color: theme.colors.black,
+  },
+  darkLink: {
+    color: theme.colors.white,
+  },
   [theme.breakpoints.down("sm")]: {
     navigation: {
       display: "none",

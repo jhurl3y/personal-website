@@ -5,8 +5,10 @@ import Image from "next/image";
 import Container from "@mui/material/Container";
 import Transition from "../Transition";
 import PrettyLink from "./prettyLink";
+import Link from "@mui/material/Link";
 import MobileMenu from "./mobileMenu";
 import Styles from "./styles";
+import { navbarStrings } from "../../utils/strings";
 
 const Links = ({ selectedPage, pages, dark, classes }) => {
   const links = pages.map((page, currentIndex) => {
@@ -30,7 +32,24 @@ const Links = ({ selectedPage, pages, dark, classes }) => {
     );
   });
 
-  return <div className={classes.navigation}>{links}</div>;
+  return (
+    <div className={classes.navigation}>
+      <>
+        {links}
+        <Link
+          key={navbarStrings.blog}
+          title={navbarStrings.blog}
+          href="https://blog.jameshurley.ie"
+          target="_blank"
+          className={`${classes.link} ${
+            dark ? classes.darkLink : classes.lightLink
+          }`}
+        >
+          {navbarStrings.blog}
+        </Link>
+      </>
+    </div>
+  );
 };
 
 export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
