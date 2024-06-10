@@ -288,8 +288,7 @@ export const fadeDuration = 300;
 
 export const SPOTIFY_PLAYLISTS = [
   "https://open.spotify.com/playlist/37i9dQZF1EpAh9wBJPJbF3",
-  "https://open.spotify.com/playlist/37i9dQZF1EtkB4R6IdSwy2",
-  "https://open.spotify.com/playlist/37i9dQZEVXcCRutUm5lf69",
+  "https://open.spotify.com/playlist/4Jb4PDWREzNnbZcOHPcZPy",
 ];
 
 export const WIDGET_HEIGHT = 450;
