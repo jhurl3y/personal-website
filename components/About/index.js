@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
+import Image from "next/image";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -6,35 +7,11 @@ import { Slide } from "react-awesome-reveal";
 import RightRail from "./rightRail";
 import { aboutStrings } from "../../utils/strings";
 import Styles from "./styles";
-import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { WIDGET_HEIGHT, fadeDuration } from "../../utils/constants";
+import { Spotify } from "react-spotify-embed";
 
 export default ({ spotify }) => {
   const classes = Styles();
-
-  const SpotifyWidget = () => (
-    <iframe
-      src={spotify}
-      width="100%"
-      height={WIDGET_HEIGHT}
-      frameBorder="0"
-      allowtransparency="true"
-      allow="encrypted-media"
-    />
-  );
-
-  const TwitterWidget = () => (
-    <TwitterTimelineEmbed
-      sourceType="profile"
-      screenName="hurley_19"
-      options={{
-        height: WIDGET_HEIGHT,
-      }}
-      theme="dark"
-      noBorders
-      noFooter
-    />
-  );
 
   // disable radio button keydown event
   useEffect(() => {
@@ -57,10 +34,12 @@ export default ({ spotify }) => {
           <Grid item sm={12} md={6}>
             <Slide duration={fadeDuration} direction="left" triggerOnce>
               <Container maxWidth={false} className={classes.imageContainer}>
-                <img
-                  width={450}
-                  alt="about"
-                  src="/static/assets/images/about.png"
+                <Image
+                  src="/static/assets/images/about.webp"
+                  width={499}
+                  height={597}
+                  alt="about me"
+                  priority={false}
                 />
               </Container>
             </Slide>
@@ -81,14 +60,17 @@ export default ({ spotify }) => {
         <Grid container spacing={6}>
           <Grid item xs={12} sm={12} md={12} className={classes.musicItem}>
             <Slide duration={fadeDuration} direction="right" triggerOnce>
-              <SpotifyWidget />
+              <Suspense fallback={<p>Loading feed...</p>}>
+                <Spotify
+                  link={spotify}
+                  title="spotify widget"
+                  width="100%"
+                  height={WIDGET_HEIGHT}
+                  frameBorder="0"
+                />
+              </Suspense>
             </Slide>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={6} className={classes.musicItem}>
-            <Fade duration={getFadeDuration()} right>
-              <TwitterWidget />
-            </Fade>
-          </Grid> */}
         </Grid>
       </Container>
     </Container>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { Slide } from "react-awesome-reveal";
@@ -91,14 +91,16 @@ export default ({ formspree, maps }) => {
           {showDetails && <Details />}
         </Container>
       </Slide>
-      <Map
-        location={location}
-        zoom={MAP_ZOOM}
-        mapStyles={MAP_STYLES}
-        title="contact-map"
-        mapClasses={classes.map}
-        apiKey={maps}
-      />
+      <Suspense fallback={<p>Loading feed...</p>}>
+        <Map
+          location={location}
+          zoom={MAP_ZOOM}
+          mapStyles={MAP_STYLES}
+          title="contact-map"
+          mapClasses={classes.map}
+          apiKey={maps}
+        />
+      </Suspense>
     </Container>
   );
 };
