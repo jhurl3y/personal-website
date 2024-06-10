@@ -83,10 +83,10 @@ export default () => {
     setTranslateValue(index * -1 * slideWidth());
   };
 
-  const onKeyDown = ({ keyCode }) => {
-    if (keyCode === LEFT_KEY) {
+  const onKeyDown = ({ key }) => {
+    if (key === LEFT_KEY) {
       goToPrevSlide();
-    } else if (keyCode === RIGHT_KEY) {
+    } else if (key === RIGHT_KEY) {
       goToNextSlide();
     }
   };

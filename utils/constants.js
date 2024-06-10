@@ -52,9 +52,9 @@ export const MOBILE_IMAGE_PATH =
 
 export const NUMBER_OF_IMAGES = 6;
 
-export const LEFT_KEY = 37;
+export const LEFT_KEY = "ArrowLeft";
 
-export const RIGHT_KEY = 39;
+export const RIGHT_KEY = "ArrowRight";
 
 export const MAP_ZOOM = 13;
 
