@@ -14,6 +14,11 @@ export default makeStyles((theme) => ({
   card: {
     margin: theme.spacing(0, 6),
     height: "100%",
+    "& ul": {
+      listStyleType: "none",
+      margin: 0,
+      padding: 0,
+    },
   },
   cardTitle: {
     fontWeight: 600,
