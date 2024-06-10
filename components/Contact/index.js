@@ -1,6 +1,8 @@
 import React, { useState, useEffect, Suspense } from "react";
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Skeleton from "@mui/material/Skeleton";
 import { Slide } from "react-awesome-reveal";
 import Styles from "./styles";
 import Map from "../Map";
@@ -11,6 +13,34 @@ import Form from "./form";
 import { contactStrings } from "../../utils/strings";
 import { withStyles } from "@mui/styles";
 import { MAP_ZOOM, MAP_STYLES, fadeDuration } from "../../utils/constants";
+
+const MapSkeletonLoader = () => {
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        height: 300,
+        bgcolor: "background.paper",
+        borderRadius: 1,
+        boxShadow: 3,
+        p: 1,
+        position: "relative",
+      }}
+    >
+      <Skeleton variant="rectangular" width="100%" height="100%" />
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: 4,
+          bgcolor: "primary.main",
+        }}
+      />
+    </Box>
+  );
+};
 
 const StyledButton = withStyles((theme) => ({
   root: {
@@ -91,7 +121,7 @@ export default ({ formspree, maps }) => {
           {showDetails && <Details />}
         </Container>
       </Slide>
-      <Suspense fallback={<p>Loading feed...</p>}>
+      <Suspense fallback={<MapSkeletonLoader />}>
         <Map
           location={location}
           zoom={MAP_ZOOM}

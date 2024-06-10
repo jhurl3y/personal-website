@@ -1,14 +1,61 @@
 import React, { useEffect, Suspense } from "react";
 import Image from "next/image";
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import { Skeleton } from "@mui/material";
 import { Slide } from "react-awesome-reveal";
 import RightRail from "./rightRail";
 import { aboutStrings } from "../../utils/strings";
 import Styles from "./styles";
 import { WIDGET_HEIGHT, fadeDuration } from "../../utils/constants";
 import { Spotify } from "react-spotify-embed";
+
+const SkeletonLoader = () => {
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        borderRadius: 1,
+        boxShadow: 3,
+        p: 2,
+      }}
+    >
+      <Box display="flex" alignItems="center" mb={2}>
+        <Skeleton
+          variant="rectangular"
+          width={60}
+          height={60}
+          sx={{ borderRadius: 1 }}
+        />
+        <Box ml={2} flex={1}>
+          <Skeleton variant="text" width="60%" />
+          <Skeleton variant="text" width="40%" />
+        </Box>
+        <Skeleton variant="circular" width={40} height={40} />
+      </Box>
+      {[1, 2, 3, 4, 5].map((index) => (
+        <Box
+          key={index}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={1}
+        >
+          <Box display="flex" alignItems="center">
+            <Skeleton variant="text" width={20} />
+            <Box ml={2}>
+              <Skeleton variant="text" width={200} />
+              <Skeleton variant="text" width={150} />
+            </Box>
+          </Box>
+          <Skeleton variant="text" width={40} />
+        </Box>
+      ))}
+    </Box>
+  );
+};
 
 export default ({ spotify }) => {
   const classes = Styles();
@@ -60,7 +107,7 @@ export default ({ spotify }) => {
         <Grid container spacing={6}>
           <Grid item xs={12} sm={12} md={12} className={classes.musicItem}>
             <Slide duration={fadeDuration} direction="right" triggerOnce>
-              <Suspense fallback={<p>Loading feed...</p>}>
+              <Suspense fallback={<SkeletonLoader />}>
                 <Spotify
                   link={spotify}
                   title="spotify widget"
