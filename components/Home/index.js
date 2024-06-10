@@ -17,7 +17,7 @@ import chunk from "lodash.chunk";
 
 const LeftButton = ({ onClick }) => {
   return (
-    <Button color="inherit" onClick={onClick}>
+    <Button color="inherit" onClick={onClick} title="left">
       <FontAwesomeIcon icon="arrow-left" size="3x" className="highlight" />
     </Button>
   );
@@ -25,7 +25,7 @@ const LeftButton = ({ onClick }) => {
 
 const RightButton = ({ onClick }) => {
   return (
-    <Button color="inherit" onClick={onClick}>
+    <Button color="inherit" onClick={onClick} title="right">
       <FontAwesomeIcon icon="arrow-right" size="3x" className="highlight" />
     </Button>
   );

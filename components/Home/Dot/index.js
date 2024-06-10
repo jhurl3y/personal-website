@@ -6,6 +6,7 @@ export default ({ i, highlight, onDotClick, classes }) => (
     onClick={() => onDotClick(i)}
     className={classes.dotContainer}
     key={i}
+    title={`dot-${i}`}
   >
     <span
       className={classes.dot}

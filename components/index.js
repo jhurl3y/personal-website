@@ -10,7 +10,6 @@ import Footer from "./Footer";
 import { PAGES } from "../utils/constants";
 import Typography from "@mui/material/Typography";
 import { metaStrings } from "../utils/strings";
-// import CookieConsent from "react-cookie-consent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,16 +61,6 @@ const Component = ({ spotify, formspree, maps }) => {
         navRef={navRef}
         stickyRefs={[homeRef, aboutRef, experienceRef, contactRef]}
       />
-      {/* <CookieConsent
-        cookieName="jh_cookie_consent"
-        containerClasses="cookie-banner-container"
-        contentClasses="cookie-banner-content"
-        buttonClasses="cookie-banner-button"
-        location="bottom"
-        buttonText="X"
-      >
-        {metaStrings.cookies}
-      </CookieConsent> */}
       <Section id="home" ref={homeRef}>
         <Typography variant="h1" align="center" style={{ display: "none" }}>
           {metaStrings.title}

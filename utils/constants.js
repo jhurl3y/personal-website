@@ -50,7 +50,7 @@ export const DESKTOP_IMAGE_PATH =
 export const MOBILE_IMAGE_PATH =
   "https://hurley-site-images.s3-eu-west-1.amazonaws.com/minified_new/mobile/";
 
-export const NUMBER_OF_IMAGES = 0;
+export const NUMBER_OF_IMAGES = 6;
 
 export const LEFT_KEY = 37;
 
