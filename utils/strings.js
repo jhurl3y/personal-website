@@ -80,20 +80,21 @@ export const experienceStrings = {
 
 export const skillStrings = {
   webDevelopment:
-    "<li>HTML/CSS</li><li>Templating langauges</li><li>Responsive Design</li><li>SEO</li>",
-  python: "<li>Python 2/3</li><li>Jinja</li><li>Pyramid/Flask</li><li></li>",
+    "<ul><li>HTML/CSS</li><li>Templating langauges</li><li>Responsive Design</li><li>SEO</li></ul>",
+  python:
+    "<ul><li>Python 2/3</li><li>Jinja</li><li>Pyramid/Flask</li><li></li></ul>",
   javascript:
-    "<li>Backbone.js</li><li>React/Redux</li><li>JQuery</li><li></li>",
-  ruby: "<li>Rails/Padrino</li><li>Active Record</li>",
-  java: "<li>OOP</li><li>Eclipse</li>",
-  git: "<li>GitHub</li><li>Gitlab</li>",
-  mobile: "<li>Android</li><li>React Native</li>",
-  algorihtms: "Good knowledge from studying & using in practise",
-  abTesting: "<li>Experimentation</li><li>Growth Hacking</li>",
-  sql: "<li>Relational Databases</li><li>Queries</li><li>MySQL</li>",
+    "<ul><li>Backbone.js</li><li>React/Redux</li><li>JQuery</li><li></li></ul>",
+  ruby: "<ul><li>Rails/Padrino</li><li>Active Record</li></ul>",
+  java: "<ul><li>OOP</li><li>Eclipse</li></ul>",
+  git: "<ul><li>GitHub</li><li>Gitlab</li></ul>",
+  mobile: "<ul><li>Android</li><li>React Native</li></ul>",
+  algorithms: "Good knowledge from studying & using in practise",
+  abTesting: "<ul><li>Experimentation</li><li>Growth Hacking</li></ul>",
+  sql: "<ul><li>Relational Databases</li><li>Queries</li><li>MySQL</li></ul>",
   systemDesign: "Have designed/built systems from the ground up",
   testing:
-    "<li>Unit Tests</li><li>Integration Tests</li><li>JS/Python/Ruby</li>",
+    "<ul><li>Unit Tests</li><li>Integration Tests</li><li>JS/Python/Ruby</li></ul>",
 };
 
 export const contactStrings = {

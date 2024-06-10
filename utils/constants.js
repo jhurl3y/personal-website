@@ -42,7 +42,7 @@ export const MOBILE_BACKGROUNDS = [
   "seven",
 ];
 
-export const FIRST_IMAGE_PATH = "/static/assets/images/first_image.jpg";
+export const FIRST_IMAGE_PATH = "/static/assets/images/first_image.webp";
 
 export const DESKTOP_IMAGE_PATH =
   "https://hurley-site-images.s3-eu-west-1.amazonaws.com/minified_new/desktop/";
@@ -50,7 +50,7 @@ export const DESKTOP_IMAGE_PATH =
 export const MOBILE_IMAGE_PATH =
   "https://hurley-site-images.s3-eu-west-1.amazonaws.com/minified_new/mobile/";
 
-export const NUMBER_OF_IMAGES = 6;
+export const NUMBER_OF_IMAGES = 0;
 
 export const LEFT_KEY = 37;
 
@@ -209,7 +209,7 @@ export const SKILLS = [
   {
     name: "algorithms",
     title: "Algorithms & Data Structures",
-    content: skillStrings.algorihtms,
+    content: skillStrings.algorithms,
     icon: <Image priority src={Algorithms} alt="algorithms" />,
   },
   {
@@ -287,9 +287,9 @@ export const experience = [
 export const fadeDuration = 300;
 
 export const SPOTIFY_PLAYLISTS = [
-  "https://open.spotify.com/embed/playlist/37i9dQZF1EpAh9wBJPJbF3",
-  "https://open.spotify.com/embed/playlist/37i9dQZF1EtkB4R6IdSwy2",
-  "https://open.spotify.com/embed/playlist/37i9dQZEVXcCRutUm5lf69",
+  "https://open.spotify.com/playlist/37i9dQZF1EpAh9wBJPJbF3",
+  "https://open.spotify.com/playlist/37i9dQZF1EtkB4R6IdSwy2",
+  "https://open.spotify.com/playlist/37i9dQZEVXcCRutUm5lf69",
 ];
 
 export const WIDGET_HEIGHT = 450;
