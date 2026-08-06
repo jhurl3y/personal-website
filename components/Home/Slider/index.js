@@ -27,7 +27,7 @@ const Slider = ({
   classes,
   translateValue,
   shouldTransition,
-  refs,
+  setSlideRef,
   backgrounds,
 }) => (
   <div
@@ -43,7 +43,12 @@ const Slider = ({
     }}
   >
     {backgrounds.map((image, i) => (
-      <ImageWrapper key={i} image={image} classes={classes} ref={refs[i]} />
+      <ImageWrapper
+        key={i}
+        image={image}
+        classes={classes}
+        ref={setSlideRef(i)}
+      />
     ))}
   </div>
 );

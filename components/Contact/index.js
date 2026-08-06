@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -54,15 +54,6 @@ const Contact = ({ formspree, maps }) => {
   const classes = Styles();
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [showDetails, setShowDetails] = useState(false);
-
-  // disable radio button keydown event
-  useEffect(() => {
-    window.addEventListener("keydown", () => null);
-
-    return () => {
-      window.removeEventListener("keydown", () => null);
-    };
-  }, []);
 
   const handleGalway = () => {
     setLocation(LOCATIONS.find((location) => location.name === "galway"));

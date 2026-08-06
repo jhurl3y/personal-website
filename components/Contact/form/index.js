@@ -14,6 +14,12 @@ const noErrors = {
   message: "",
 };
 
+const FALLBACK_ERROR =
+  "Something went wrong sending your message. Please try again.";
+
+const UNAVAILABLE =
+  "The contact form is unavailable right now. You can reach me by email instead.";
+
 const ContactForm = ({ formspree }) => {
   const classes = Styles();
   const [firstName, setFirstName] = useState("");
@@ -22,6 +28,9 @@ const ContactForm = ({ formspree }) => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
   const [errorFields, setErrorFields] = useState(noErrors);
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isDisabled = !formspree;
 
   const handleFieldChange = (fieldName, value) => {
     if (fieldName === "firstName") {
@@ -35,6 +44,10 @@ const ContactForm = ({ formspree }) => {
     }
   };
 
+  // Bug 7.12: returns whether it actually produced a field error. It only
+  // recognises "empty" and "email", so a 500 HTML body or unfamiliar JSON
+  // matched neither branch and rendered nothing at all - a silent failure. The
+  // caller now falls back to a generic message when this returns false.
   const handleError = (errorMessage) => {
     if (errorMessage.includes("empty")) {
       setErrorFields({
@@ -43,12 +56,18 @@ const ContactForm = ({ formspree }) => {
         email: "Can't be empty.",
         message: "Can't be empty.",
       });
-    } else if (errorMessage.includes("email")) {
+      return true;
+    }
+
+    if (errorMessage.includes("email")) {
       setErrorFields({
         ...noErrors,
         email: "Oops invalid email.",
       });
+      return true;
     }
+
+    return false;
   };
 
   const validateFields = (fields) => {
@@ -126,31 +145,54 @@ const ContactForm = ({ formspree }) => {
 
   const submitForm = (e) => {
     e.preventDefault();
+
+    // Bug 7.10: with no Formspree URL the form must not post anywhere.
+    if (!formspree) return;
+
     const form = e.target;
     const data = new FormData(form);
     const xhr = new XMLHttpRequest();
+
+    setIsSubmitting(true);
+    setSubmitError("");
 
     validateFields(["firstName", "lastName", "email", "message"])
       .then(() => {
         xhr.open(form.method, form.action);
         xhr.setRequestHeader("Accept", "application/json");
 
+        // Bug 7.12: transport failure previously reached DONE with status 0 and
+        // an empty responseText, so handleError("") rendered a blank error box.
+        // There was no onerror either, and no submitting state.
+        xhr.onerror = () => {
+          setIsSubmitting(false);
+          setStatus("error");
+          setSubmitError(FALLBACK_ERROR);
+        };
+
         xhr.onreadystatechange = () => {
           if (xhr.readyState !== XMLHttpRequest.DONE) {
             return;
           }
 
+          setIsSubmitting(false);
+
           if (xhr.status === 200) {
             form.reset();
             setStatus("success");
-          } else {
-            setStatus("error");
-            handleError(xhr.responseText);
+            return;
           }
+
+          setStatus("error");
+          const matched = xhr.responseText
+            ? handleError(xhr.responseText)
+            : false;
+          if (!matched) setSubmitError(FALLBACK_ERROR);
         };
         xhr.send(data);
       })
       .catch((errors) => {
+        setIsSubmitting(false);
         setStatus("error");
         setErrorFields({
           ...noErrors,
@@ -241,6 +283,14 @@ const ContactForm = ({ formspree }) => {
           </Grid>
         </Grid>
         <div className={classes.submit}>
+          {/* Bug 7.12: there was no general error output at all, so any failure
+              handleError did not recognise showed the user nothing. */}
+          {submitError && (
+            <p role="alert" aria-live="polite">
+              {submitError}
+            </p>
+          )}
+          {isDisabled && <p role="status">{UNAVAILABLE}</p>}
           {status === "success" ? (
             <p>{contactStrings.thanks}</p>
           ) : (
@@ -249,6 +299,7 @@ const ContactForm = ({ formspree }) => {
               color="primary"
               className={classes.button}
               type="submit"
+              disabled={isDisabled || isSubmitting}
             >
               {contactStrings.send}
             </Button>

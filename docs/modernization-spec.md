@@ -246,27 +246,37 @@ this is not a copy rewrite.
    is empty or unparseable, so the failure state always says something. The form stays
    populated and re-submittable. Verified by cases 7a and 7b.
 
-5. **`pages/_app.js`** — `ThemeProvider` imported from `@mui/styles` instead of
+5. **Every carousel slide shares one ref object** (`components/Home/index.js`).
+   Found during implementation by the newly-added linter, not by this spec's
+   review. The slide refs were built with
+   `new Array(n).fill(React.createRef())` — `.fill()` stores the **same**
+   ref object in every slot, so `slideWidth()` never measured the slide it
+   thought it was measuring, and the translate maths was wrong for every slide
+   but the first. Creating refs during render also violates
+   `react-hooks/refs`. Fixed with a single `useRef([])` populated by callback
+   refs. This brings the total to **13 bugs**, not 12.
+
+6. **`pages/_app.js`** — `ThemeProvider` imported from `@mui/styles` instead of
    `@mui/material`. Custom theme keys reach JSS but not MUI components.
-6. **`next.config.js`** — enables the **styled-components** SWC transform on a
+7. **`next.config.js`** — enables the **styled-components** SWC transform on a
    project that uses **Emotion**. Wrong compiler option; remove it.
-7. **`pages/_app.js`** — FontAwesome `library.add(...)` runs on every render.
+8. **`pages/_app.js`** — FontAwesome `library.add(...)` runs on every render.
    Move to module scope.
-8. **`utils/helpers.js:41`** — `getFormspreeUrl()` does
+9. **`utils/helpers.js:41`** — `getFormspreeUrl()` does
    `process.env.FORMSPREE_TOKENS.split(",")` with no guard; an unset env var
    throws inside data fetching and 500s the whole page. Add a guard that degrades
    to a disabled contact form.
-9. **`utils/helpers.js:27`** — `getBackgroundUrls()` branches on
-   `react-device-detect`'s `isBrowser`, which reports _browser vs server_, not
-   _desktop vs mobile_. Desktop and mobile image sets are therefore selected by
-   render environment, not viewport. Fix with a CSS/`next/image` responsive
-   source set.
-10. **Fonts** — `styles/global.css` declares Inter but is never imported;
+10. **`utils/helpers.js:27`** — `getBackgroundUrls()` branches on
+    `react-device-detect`'s `isBrowser`, which reports _browser vs server_, not
+    _desktop vs mobile_. Desktop and mobile image sets are therefore selected by
+    render environment, not viewport. Fix with a CSS/`next/image` responsive
+    source set.
+11. **Fonts** — `styles/global.css` declares Inter but is never imported;
     `src/theme.js` and `_document.js` declare Roboto. Resolved by section 6.
-11. **`utils/helpers.js:18`** — `getBackground()` creates object URLs via
+12. **`utils/helpers.js:18`** — `getBackground()` creates object URLs via
     `URL.createObjectURL` that are never revoked, and bypasses image optimisation.
     Removed in favour of `next/image`.
-12. **Missing-env behaviour is undefined.** Returning no Formspree URL does not by
+13. **Missing-env behaviour is undefined.** Returning no Formspree URL does not by
     itself disable the contact form — `components/Contact/form/index.js` still calls
     `xhr.open(form.method, form.action)` and posts to an empty action. An absent
     Google Maps key has no fallback either. Required behaviour:

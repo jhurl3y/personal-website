@@ -44,15 +44,15 @@ const Component = ({ spotify, formspree, maps }) => {
   const contactRef = useRef(null);
   const [navHeight, setNavHeight] = useState(0);
 
+  // Bug 7.1: this previously read `navRef.clientHeight` off the ref object
+  // rather than the node, so it was always undefined and every Section offset
+  // was falsy - the sticky-nav scroll offset never applied. Also re-measures on
+  // resize, which it never did.
   useEffect(() => {
-    setNavHeight(navRef.clientHeight);
-
-    // disable radio button keydown event
-    window.addEventListener("keydown", () => null);
-
-    return () => {
-      window.removeEventListener("keydown", () => null);
-    };
+    const measure = () => setNavHeight(navRef.current?.clientHeight ?? 0);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
   return (

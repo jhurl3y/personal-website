@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Slide } from "react-awesome-reveal";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -12,14 +12,6 @@ import Styles from "./styles";
 
 const Experience = () => {
   const classes = Styles();
-  // disable radio button keydown event
-  useEffect(() => {
-    window.addEventListener("keydown", () => null);
-
-    return () => {
-      window.removeEventListener("keydown", () => null);
-    };
-  }, []);
 
   return (
     <Container className={classes.container} maxWidth={false}>

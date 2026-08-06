@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -59,15 +59,6 @@ const SkeletonLoader = () => {
 
 const About = ({ spotify }) => {
   const classes = Styles();
-
-  // disable radio button keydown event
-  useEffect(() => {
-    window.addEventListener("keydown", () => null);
-
-    return () => {
-      window.removeEventListener("keydown", () => null);
-    };
-  }, []);
 
   return (
     <Container className={classes.container} maxWidth={false}>

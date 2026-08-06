@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Container from "@mui/material/Container";
@@ -39,24 +39,17 @@ const Home = () => {
   const [shouldTransition, setSouldTransition] = useState(true);
   const [backgrounds, setBackgrounds] = useState([FIRST_IMAGE_PATH]);
 
-  // TODO(Task 3, bug 7.13): two defects here, fixed with the carousel work
-  // rather than in the tooling commit.
-  //   1. `.fill(React.createRef())` puts the SAME ref object in every slot, so
-  //      all slides share one ref instead of getting their own.
-  //   2. `slideWidth()` then reads `.current` during render, which is invalid.
-  const [refs] = useState(
-    new Array([FIRST_IMAGE_PATH, ...backgroundUrls].length).fill(
-      // eslint-disable-next-line react-hooks/refs
-      React.createRef()
-    )
-  );
-
-  const slideWidth = () => {
-    if (refs[index] && refs[index] != undefined) {
-      return refs[index].current.clientWidth;
-    }
-    return 0;
+  // Bug 7.13: this was `new Array(n).fill(React.createRef())`, which puts the
+  // SAME ref object in every slot - every slide shared one ref, so slideWidth()
+  // never measured the slide it thought it was measuring. Creating the refs
+  // during render also tripped react-hooks/refs. A single ref holding an array
+  // of nodes, populated by callback refs, fixes both.
+  const slideRefs = useRef([]);
+  const setSlideRef = (i) => (node) => {
+    slideRefs.current[i] = node;
   };
+
+  const slideWidth = () => slideRefs.current[index]?.clientWidth ?? 0;
 
   const goToPrevSlide = () => {
     if (index === 0) {
@@ -125,23 +118,29 @@ const Home = () => {
     }
   }, []);
 
+  // Bug 7.11: onKeyDown used to be bound to `window`, so pressing an arrow key
+  // while typing in the contact form advanced the hero carousel further up the
+  // page. It is now bound to the focusable carousel region below, so it only
+  // fires when the carousel itself has focus. Resize stays on window.
   useEffect(() => {
     window.addEventListener("resize", onResize);
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("keydown", onKeyDown);
-    };
+    return () => window.removeEventListener("resize", onResize);
   }, [index, translateValue]);
 
   return (
-    <div className={classes.outer}>
+    <div
+      className={classes.outer}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Travel photographs"
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+    >
       <Slider
         classes={classes}
         translateValue={translateValue}
         shouldTransition={shouldTransition}
-        refs={refs}
+        setSlideRef={setSlideRef}
         backgrounds={backgrounds}
       />
       <div className={classes.content}>

@@ -34,16 +34,22 @@ export const validEmailRegex = RegExp(
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
 );
 
+// Bug 7.6: this used to call `tokens.split(",")` unguarded, so an unset
+// FORMSPREE_TOKENS threw inside data fetching and 500'd the whole page.
+// Returns null instead, and the contact form renders disabled (bug 7.10).
 export const getFormspreeUrl = () => {
   const tokens = process.env.FORMSPREE_TOKENS;
-  const token = shuffle(tokens.split(","))[0];
+  if (!tokens) return null;
 
-  return `${FORMSPREE_URL}/${token}`;
+  const list = tokens.split(",").filter(Boolean);
+  if (list.length === 0) return null;
+
+  return `${FORMSPREE_URL}/${shuffle(list)[0]}`;
 };
 
-export const getGoogleMapsKey = () => {
-  return process.env.GOOGLE_MAPS_API_KEY;
-};
+// Bug 7.10: null rather than undefined, so the absent case is explicit and the
+// map renders a static fallback instead of mounting the Google loader.
+export const getGoogleMapsKey = () => process.env.GOOGLE_MAPS_API_KEY || null;
 
 export const getAge = (dateString) => {
   const today = new Date();
