@@ -28,6 +28,7 @@
 ## File Structure
 
 **Created:**
+
 - `eslint.config.mjs` — flat ESLint config
 - `.prettierrc`, `.prettierignore` — formatting
 - `tsconfig.json` — strict TypeScript
@@ -37,11 +38,13 @@
 - `utils/array.ts` — local `chunk`/`shuffle`, replacing two lodash packages
 
 **Deleted:**
+
 - `styles/global.css`, `styles/Home.module.css` — imported by nothing
 - `public/static/assets/images/first_image.jpg`, `about.png` — unreferenced, ~1 MB
 - All 12 `components/**/styles.js` — absorbed into their components as `styled`/`sx`
 
 **Heavily modified:**
+
 - `pages/_app.js` → `.tsx`, `pages/_document.js` → `.tsx` — provider and SSR rewiring
 - `components/Home/index.js` → `.tsx` — carousel, the largest single rewrite
 - `utils/constants.js` → `.tsx` — gains the `HERO_IMAGES` manifest
@@ -51,10 +54,12 @@
 ## Task 1: Tooling foundation
 
 **Files:**
+
 - Create: `eslint.config.mjs`, `.prettierrc`, `.prettierignore`, `tsconfig.json`
 - Modify: `package.json`, `.nvmrc`, `next.config.js`
 
 **Interfaces:**
+
 - Consumes: nothing (first task)
 - Produces: `npm run lint`, `npm run lint:fix`, `npm run format`, `npm run format:check`, `npm run typecheck`
 
@@ -92,7 +97,10 @@ export default tseslint.config(
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
     },
   }
 );
@@ -110,6 +118,7 @@ export default tseslint.config(
 ```
 
 `.prettierignore`:
+
 ```
 .next
 node_modules
@@ -222,6 +231,7 @@ Verify the pinned version resolves before relying on it; if 12.8.2 is unavailabl
 ```bash
 npm run build && npm run lint && npm run format:check
 ```
+
 Expected: both succeed. `typecheck` is **not** a gate yet — it cannot pass until Task 7.
 
 - [ ] **Step 11: Commit**
@@ -238,11 +248,13 @@ git commit -m "chore: add TypeScript, ESLint, Prettier tooling"
 ## Task 2: Dead code and dependency pruning
 
 **Files:**
+
 - Delete: `styles/global.css`, `styles/Home.module.css`, `public/static/assets/images/first_image.jpg`, `public/static/assets/images/about.png`
 - Create: `utils/array.ts`
 - Modify: `utils/helpers.js`, `utils/constants.js`, `utils/strings.js`, `components/Home/index.js`, `components/Navbar/smoothAnchor.js`, `components/About/styles.js`, `src/styles.css`, `package.json`
 
 **Interfaces:**
+
 - Consumes: Task 1's tooling
 - Produces: `chunk<T>(arr: T[], size: number): T[][]`, `shuffle<T>(arr: T[]): T[]` from `utils/array.ts`
 
@@ -279,6 +291,7 @@ export const shuffle = <T>(arr: T[]): T[] => {
 - [ ] **Step 3: Remove the complete Garmin surface**
 
 Verified dead by repo-wide grep — confirm each with `grep -rn` before deleting:
+
 - `utils/helpers.js` — `fetchGarmin()`, `filterObject()`
 - `utils/constants.js` — `GARMIN_API_DEV`, `GARMIN_API_PROD`, `MAP_ZOOM_GARMIN`, Garmin chart/allowlist constants
 - `utils/strings.js` — the ~20 Garmin keys in `aboutStrings`
@@ -310,6 +323,7 @@ npm install --save-exact react-transition-group@4.4.5
 ```bash
 grep -rn "lodash\.\|smoothscroll\|twitter-embed\|CookieConsent\|fetchGarmin\|filterObject\|MAP_ZOOM_GARMIN\|react-reveal" --include="*.js" --include="*.css" . | grep -v node_modules
 ```
+
 Expected: no output.
 
 - [ ] **Step 8: Build and commit**
@@ -327,9 +341,11 @@ git commit -m "chore: remove dead code, prune and correct dependencies"
 ## Task 3: Stack-independent bug fixes
 
 **Files:**
+
 - Modify: `components/index.js`, `components/About/index.js`, `components/Experience/index.js`, `components/Contact/index.js`, `components/Home/index.js`, `utils/helpers.js`, `components/Contact/form/index.js`, `components/Map/index.js`
 
 **Interfaces:**
+
 - Consumes: Task 2's `utils/array.ts`
 - Produces: `getFormspreeUrl(): string | null`, `getGoogleMapsKey(): string | null` — both now nullable, which Task 7 turns into typed union states
 
@@ -350,7 +366,8 @@ useEffect(() => {
 
 - [ ] **Step 2: Delete the four no-op keydown listeners (7.2)**
 
-`addEventListener("keydown", () => null)` paired with a `removeEventListener` on a *different* function identity — does nothing, never cleans up. Remove from:
+`addEventListener("keydown", () => null)` paired with a `removeEventListener` on a _different_ function identity — does nothing, never cleans up. Remove from:
+
 - `components/index.js:49,52`
 - `components/Experience/index.js:17,20`
 - `components/Contact/index.js:60,63`
@@ -371,8 +388,13 @@ Remove the `window` listener entirely and bind to a focusable container:
   aria-label="Travel photographs"
   tabIndex={0}
   onKeyDown={(e) => {
-    if (e.key === LEFT_KEY) { e.preventDefault(); previous(); }
-    else if (e.key === RIGHT_KEY) { e.preventDefault(); next(); }
+    if (e.key === LEFT_KEY) {
+      e.preventDefault();
+      previous();
+    } else if (e.key === RIGHT_KEY) {
+      e.preventDefault();
+      next();
+    }
   }}
 >
   {/* slides */}
@@ -410,7 +432,7 @@ They must degrade **independently**: one missing variable must not disable the o
 
 - [ ] **Step 7: Surface form submission failures (7.12)**
 
-The existing `onreadystatechange` *does* have an `else` branch setting `"error"` — the defect is narrower. On transport failure the request reaches `DONE` with `status === 0` and an **empty `responseText`**, so `handleError("")` renders a blank failure box. There is also no explicit `onerror` and no submitting state.
+The existing `onreadystatechange` _does_ have an `else` branch setting `"error"` — the defect is narrower. On transport failure the request reaches `DONE` with `status === 0` and an **empty `responseText`**, so `handleError("")` renders a blank failure box. There is also no explicit `onerror` and no submitting state.
 
 **`handleError` cannot render a generic message.** Read `components/Contact/form/index.js:38` — it only branches on `errorMessage.includes("empty")` and `.includes("email")`, mapping to per-field errors. Passing it a generic string matches neither branch and **renders nothing at all**. A new piece of state is required; reusing `handleError` does not work.
 
@@ -423,7 +445,10 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 
 const finish = (message) => {
   setIsSubmitting(false);
-  if (message) { setStatus("error"); setSubmitError(message); }
+  if (message) {
+    setStatus("error");
+    setSubmitError(message);
+  }
 };
 
 setIsSubmitting(true);
@@ -453,9 +478,13 @@ Change `handleError` to `return true` in each recognised branch and `return fals
 Render `submitError` in an accessible live region — the JSX has **no general error output today**, so one must be added:
 
 ```jsx
-{submitError && (
-  <p role="alert" aria-live="polite">{submitError}</p>
-)}
+{
+  submitError && (
+    <p role="alert" aria-live="polite">
+      {submitError}
+    </p>
+  );
+}
 ```
 
 Disable the submit button while `isSubmitting` to prevent duplicate sends, and clear pending state on **every** completion path. The form stays populated and re-submittable on failure.
@@ -475,9 +504,11 @@ git commit -m "fix: nav offset, listener leaks, key scoping, env guards, form er
 ## Task 4: MUI 5.18 bump
 
 **Files:**
+
 - Modify: `package.json`
 
 **Interfaces:**
+
 - Consumes: Task 3's fixes
 - Produces: an MUI version whose React peer range admits React 19
 
@@ -492,7 +523,7 @@ npm install --save-exact \
   @mui/styles@5.18.0
 ```
 
-**`@mui/styles` must be bumped too, even though it dies in Task 6.** The installed 5.15.19 declares `react: "^17.0.0"` — React 17 *only*, so it is already violating peers against the current React 18. Leaving it pinned there means Task 5's React 19 install can resolve incorrectly or pull a second React instance. 5.18.0 widens it to `^17 || ^18 || ^19`. Task 6 uninstalls it.
+**`@mui/styles` must be bumped too, even though it dies in Task 6.** The installed 5.15.19 declares `react: "^17.0.0"` — React 17 _only_, so it is already violating peers against the current React 18. Leaving it pinned there means Task 5's React 19 install can resolve incorrectly or pull a second React instance. 5.18.0 widens it to `^17 || ^18 || ^19`. Task 6 uninstalls it.
 
 - [ ] **Step 2: Verify and commit**
 
@@ -509,9 +540,11 @@ git commit -m "chore: bump MUI to 5.18 for React 19 peer compatibility"
 ## Task 5: Next 16 + React 19, and FontAwesome
 
 **Files:**
+
 - Modify: `package.json`, `next.config.js`, `pages/_app.js`
 
 **Interfaces:**
+
 - Consumes: Task 4's MUI 5.18
 - Produces: the Next 16 / React 19 runtime everything after depends on
 
@@ -561,7 +594,16 @@ npm install --save-exact \
 It currently re-runs on every render:
 
 ```js
-library.add(faCode, faHeartbeat, faTrain, faUsers, faEnvelope, faPhone, faArrowLeft, faArrowRight);
+library.add(
+  faCode,
+  faHeartbeat,
+  faTrain,
+  faUsers,
+  faEnvelope,
+  faPhone,
+  faArrowLeft,
+  faArrowRight
+);
 
 export default function MyApp({ Component, pageProps }) {
   // ...
@@ -620,10 +662,12 @@ There is **no fourth combined commit** — A, B and C are the complete set.
 ## Task 6: Kill `@mui/styles`, migrate to MUI 9
 
 **Files:**
+
 - Delete: all 12 `components/**/styles.js`
 - Modify: `src/theme.js` (palette — see Step 3c), `pages/_app.js`, `pages/_document.js`, `components/index.js`, `components/Contact/index.js`, `components/Contact/form/index.js`, `components/About/index.js`, `components/About/rightRail/index.js`, `components/Experience/skills/index.js` (the last four for the Grid migration), and all 12 components that consumed a `styles.js`
 
 **Interfaces:**
+
 - Consumes: Task 5's React 19 runtime
 - Produces: `theme.palette.*` Atlantic tokens (Step 3c) consumed by every later task; the current Grid API across the four files in Step 3b
 
@@ -651,7 +695,7 @@ An earlier draft created `src/emotion-cache.ts` with a custom `key: "css"` cache
 
 `@mui/material-nextjs` ships a correct default for both sides. This project has no requirement that needs custom cache behaviour, so use it. **No `src/emotion-cache.ts` is created.**
 
-If a custom cache is ever genuinely needed, the same configured instance must be passed to `AppCacheProvider` *and* `documentGetInitialProps` — configuring only one side is the failure mode this step exists to avoid.
+If a custom cache is ever genuinely needed, the same configured instance must be passed to `AppCacheProvider` _and_ `documentGetInitialProps` — configuring only one side is the failure mode this step exists to avoid.
 
 - [ ] **Step 3: Wire Emotion SSR on BOTH sides**
 
@@ -660,13 +704,21 @@ The integration needs `_app` **and** `_document`. Wiring only `_document` leaves
 `pages/_document.js`:
 
 ```jsx
-import { DocumentHeadTags, documentGetInitialProps } from "@mui/material-nextjs/v15-pagesRouter";
+import {
+  DocumentHeadTags,
+  documentGetInitialProps,
+} from "@mui/material-nextjs/v15-pagesRouter";
 
 export default function MyDocument(props) {
   return (
     <Html lang="en">
-      <Head><DocumentHeadTags {...props} /></Head>
-      <body><Main /><NextScript /></body>
+      <Head>
+        <DocumentHeadTags {...props} />
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
     </Html>
   );
 }
@@ -720,7 +772,7 @@ Run MUI's codemod first, then hand-check every site — the codemod does not cat
 
 - [ ] **Step 3c: Introduce the Atlantic palette now, not in Task 8**
 
-The `makeStyles` modules reference `theme.colors.black` etc. — a **custom non-standard key** that only ever worked through the JSS provider. Converting them requires real `theme.palette` tokens to convert *to*, so the palette must exist here. Waiting until Task 8 would mean writing every `styled` call twice.
+The `makeStyles` modules reference `theme.colors.black` etc. — a **custom non-standard key** that only ever worked through the JSS provider. Converting them requires real `theme.palette` tokens to convert _to_, so the palette must exist here. Waiting until Task 8 would mean writing every `styled` call twice.
 
 In `src/theme.js`, replace the `colors` block with the Atlantic palette (full token table and computed contrast ratios in Task 8 Step 1 — copy the hex values from there):
 
@@ -741,11 +793,11 @@ Map the old names as you convert: `colors.black` → `palette.slate`, `colors.wh
 
 **This is a deliberate deviation from the spec**, which places all palette work in the redesign stage (§13 step 7). Moving it here is forced: `theme.colors.*` has no MUI equivalent, so the `styled` conversions need real tokens to target, and leaving it to Task 8 means writing every `styled` call twice. Lifecycle across the three tasks:
 
-| Task | File | Action |
-|---|---|---|
-| 6 | `src/theme.js` | Palette tokens replace the `colors` block |
-| 7 | `src/theme.js` → `src/theme.ts` | Renamed with everything else; augmentation added |
-| 8 | `src/theme.ts` | **Modified**, not created — typography, spacing, motion. **Does not redefine the palette.** |
+| Task | File                            | Action                                                                                      |
+| ---- | ------------------------------- | ------------------------------------------------------------------------------------------- |
+| 6    | `src/theme.js`                  | Palette tokens replace the `colors` block                                                   |
+| 7    | `src/theme.js` → `src/theme.ts` | Renamed with everything else; augmentation added                                            |
+| 8    | `src/theme.ts`                  | **Modified**, not created — typography, spacing, motion. **Does not redefine the palette.** |
 
 Note the deviation in the Task 6 commit message so the spec and plan do not silently disagree.
 
@@ -787,6 +839,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 ```bash
 grep -rn "@mui/styles\|makeStyles\|withStyles\|ServerStyleSheets" --include="*.js" --include="*.tsx" . | grep -v node_modules
 ```
+
 Expected: no output.
 
 - [ ] **Step 8: Verify and commit**
@@ -804,10 +857,12 @@ git commit -m "refactor: replace @mui/styles JSS layer with MUI 9 styled/sx"
 ## Task 7: TypeScript migration
 
 **Files:**
+
 - Rename: every `.js` under `pages/`, `components/`, `utils/`, `src/` → `.ts`/`.tsx`
 - Create: `src/types/theme.d.ts`
 
 **Interfaces:**
+
 - Consumes: Task 6's MUI 9 layer
 - Produces: `FormspreeUrl = string | null`, `MapsKey = string | null`, `HeroImage` (defined in Task 8)
 
@@ -878,6 +933,7 @@ Use `unknown` plus narrowing. For third-party gaps write a local `.d.ts`, never 
 ```bash
 npm run typecheck
 ```
+
 Expected: clean. From this task forward it runs before every commit.
 
 - [ ] **Step 6: Verify and commit**
@@ -895,9 +951,11 @@ git commit -m "refactor: migrate to TypeScript in strict mode"
 ## Task 8: Atlantic redesign
 
 **Files:**
+
 - Modify: `src/theme.ts` (**exists already** — created in Task 6, renamed in Task 7; this task adds typography, spacing and motion and must **not** redefine the palette), `utils/constants.tsx`, `pages/_app.tsx`, all section components
 
 **Interfaces:**
+
 - Consumes: Task 7's typed theme augmentation
 - Produces: `HERO_IMAGES: HeroImage[]`
 
@@ -907,16 +965,16 @@ Resolves **7.8** — the font inconsistency, since the new scale replaces both b
 
 The tokens already exist in `src/theme.ts` from Task 6 Step 3c. This step is a **verification** that they match the table below, not a re-definition. Every ratio is **computed, not estimated** — two earlier drafts of the spec got these wrong.
 
-| Token | Hex | Use | Contrast |
-|---|---|---|---|
-| `slate` | `#2B373B` | Dark surface | — |
-| `limestone` | `#E8E4DC` | Light surface | — |
-| `ink` | `#14110F` | Text on light | 14.83:1 ✓ AAA |
-| `chalk` | `#FAFAF8` | Text on dark | 11.73:1 ✓ AAA |
-| `seaGlass` | `#7FA8A0` | Accent **on dark only** | 4.68:1 on slate ✓ AA |
-| `deepSea` | `#2F5D57` | Links **on light** | 5.87:1 on limestone ✓ AA |
-| `signal` | `#E4572E` | **Decorative marks only** | 2.90:1 ✗ — never text |
-| `signalText` | `#A33A1B` | Accent text on light | 5.21:1 ✓ AA |
+| Token        | Hex       | Use                       | Contrast                 |
+| ------------ | --------- | ------------------------- | ------------------------ |
+| `slate`      | `#2B373B` | Dark surface              | —                        |
+| `limestone`  | `#E8E4DC` | Light surface             | —                        |
+| `ink`        | `#14110F` | Text on light             | 14.83:1 ✓ AAA            |
+| `chalk`      | `#FAFAF8` | Text on dark              | 11.73:1 ✓ AAA            |
+| `seaGlass`   | `#7FA8A0` | Accent **on dark only**   | 4.68:1 on slate ✓ AA     |
+| `deepSea`    | `#2F5D57` | Links **on light**        | 5.87:1 on limestone ✓ AA |
+| `signal`     | `#E4572E` | **Decorative marks only** | 2.90:1 ✗ — never text    |
+| `signalText` | `#A33A1B` | Accent text on light      | 5.21:1 ✓ AA              |
 
 **`seaGlass` must never carry text on `limestone`** (2.07:1) and **`signal` must never be text anywhere** (2.90:1, failing even the 3:1 non-text threshold). Use `deepSea` and `signalText` respectively.
 
@@ -960,7 +1018,7 @@ typography: {
 },
 ```
 
-3. `axes: ["wdth"]` only *loads* the axis — **`font-stretch: 125%` is what actually applies the expanded width.** Without it the display face renders at default width and the direction's whole typographic character is lost.
+3. `axes: ["wdth"]` only _loads_ the axis — **`font-stretch: 125%` is what actually applies the expanded width.** Without it the display face renders at default width and the direction's whole typographic character is lost.
 
 Coordinates use `font-variant-numeric: tabular-nums` on the body face rather than a third font.
 
@@ -969,6 +1027,7 @@ Coordinates use `font-variant-numeric: tabular-nums` on the body face rather tha
 ```bash
 npm run build
 ```
+
 Budget: **≤ 90 KB total**. This is a gate, not an estimate. If exceeded: drop Archivo 600 and ship 700 alone; if still over, pin a static instance instead of the variable axis.
 
 - [ ] **Step 4: Add the `HERO_IMAGES` manifest to `utils/constants.tsx`**
@@ -976,8 +1035,8 @@ Budget: **≤ 90 KB total**. This is a gate, not an estimate. If exceeded: drop 
 ```ts
 export type HeroImage = {
   id: string;
-  alt: string;        // required, non-empty
-  location: string;   // required — all 8 are known
+  alt: string; // required, non-empty
+  location: string; // required — all 8 are known
   desktopSrc: string;
   mobileSrc?: string; // absent only for the local slide 0
 };
@@ -998,7 +1057,7 @@ Populate all 8 entries from spec §7a — the alt text and locations are already
 
 Timeline: each role anchored to its city with coordinates, the vertical rule reading as a route line. Map: promoted to the closing element of the arc, showing all three cities connected.
 
-The photographs are *global* travel while the CV is the Galway → Dublin → SF arc — two complementary uses of geography, not a contradiction.
+The photographs are _global_ travel while the CV is the Galway → Dublin → SF arc — two complementary uses of geography, not a contradiction.
 
 - [ ] **Step 7: Neutralise all four motion sources under reduced motion**
 
@@ -1008,12 +1067,12 @@ The photographs are *global* travel while the CV is the Galway → Dublin → SF
 }
 ```
 
-| Source | Behaviour |
-|---|---|
-| `react-awesome-reveal` reveals | No animation, content in place |
-| Hero load sequence | Skipped |
-| Smooth anchor scroll (`smoothAnchor.tsx`, `Layout/index.tsx`) | `behavior: "auto"` — instant |
-| Carousel transition (`Home/Slider/index.tsx`) | Zero duration; slides still change |
+| Source                                                        | Behaviour                          |
+| ------------------------------------------------------------- | ---------------------------------- |
+| `react-awesome-reveal` reveals                                | No animation, content in place     |
+| Hero load sequence                                            | Skipped                            |
+| Smooth anchor scroll (`smoothAnchor.tsx`, `Layout/index.tsx`) | `behavior: "auto"` — instant       |
+| Carousel transition (`Home/Slider/index.tsx`)                 | Zero duration; slides still change |
 
 - [ ] **Step 8: Verify and commit**
 
@@ -1030,10 +1089,12 @@ git commit -m "feat: Atlantic design direction"
 ## Task 9: Performance
 
 **Files:**
+
 - Modify: `pages/index.tsx`, `next.config.js`, `components/Home/index.tsx`, `components/About/*`, `components/Footer/index.tsx`
 - Re-encode: `public/static/assets/images/first_image.webp`
 
 **Interfaces:**
+
 - Consumes: Task 8's `HERO_IMAGES`
 - Produces: a statically generated page
 
@@ -1056,12 +1117,12 @@ export const getStaticProps = (async () => ({
 
 - [ ] **Step 2: Handle all four non-static values**
 
-| Value | Fix |
-|---|---|
-| Spotify playlist | Not a prop at all. Server renders a **fixed-height skeleton**; `useEffect` picks the playlist after mount into local state; `<Spotify>` renders **only once that state is set**, so the iframe mounts exactly once. Rendering a first playlist then swapping would load two Spotify iframes per visit. |
-| Age (`getAge("1994/07/14")`, hardcoded at `About/rightRail/index.tsx:19`) | Move the literal into `constants.tsx`; compute **client-side only** |
-| Copyright year (`Footer`) | **Client-side.** A build-time year goes stale on 1 January |
-| Formspree token | **Build-time selection, accepted.** Rotating client-side would ship every token to the browser |
+| Value                                                                     | Fix                                                                                                                                                                                                                                                                                                    |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Spotify playlist                                                          | Not a prop at all. Server renders a **fixed-height skeleton**; `useEffect` picks the playlist after mount into local state; `<Spotify>` renders **only once that state is set**, so the iframe mounts exactly once. Rendering a first playlist then swapping would load two Spotify iframes per visit. |
+| Age (`getAge("1994/07/14")`, hardcoded at `About/rightRail/index.tsx:19`) | Move the literal into `constants.tsx`; compute **client-side only**                                                                                                                                                                                                                                    |
+| Copyright year (`Footer`)                                                 | **Client-side.** A build-time year goes stale on 1 January                                                                                                                                                                                                                                             |
+| Formspree token                                                           | **Build-time selection, accepted.** Rotating client-side would ship every token to the browser                                                                                                                                                                                                         |
 
 - [ ] **Step 3: Configure remote images**
 
@@ -1091,6 +1152,7 @@ Delete `getBackground()` — it creates object URLs that are never revoked and b
 ```bash
 npm uninstall react-device-detect
 ```
+
 Its only call site is now gone.
 
 - [ ] **Step 5: Repo-wide `priority` → `preload` audit — 18 occurrences**
@@ -1105,6 +1167,7 @@ Two problems, not one: `priority` is **deprecated in Next 16**, and most of thes
 ```bash
 grep -rn "priority" --include="*.tsx" --include="*.ts" . | grep -v node_modules
 ```
+
 Expected after this step: **no output.** The hero uses `preload`, so `priority` should not survive anywhere.
 
 - [ ] **Step 6: Re-encode the hero image**
@@ -1130,16 +1193,18 @@ git commit -m "perf: static generation, next/font, responsive images"
 ## Task 10: Pre-merge
 
 **Files:**
+
 - Create: `docs/lighthouse-after.json` (committed alongside the Task 1 baseline, so the comparison is reproducible from the repo)
 - Create: `docs/pr-body.md` (Step 4b — `gh pr create --body-file` requires it to exist)
 
-**Ordering matters here.** Both artifacts are *created* in this task, so they must be written, then gated, then committed, and only then reviewed and pushed — otherwise the final commit is neither gated nor covered by the branch review.
+**Ordering matters here.** Both artifacts are _created_ in this task, so they must be written, then gated, then committed, and only then reviewed and pushed — otherwise the final commit is neither gated nor covered by the branch review.
 
 - [ ] **Step 1: Preliminary gate run**
 
 ```bash
 npm run build && npm run lint && npm run format:check && npm run typecheck
 ```
+
 All four must pass. **Report failures plainly with output — never push past them.**
 
 - [ ] **Step 2: Walk the complete manual matrix**
@@ -1206,7 +1271,7 @@ Now that every commit exists, review covers the whole branch including the artif
 codex review --base main
 ```
 
-`codex-review diff` is the *skill* name, not a CLI command — it does not exist as an executable.
+`codex-review diff` is the _skill_ name, not a CLI command — it does not exist as an executable.
 
 - [ ] **Step 7: Push and open the PR**
 
@@ -1232,6 +1297,6 @@ Body contents are specified in Step 4.
 
 **Placeholder scan:** none. Every code step carries real code; every version is exact.
 
-**Type consistency:** `HeroImage` (Task 8) is referenced only after definition. `FormspreeUrl`/`MapsKey` are introduced in Task 3 as runtime `null` and typed in Task 7 — intentional, since TypeScript does not exist until Task 7. `chunk`/`shuffle` are defined in Task 2 before their Task 2 call sites. The Atlantic palette is defined in Task 6 Step 3c and only *verified* in Task 8 Step 1 — it is never defined twice.
+**Type consistency:** `HeroImage` (Task 8) is referenced only after definition. `FormspreeUrl`/`MapsKey` are introduced in Task 3 as runtime `null` and typed in Task 7 — intentional, since TypeScript does not exist until Task 7. `chunk`/`shuffle` are defined in Task 2 before their Task 2 call sites. The Atlantic palette is defined in Task 6 Step 3c and only _verified_ in Task 8 Step 1 — it is never defined twice.
 
 **Known risk:** Task 6 is much larger than the others. It is not split because the `@mui/styles` removal is atomic — a half-migrated styling layer does not build.

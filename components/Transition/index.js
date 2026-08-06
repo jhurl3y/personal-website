@@ -3,20 +3,20 @@ import { TRANSITION_DURATION } from "../../utils/constants";
 
 const baseStyles = {
   transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
-  opacity: 0
+  opacity: 0,
 };
 
 const transitionStyles = {
   entering: { opacity: 1 },
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
-  exited: { opacity: 0 }
+  exited: { opacity: 0 },
 };
 
 const stickyStyles = {
   top: 0,
   height: 0,
-  zIndex: 99
+  zIndex: 99,
 };
 
 export const buildStyles = (sticky, state) => {
@@ -29,10 +29,10 @@ export const buildStyles = (sticky, state) => {
   return styles;
 };
 
-export default props => {
+const FadeTransition = (props) => {
   return (
     <Transition in={props.in} timeout={TRANSITION_DURATION}>
-      {state => (
+      {(state) => (
         <div
           className={props.sticky ? "is-sticky" : ""}
           style={buildStyles(props.sticky, state)}
@@ -43,3 +43,5 @@ export default props => {
     </Transition>
   );
 };
+
+export default FadeTransition;

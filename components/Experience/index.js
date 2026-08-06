@@ -10,7 +10,7 @@ import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { experienceStrings } from "../../utils/strings";
 import Styles from "./styles";
 
-export default () => {
+const Experience = () => {
   const classes = Styles();
   // disable radio button keydown event
   useEffect(() => {
@@ -51,3 +51,5 @@ export default () => {
     </Container>
   );
 };
+
+export default Experience;

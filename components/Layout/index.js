@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-export default ({ children, title, className }) => (
+const Layout = ({ children, title, className }) => (
   <div>
     <Head>
       <title>{title}</title>
@@ -20,3 +20,5 @@ export default ({ children, title, className }) => (
     `}</style>
   </div>
 );
+
+export default Layout;

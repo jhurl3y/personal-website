@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Styles from "./styles";
 
-export default ({ title, content, icon }) => {
+const SkillCard = ({ title, content, icon }) => {
   const classes = Styles();
 
   return (
@@ -26,3 +26,5 @@ export default ({ title, content, icon }) => {
     </Card>
   );
 };
+
+export default SkillCard;

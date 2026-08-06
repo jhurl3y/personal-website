@@ -14,7 +14,7 @@ const noErrors = {
   message: "",
 };
 
-export default ({ formspree }) => {
+const ContactForm = ({ formspree }) => {
   const classes = Styles();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -258,3 +258,5 @@ export default ({ formspree }) => {
     </Container>
   );
 };
+
+export default ContactForm;

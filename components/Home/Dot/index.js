@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import { COLORS } from "../../../utils/constants";
 
-export default ({ i, highlight, onDotClick, classes }) => (
+const Dot = ({ i, highlight, onDotClick, classes }) => (
   <Button
     onClick={() => onDotClick(i)}
     className={classes.dotContainer}
@@ -18,3 +18,5 @@ export default ({ i, highlight, onDotClick, classes }) => (
     </span>
   </Button>
 );
+
+export default Dot;

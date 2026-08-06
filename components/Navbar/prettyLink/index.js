@@ -1,13 +1,13 @@
 import SmoothAnchor from "../smoothAnchor";
 import Styles from "./styles";
 
-export default ({
+const PrettyLink = ({
   href,
   text,
   title = "",
   dark = true,
   active = false,
-  extraScroll = false
+  extraScroll = false,
 }) => {
   const classes = Styles();
 
@@ -24,3 +24,5 @@ export default ({
     </SmoothAnchor>
   );
 };
+
+export default PrettyLink;

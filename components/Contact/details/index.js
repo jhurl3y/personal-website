@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Styles from "./styles";
 import { PHONE, EMAIL } from "../../../utils/constants";
 
-export default () => {
+const ContactDetails = () => {
   const classes = Styles();
 
   return (
@@ -29,3 +29,5 @@ export default () => {
     </Container>
   );
 };
+
+export default ContactDetails;

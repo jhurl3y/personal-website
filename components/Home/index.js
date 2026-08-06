@@ -31,7 +31,7 @@ const RightButton = ({ onClick }) => {
   );
 };
 
-export default () => {
+const Home = () => {
   const classes = Styles();
   const backgroundUrls = getBackgroundUrls();
   const [index, setIndex] = useState(0);
@@ -39,8 +39,14 @@ export default () => {
   const [shouldTransition, setSouldTransition] = useState(true);
   const [backgrounds, setBackgrounds] = useState([FIRST_IMAGE_PATH]);
 
+  // TODO(Task 3, bug 7.13): two defects here, fixed with the carousel work
+  // rather than in the tooling commit.
+  //   1. `.fill(React.createRef())` puts the SAME ref object in every slot, so
+  //      all slides share one ref instead of getting their own.
+  //   2. `slideWidth()` then reads `.current` during render, which is invalid.
   const [refs] = useState(
     new Array([FIRST_IMAGE_PATH, ...backgroundUrls].length).fill(
+      // eslint-disable-next-line react-hooks/refs
       React.createRef()
     )
   );
@@ -164,3 +170,5 @@ export default () => {
     </div>
   );
 };
+
+export default Home;

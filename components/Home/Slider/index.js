@@ -21,7 +21,9 @@ const ImageWrapper = React.forwardRef(({ image, classes }, ref) => {
   );
 });
 
-export default ({
+ImageWrapper.displayName = "ImageWrapper";
+
+const Slider = ({
   classes,
   translateValue,
   shouldTransition,
@@ -45,3 +47,5 @@ export default ({
     ))}
   </div>
 );
+
+export default Slider;

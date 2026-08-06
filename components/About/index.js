@@ -57,7 +57,7 @@ const SkeletonLoader = () => {
   );
 };
 
-export default ({ spotify }) => {
+const About = ({ spotify }) => {
   const classes = Styles();
 
   // disable radio button keydown event
@@ -123,3 +123,5 @@ export default ({ spotify }) => {
     </Container>
   );
 };
+
+export default About;

@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@mui/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../src/theme";
-const { library } = require("@fortawesome/fontawesome-svg-core");
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCode,
   faHeartbeat,

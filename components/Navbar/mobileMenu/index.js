@@ -8,7 +8,7 @@ import Styles from "./styles";
 import Link from "@mui/material/Link";
 import { navbarStrings } from "../../../utils/strings";
 
-export default ({ pages, dark }) => {
+const MobileMenu = ({ pages, dark }) => {
   const classes = Styles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -64,3 +64,5 @@ export default ({ pages, dark }) => {
     </div>
   );
 };
+
+export default MobileMenu;

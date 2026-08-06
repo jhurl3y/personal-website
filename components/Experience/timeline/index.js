@@ -5,7 +5,7 @@ import {
 import { experience, COLORS } from "../../../utils/constants";
 import { Work, School } from "@mui/icons-material";
 
-export default () => {
+const Timeline = () => {
   const timelineContent = experience.map((position, i) => {
     const { color, type, date, title, location, tasks, skills } = position;
 
@@ -30,3 +30,5 @@ export default () => {
 
   return <VerticalTimeline>{timelineContent}</VerticalTimeline>;
 };
+
+export default Timeline;

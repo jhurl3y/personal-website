@@ -42,7 +42,7 @@ const MapSkeletonLoader = () => {
   );
 };
 
-const StyledButton = withStyles((theme) => ({
+const StyledButton = withStyles((_theme) => ({
   root: {
     color: "#46bcec",
     background: "transparent",
@@ -50,7 +50,7 @@ const StyledButton = withStyles((theme) => ({
   },
 }))(Button);
 
-export default ({ formspree, maps }) => {
+const Contact = ({ formspree, maps }) => {
   const classes = Styles();
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [showDetails, setShowDetails] = useState(false);
@@ -134,3 +134,5 @@ export default ({ formspree, maps }) => {
     </Container>
   );
 };
+
+export default Contact;

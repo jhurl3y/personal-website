@@ -7,7 +7,7 @@ import { aboutStrings } from "../../../utils/strings";
 import { getAge } from "../../../utils/helpers";
 import Styles from "./styles";
 
-export default () => {
+const RightRail = () => {
   const classes = Styles();
   const { me, intro, iLike, code, sport, travel, friends } = aboutStrings;
 
@@ -49,3 +49,5 @@ export default () => {
     </Grid>
   );
 };
+
+export default RightRail;

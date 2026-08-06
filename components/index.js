@@ -33,6 +33,8 @@ const Section = forwardRef(({ children, id, offset }, ref) => {
   );
 });
 
+Section.displayName = "Section";
+
 const Component = ({ spotify, formspree, maps }) => {
   const classes = useStyles();
   const navRef = useRef(null);

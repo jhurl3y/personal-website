@@ -7,7 +7,7 @@ import Image from "next/image";
 import { footerStrings } from "../../utils/strings";
 import Styles from "./styles";
 
-export default () => {
+const Footer = () => {
   const classes = Styles();
 
   return (
@@ -63,3 +63,5 @@ export default () => {
     </div>
   );
 };
+
+export default Footer;

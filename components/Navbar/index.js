@@ -52,7 +52,7 @@ const Links = ({ selectedPage, pages, dark, classes }) => {
   );
 };
 
-export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
+const Navbar = ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
   const classes = Styles();
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(pages[0]);
@@ -131,3 +131,5 @@ export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
     </Transition>
   );
 };
+
+export default Navbar;

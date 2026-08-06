@@ -5,7 +5,7 @@ import Styles from "./styles";
 import { SKILLS } from "../../../utils/constants";
 import { fadeDuration } from "../../../utils/constants";
 
-export default () => {
+const Skills = () => {
   const classes = Styles();
 
   return (
@@ -24,3 +24,5 @@ export default () => {
     </Grid>
   );
 };
+
+export default Skills;
