@@ -304,11 +304,10 @@ that ambiguity now, before planning:
     ```ts
     type HeroImage = {
       id: string;              // existing identifier ("one"…"fourteen"), or "first"
-      alt: string;             // "" in the decorative fallback; see open question 15.4
-      location?: string;       // e.g. "Connemara, Galway" — feeds the coordinate eyebrow.
-                               // OPTIONAL: absent in the fallback path, where no
-                               // per-slide eyebrow renders and the hero shows the
-                               // static "53°N → 37°N" arc label instead.
+      alt: string;             // required, non-empty; all 8 written in §7a below
+      location: string;        // e.g. "Table Mountain, Cape Town" — feeds the
+                               // coordinate eyebrow. Required: all 8 are known, so
+                               // there is no case where a slide lacks one.
       desktopSrc: string;      // DESKTOP_IMAGE_PATH + id + ".jpg"
       mobileSrc?: string;      // present only for the 7 ids that exist in the mobile bucket
     };
@@ -384,12 +383,12 @@ that ambiguity now, before planning:
     location; and that pool is what the desktop carousel now draws from too. If the
     desktop-only images (`eight`…`fourteen`) hold more variety, adding mobile crops for
     them is the fix — see section 4 of this list.
-  - **Defined fallback if he declines:** treat the carousel as a decorative backdrop —
-    `alt=""`, `aria-hidden` on the images, and remove the keyboard/dot controls so it
-    is not an interactive element with no accessible content. The gallery framing in
-    the about copy would then be reworded. This is the worse outcome, recorded so the
-    implementer is never blocked.
 - The S3 bucket is outside this repo's control; see open question 15.1.
+
+**The decorative fallback is withdrawn.** Earlier drafts defined a degraded path
+(`alt=""`, `aria-hidden`, controls removed, about copy reworded) for the case where
+descriptions were unavailable. All 8 descriptions now exist, so that branch is dead and
+must not be implemented. The carousel is always the interactive, described version.
 
 ## 8. Performance
 
@@ -586,7 +585,6 @@ is the cost of the declined test option, not padding.
 | 1 | Click each nav link | Section lands below the sticky nav, not under it | 7.1 |
 | 2 | Resize window, click nav again | Offset re-measured, still correct | 7.1 |
 | 3 | Carousel arrow keys + dots | Slides advance both ways; dots track | preserved `onKeyDown` |
-| — | **Cases 3 and 19 apply only on the descriptions-supplied path.** If the §15.4 decorative fallback ships instead, they are replaced by: images carry `alt=""` and `aria-hidden`, **no carousel controls are present**, no arrow-key handler is registered, and the `aboutStrings.intro` copy no longer invites browsing. Exactly one of the two branches is walked, and the PR states which. | | 7a/§15.4 |
 | 4 | Tab through the whole page | Focus ring always visible, order sensible | quality floor |
 | 5 | Submit contact form, valid input | Success state shown | 7.10 |
 | 6 | Submit contact form, invalid email | Inline validation, no request sent | 7.10 |
@@ -643,18 +641,9 @@ All results reported plainly in the PR, including failures.
    restore the full 14 and need 7 more descriptions. Default if you say nothing: ship
    with the 7.
 
-   **Default if they are not supplied by the time step 8 begins:** the decorative
-   fallback ships — `alt=""`, `aria-hidden` on the imagery, carousel controls removed,
-   and the "scroll through the pictures above" line in `aboutStrings.intro` reworded.
-   **In fallback mode the hero renders the local slide only** and skips remote selection
-   and loading entirely. Appending six remote images behind removed controls would
-   download roughly a megabyte the visitor can never reach — there is no autoplay today
-   and none is being added.
-   No further approval needed to take that path; silence resolves to it. Supplying the
-   descriptions later is a small follow-up PR, not a rework.
-
-   (An earlier draft called this both "design-blocking" and "never blocking", which was
-   a contradiction. The above is the resolution: it blocks *quality*, not *progress*.)
+   (Earlier drafts defined a decorative-fallback default here for the case where
+   descriptions never arrived. That is **withdrawn** — see §7a. All 8 descriptions
+   exist, so there is no fallback path to select and nothing for silence to resolve to.)
 
 3. ~~`getAge()` birth date location~~ — resolved. The date is not in `constants.js`;
    it is a hardcoded literal `"1994/07/14"` at `components/About/rightRail/index.js:19`.

@@ -31,9 +31,9 @@
 - `eslint.config.mjs` — flat ESLint config
 - `.prettierrc`, `.prettierignore` — formatting
 - `tsconfig.json` — strict TypeScript
-- `src/theme.ts` — Atlantic tokens, replaces `src/theme.js`
-- `src/emotion-cache.ts` — Emotion cache for MUI SSR
 - `src/types/theme.d.ts` — MUI theme module augmentation
+- `docs/lighthouse-before.json`, `docs/lighthouse-after.json` — perf baseline and result
+- `docs/pr-body.md` — PR description assembled during Task 10
 - `utils/array.ts` — local `chunk`/`shuffle`, replacing two lodash packages
 
 **Deleted:**
@@ -44,7 +44,7 @@
 **Heavily modified:**
 - `pages/_app.js` → `.tsx`, `pages/_document.js` → `.tsx` — provider and SSR rewiring
 - `components/Home/index.js` → `.tsx` — carousel, the largest single rewrite
-- `utils/constants.js` → `.ts` — gains the `HERO_IMAGES` manifest
+- `utils/constants.js` → `.tsx` — gains the `HERO_IMAGES` manifest
 
 ---
 
@@ -196,12 +196,23 @@ npm install -D --save-exact lighthouse@12.8.2
 npm run build
 npm run start & SERVER_PID=$!
 trap 'kill $SERVER_PID 2>/dev/null' EXIT
+
+# Wait for readiness, bounded. Launching Lighthouse immediately races the server
+# start; an unbounded wait hangs forever if the server dies or never binds.
+for i in $(seq 1 60); do
+  kill -0 $SERVER_PID 2>/dev/null || { echo "server exited"; exit 1; }
+  curl -sf http://localhost:3000 >/dev/null && break
+  [ "$i" = 60 ] && { echo "server not ready after 60s"; exit 1; }
+  sleep 1
+done
+
 npx --no-install lighthouse http://localhost:3000 \
   --preset=desktop \
   --only-categories=performance,accessibility,best-practices,seo \
   --chrome-flags="--headless" \
   --output=json --output-path=./docs/lighthouse-before.json
-kill $SERVER_PID
+
+kill $SERVER_PID; trap - EXIT
 ```
 
 Verify the pinned version resolves before relying on it; if 12.8.2 is unavailable, pin whatever `npm view lighthouse version` reports and record it. Task 10 must re-run with **identical** version, preset, viewport, throttling, and run count. Commit the JSON so the baseline survives the nine intervening commits.
@@ -209,7 +220,7 @@ Verify the pinned version resolves before relying on it; if 12.8.2 is unavailabl
 - [ ] **Step 10: Verify build and lint**
 
 ```bash
-npm run build && npm run lint
+npm run build && npm run lint && npm run format:check
 ```
 Expected: both succeed. `typecheck` is **not** a gate yet — it cannot pass until Task 7.
 
@@ -304,7 +315,7 @@ Expected: no output.
 - [ ] **Step 8: Build and commit**
 
 ```bash
-npm run build && npm run lint
+npm run build && npm run lint && npm run format:check
 git add -A
 git commit -m "chore: remove dead code, prune and correct dependencies"
 ```
@@ -452,7 +463,7 @@ Disable the submit button while `isSubmitting` to prevent duplicate sends, and c
 - [ ] **Step 8: Build and commit**
 
 ```bash
-npm run build && npm run lint
+npm run build && npm run lint && npm run format:check
 git add -A
 git commit -m "fix: nav offset, listener leaks, key scoping, env guards, form errors"
 ```
@@ -475,15 +486,18 @@ MUI 5.15.19 declares React peers of `^17 || ^18` only. **5.18.0 widens them to i
 - [ ] **Step 1: Bump MUI within v5**
 
 ```bash
-npm install --save-exact @mui/material@5.18.0 @mui/icons-material@5.18.0
+npm install --save-exact \
+  @mui/material@5.18.0 \
+  @mui/icons-material@5.18.0 \
+  @mui/styles@5.18.0
 ```
 
-Leave `@mui/styles` alone — it dies in Task 6.
+**`@mui/styles` must be bumped too, even though it dies in Task 6.** The installed 5.15.19 declares `react: "^17.0.0"` — React 17 *only*, so it is already violating peers against the current React 18. Leaving it pinned there means Task 5's React 19 install can resolve incorrectly or pull a second React instance. 5.18.0 widens it to `^17 || ^18 || ^19`. Task 6 uninstalls it.
 
 - [ ] **Step 2: Verify and commit**
 
 ```bash
-npm run build && npm run lint
+npm run build && npm run lint && npm run format:check
 git add -A
 git commit -m "chore: bump MUI to 5.18 for React 19 peer compatibility"
 ```
@@ -501,19 +515,37 @@ git commit -m "chore: bump MUI to 5.18 for React 19 peer compatibility"
 - Consumes: Task 4's MUI 5.18
 - Produces: the Next 16 / React 19 runtime everything after depends on
 
-- [ ] **Step 1: Upgrade the framework**
+**Three slices, three commits.** Bundling the highest-risk upgrade with the framework bump makes a bisect useless. Each slice runs **install → fix its breakage → verify → stage → commit** and is finished before the next slice's install. Do **not** read ahead and batch the installs.
+
+### Slice A — Next 16 + React 19
+
+- [ ] **A1: Install**
 
 ```bash
 npm install --save-exact next@16.3.0 react@19.2.8 react-dom@19.2.8
 ```
 
-`"next": "latest"` was **unpinned** — a live hazard where any `npm install` could silently jump majors. It is now pinned.
+`"next": "latest"` was **unpinned** — any `npm install` could silently jump majors. Now pinned.
 
-- [ ] **Step 2: Remove the build-time lint escape hatch**
+- [ ] **A2: Remove the build-time lint escape hatch**
 
-Next 16 no longer lints during `next build`, so `eslint.ignoreDuringBuilds` from Task 1 is obsolete. Delete it. `next.config.js` should now be effectively empty except for what Task 9 adds.
+Next 16 no longer lints during `next build`, so `eslint.ignoreDuringBuilds` from Task 1 is obsolete. Delete it from `next.config.js`, leaving the file effectively empty until Task 9 adds `images`.
 
-- [ ] **Step 3: Upgrade FontAwesome and fix `library.add` (7.5)**
+- [ ] **A3: Resolve React 19 breakage**
+
+Expect `ReactDOM.render` removals, ref-as-prop changes, stricter `useEffect`. `components/index.js` uses `forwardRef` — React 19 still supports it, but verify `Section` still receives refs and the Task 3 nav offset still measures.
+
+- [ ] **A4: Verify and commit**
+
+```bash
+npm run build && npm run lint && npm run format:check
+git add -A
+git commit -m "feat: upgrade to Next 16 and React 19"
+```
+
+### Slice B — FontAwesome
+
+- [ ] **B1: Install**
 
 ```bash
 npm install --save-exact \
@@ -522,9 +554,11 @@ npm install --save-exact \
   @fortawesome/react-fontawesome@3.5.0
 ```
 
-**This is the highest-uncertainty upgrade in the plan** — the React adapter goes 0.2.2 → 3.5.0, a major rewrite. Read its migration notes first; the `library.add()` pattern may not survive in its current form.
+**Highest-uncertainty upgrade in the plan** — the React adapter goes 0.2.2 → 3.5.0, a major rewrite. Read its migration notes before running this.
 
-In `pages/_app.js`, move `library.add(...)` **out of the component body to module scope** — it currently re-runs on every render:
+- [ ] **B2: Move `library.add` to module scope (7.5)**
+
+It currently re-runs on every render:
 
 ```js
 library.add(faCode, faHeartbeat, faTrain, faUsers, faEnvelope, faPhone, faArrowLeft, faArrowRight);
@@ -534,9 +568,21 @@ export default function MyApp({ Component, pageProps }) {
 }
 ```
 
-If the 3.x adapter replaces this API entirely, follow the new documented pattern instead and note the deviation in the commit message.
+If the 3.x adapter replaces this API entirely, follow its documented pattern instead and note the deviation in the commit message.
 
-- [ ] **Step 4: Upgrade the remaining dependencies — before anything is built on them**
+- [ ] **B3: Verify and commit**
+
+```bash
+npm run build && npm run lint && npm run format:check
+git add -A
+git commit -m "feat: upgrade FontAwesome to v7 and adapter v3"
+```
+
+**Check every icon renders** — contact details, skills grid, carousel arrows.
+
+### Slice C — remaining dependencies
+
+- [ ] **C1: Install**
 
 ```bash
 npm install --save-exact \
@@ -549,48 +595,37 @@ npm install --save-exact \
   react-vertical-timeline-component@4.0.0
 ```
 
-These were previously scheduled after the redesign, which was wrong: Task 8 restyles the timeline, and upgrading it afterwards could invalidate that work. **Resolve the replacement decision here.**
+These land **before** the redesign, not after: Task 8 restyles the timeline, so upgrading it afterwards could invalidate that work.
 
-`react-vertical-timeline-component` 3.6 → 4.0 is the one with real risk. If it fails against React 19, **hand-roll the timeline now** — the Atlantic direction restyles it heavily anyway, so its remaining value is small. Record which path was taken; Task 8 Step 6 depends on knowing.
+- [ ] **C2: Resolve the timeline decision**
 
-**If the timeline is replaced rather than upgraded**, this step also modifies `components/Experience/timeline/index.js` and `components/Experience/styles.js`, and removes the `react-vertical-timeline-component/style.min.css` import from `pages/_app.js`. Those files are not otherwise in this task's list.
+`react-vertical-timeline-component` 3.6 → 4.0 carries real risk. If it fails against React 19, **hand-roll the timeline now** — the Atlantic direction restyles it heavily anyway. **Record which path was taken; Task 8 Step 6 depends on knowing.**
 
-**Three commits, not one.** The spec separates these deliberately and it matters — bundling the highest-risk upgrade in the plan with the framework bump makes a bisect useless:
+If replaced, this slice also modifies `components/Experience/timeline/index.js` and `components/Experience/styles.js`, and removes the `react-vertical-timeline-component/style.min.css` import from `pages/_app.js` — files not otherwise in this task's list.
 
-```bash
-git commit -m "feat: upgrade to Next 16 and React 19"          # steps 1-2
-git commit -m "feat: upgrade FontAwesome to v7 and adapter v3"  # step 3
-git commit -m "chore: upgrade remaining dependencies"           # step 4
-```
-
-Run `npm run build && npm run lint` before each.
-
-- [ ] **Step 5: Work through any React 19 breakage**
-
-Expect: `ReactDOM.render` removals, ref-as-prop changes, and stricter `useEffect` behaviour. `components/index.js` uses `forwardRef` — React 19 supports it, but verify the `Section` component still receives refs.
-
-- [ ] **Step 5: Verify and commit**
+- [ ] **C3: Verify and commit**
 
 ```bash
-npm run build && npm run lint
+npm run build && npm run lint && npm run format:check
 git add -A
-git commit -m "feat: upgrade to Next 16 and React 19, modernize FontAwesome"
+git commit -m "chore: upgrade remaining dependencies"
 ```
 
-**Manual check:** every section renders; all FontAwesome icons still appear (contact details, skills, carousel arrows); no console errors or hydration warnings.
+There is **no fourth combined commit** — A, B and C are the complete set.
+
+**Manual check:** every section renders; all FontAwesome icons still appear (contact details, skills, carousel arrows); no console errors or hydration warnings. Run this after each slice, not only at the end — it is how you attribute a regression to the right upgrade.
 
 ---
 
 ## Task 6: Kill `@mui/styles`, migrate to MUI 9
 
 **Files:**
-- Create: `src/emotion-cache.ts`
 - Delete: all 12 `components/**/styles.js`
 - Modify: `src/theme.js` (palette — see Step 3c), `pages/_app.js`, `pages/_document.js`, `components/index.js`, `components/Contact/index.js`, `components/Contact/form/index.js`, `components/About/index.js`, `components/About/rightRail/index.js`, `components/Experience/skills/index.js` (the last four for the Grid migration), and all 12 components that consumed a `styles.js`
 
 **Interfaces:**
 - Consumes: Task 5's React 19 runtime
-- Produces: `createEmotionCache(): EmotionCache` from `src/emotion-cache.ts`
+- Produces: `theme.palette.*` Atlantic tokens (Step 3c) consumed by every later task; the current Grid API across the four files in Step 3b
 
 **This is the largest task.** `@mui/styles` is imported by 16 files: **13 `makeStyles` calls** (12 `styles.js` modules + `components/index.js:14`), **1 `withStyles`** (`components/Contact/index.js:45`), plus the `ThemeProvider` and `ServerStyleSheets` uses. All of it goes.
 
@@ -608,19 +643,15 @@ npm install --save-exact \
 npm uninstall @mui/styles
 ```
 
-The last three are **required by MUI's documented Pages Router SSR setup** and are easy to miss — without them the cache provider will not install.
+The last three are **required by MUI's documented Pages Router SSR setup** and are easy to miss — without them the integration will not install. `@emotion/cache` and `@emotion/server` are needed by `@mui/material-nextjs` itself, not by any cache of ours (Step 2).
 
-- [ ] **Step 2: Create `src/emotion-cache.ts`**
+- [ ] **Step 2: Use MUI's default cache — do not hand-roll one**
 
-```ts
-import createCache from "@emotion/cache";
-import type { EmotionCache } from "@emotion/cache";
+An earlier draft created `src/emotion-cache.ts` with a custom `key: "css"` cache. That is **removed**, for two reasons: the `_document` snippet called `createEmotionCache()` without importing it, and a custom cache must be configured **identically on both the server and browser providers** or the cache keys diverge and server-rendered styles are discarded on hydration.
 
-export const createEmotionCache = (): EmotionCache =>
-  createCache({ key: "css", prepend: true });
-```
+`@mui/material-nextjs` ships a correct default for both sides. This project has no requirement that needs custom cache behaviour, so use it. **No `src/emotion-cache.ts` is created.**
 
-`prepend: true` lets MUI styles be overridden by app styles rather than the reverse.
+If a custom cache is ever genuinely needed, the same configured instance must be passed to `AppCacheProvider` *and* `documentGetInitialProps` — configuring only one side is the failure mode this step exists to avoid.
 
 - [ ] **Step 3: Wire Emotion SSR on BOTH sides**
 
@@ -640,9 +671,10 @@ export default function MyDocument(props) {
   );
 }
 
-MyDocument.getInitialProps = async (ctx) =>
-  await documentGetInitialProps(ctx, { emotionCache: createEmotionCache() });
+MyDocument.getInitialProps = async (ctx) => await documentGetInitialProps(ctx);
 ```
+
+No `emotionCache` argument — the package's default is used on both sides (Step 2).
 
 `pages/_app.js`:
 
@@ -760,7 +792,7 @@ Expected: no output.
 - [ ] **Step 8: Verify and commit**
 
 ```bash
-npm run build && npm run lint
+npm run build && npm run lint && npm run format:check
 git add -A
 git commit -m "refactor: replace @mui/styles JSS layer with MUI 9 styled/sx"
 ```
@@ -784,6 +816,12 @@ Completes the **typed half of 7.10** — absent env values become explicit union
 - [ ] **Step 1: Rename files**
 
 Use `git mv` so history is preserved. Components with JSX get `.tsx`; pure modules get `.ts`.
+
+**`utils/constants.js` must become `utils/constants.tsx`, not `.ts`.** It contains **12 JSX elements** — the skill definitions embed `icon: <Image priority src={...} />` (`utils/constants.js:171` onward). A `.ts` rename fails to parse at the first typecheck. Check any other "pure-looking" module for JSX before renaming:
+
+```bash
+grep -ln "<[A-Z]" utils/*.js src/*.js
+```
 
 - [ ] **Step 2: Create the theme augmentation**
 
@@ -845,7 +883,7 @@ Expected: clean. From this task forward it runs before every commit.
 - [ ] **Step 6: Verify and commit**
 
 ```bash
-npm run build && npm run lint && npm run typecheck
+npm run build && npm run lint && npm run format:check && npm run typecheck
 git add -A
 git commit -m "refactor: migrate to TypeScript in strict mode"
 ```
@@ -857,7 +895,7 @@ git commit -m "refactor: migrate to TypeScript in strict mode"
 ## Task 8: Atlantic redesign
 
 **Files:**
-- Modify: `src/theme.ts` (**exists already** — created in Task 6, renamed in Task 7; this task adds typography, spacing and motion and must **not** redefine the palette), `utils/constants.ts`, `pages/_app.tsx`, all section components
+- Modify: `src/theme.ts` (**exists already** — created in Task 6, renamed in Task 7; this task adds typography, spacing and motion and must **not** redefine the palette), `utils/constants.tsx`, `pages/_app.tsx`, all section components
 
 **Interfaces:**
 - Consumes: Task 7's typed theme augmentation
@@ -933,17 +971,19 @@ npm run build
 ```
 Budget: **≤ 90 KB total**. This is a gate, not an estimate. If exceeded: drop Archivo 600 and ship 700 alone; if still over, pin a static instance instead of the variable axis.
 
-- [ ] **Step 4: Add the `HERO_IMAGES` manifest to `utils/constants.ts`**
+- [ ] **Step 4: Add the `HERO_IMAGES` manifest to `utils/constants.tsx`**
 
 ```ts
 export type HeroImage = {
   id: string;
-  alt: string;
-  location?: string;
+  alt: string;        // required, non-empty
+  location: string;   // required — all 8 are known
   desktopSrc: string;
-  mobileSrc?: string;
+  mobileSrc?: string; // absent only for the local slide 0
 };
 ```
+
+`alt` and `location` are **not optional**. The decorative fallback that made them optional has been withdrawn from the spec — every slide is described.
 
 Populate all 8 entries from spec §7a — the alt text and locations are already written there (Table Mountain, Cape Peninsula, Washington DC, Nashville, Universal Studios ×2, Golden Gate Bridge, Machu Picchu). Copy them verbatim; do not invent new descriptions.
 
@@ -978,7 +1018,7 @@ The photographs are *global* travel while the CV is the Galway → Dublin → SF
 - [ ] **Step 8: Verify and commit**
 
 ```bash
-npm run build && npm run lint && npm run typecheck
+npm run build && npm run lint && npm run format:check && npm run typecheck
 git add -A
 git commit -m "feat: Atlantic design direction"
 ```
@@ -1019,7 +1059,7 @@ export const getStaticProps = (async () => ({
 | Value | Fix |
 |---|---|
 | Spotify playlist | Not a prop at all. Server renders a **fixed-height skeleton**; `useEffect` picks the playlist after mount into local state; `<Spotify>` renders **only once that state is set**, so the iframe mounts exactly once. Rendering a first playlist then swapping would load two Spotify iframes per visit. |
-| Age (`getAge("1994/07/14")`, hardcoded at `About/rightRail/index.tsx:19`) | Move the literal into `constants.ts`; compute **client-side only** |
+| Age (`getAge("1994/07/14")`, hardcoded at `About/rightRail/index.tsx:19`) | Move the literal into `constants.tsx`; compute **client-side only** |
 | Copyright year (`Footer`) | **Client-side.** A build-time year goes stale on 1 January |
 | Formspree token | **Build-time selection, accepted.** Rotating client-side would ship every token to the browser |
 
@@ -1078,7 +1118,7 @@ Also note the S3 mobile images are ~300 KB each at 1440×2560, which is oversize
 - [ ] **Step 7: Verify and commit**
 
 ```bash
-npm run build && npm run lint && npm run typecheck
+npm run build && npm run lint && npm run format:check && npm run typecheck
 git add -A
 git commit -m "perf: static generation, next/font, responsive images"
 ```
@@ -1091,8 +1131,11 @@ git commit -m "perf: static generation, next/font, responsive images"
 
 **Files:**
 - Create: `docs/lighthouse-after.json` (committed alongside the Task 1 baseline, so the comparison is reproducible from the repo)
+- Create: `docs/pr-body.md` (Step 4b — `gh pr create --body-file` requires it to exist)
 
-- [ ] **Step 1: Full gate run**
+**Ordering matters here.** Both artifacts are *created* in this task, so they must be written, then gated, then committed, and only then reviewed and pushed — otherwise the final commit is neither gated nor covered by the branch review.
+
+- [ ] **Step 1: Preliminary gate run**
 
 ```bash
 npm run build && npm run lint && npm run format:check && npm run typecheck
@@ -1101,7 +1144,7 @@ All four must pass. **Report failures plainly with output — never push past th
 
 - [ ] **Step 2: Walk the complete manual matrix**
 
-Every case in spec §14. The descriptions-supplied branch applies (cases 3 and 19 are live; the decorative fallback branch does not apply since all 8 descriptions exist).
+Every case in spec §14. All 8 hero descriptions exist, so cases 3 and 19 are live and there is no fallback branch to consider — it was withdrawn from the spec.
 
 - [ ] **Step 3: Lighthouse after — same settings as the Task 1 baseline**
 
@@ -1111,29 +1154,65 @@ The "before" run was captured in Task 1 Step 9 as `docs/lighthouse-before.json`.
 npm run build
 npm run start & SERVER_PID=$!
 trap 'kill $SERVER_PID 2>/dev/null' EXIT
+
+# Wait for readiness, bounded. Launching Lighthouse immediately races the server
+# start; an unbounded wait hangs forever if the server dies or never binds.
+for i in $(seq 1 60); do
+  kill -0 $SERVER_PID 2>/dev/null || { echo "server exited"; exit 1; }
+  curl -sf http://localhost:3000 >/dev/null && break
+  [ "$i" = 60 ] && { echo "server not ready after 60s"; exit 1; }
+  sleep 1
+done
+
 npx --no-install lighthouse http://localhost:3000 \
   --preset=desktop \
   --only-categories=performance,accessibility,best-practices,seo \
   --chrome-flags="--headless" \
   --output=json --output-path=./docs/lighthouse-after.json
-kill $SERVER_PID
+
+kill $SERVER_PID; trap - EXIT
 ```
 
 Report both sets of scores in the PR. If anything drifted from the baseline settings, say so rather than presenting an invalid comparison.
 
-- [ ] **Step 4: Codex review of the full branch diff**
+- [ ] **Step 4: Write `docs/pr-body.md`**
 
-```
-codex-review diff
-```
+Written **before** the gates and the review, so the commit containing it is both gated and reviewed. Assemble it with:
 
-- [ ] **Step 5: Commit the Lighthouse report and open the PR**
+- Every manual matrix case from spec §14, marked pass or fail. **Failures are reported, not omitted.**
+- Lighthouse before/after scores, plus the pinned Lighthouse version and the exact flags used for both runs.
+- Measured font payload vs the 90 KB budget; measured worst-case hero response vs the 150 KB budget.
+- The 12 bug fixes, each with its spec reference.
+- Whether `react-vertical-timeline-component` was upgraded or hand-rolled (decided in Task 5 slice C).
+- The Task 6 deviation from the spec: the Atlantic palette moved from step 7 to Task 6.
+- An explicit statement that **no automated tests exist**, so review rests on the manual matrix and the Vercel preview.
+- Known follow-ups: mobile crops for images `eight`–`fourteen`; the oversized ~300 KB S3 mobile images.
 
-`git push` alone does not open a PR. Commit the artifact first, then create it explicitly:
+- [ ] **Step 5: Re-run the gates, then commit both artifacts**
+
+The gates from Step 1 ran before these two files existed. Re-run them so the final commit is not an ungated one:
 
 ```bash
-git add docs/lighthouse-after.json
-git commit -m "docs: add post-modernization Lighthouse report"
+npm run build && npm run lint && npm run format:check && npm run typecheck
+git add docs/lighthouse-after.json docs/pr-body.md
+git commit -m "docs: add post-modernization Lighthouse report and PR body"
+```
+
+- [ ] **Step 6: Codex review of the full branch diff**
+
+Now that every commit exists, review covers the whole branch including the artifacts:
+
+```bash
+codex review --base main
+```
+
+`codex-review diff` is the *skill* name, not a CLI command — it does not exist as an executable.
+
+- [ ] **Step 7: Push and open the PR**
+
+`git push` alone does not open a PR:
+
+```bash
 git push -u origin feat/modernize-2026
 
 gh pr create --base main --head feat/modernize-2026 \
@@ -1141,7 +1220,7 @@ gh pr create --base main --head feat/modernize-2026 \
   --body-file docs/pr-body.md
 ```
 
-The body must include: manual matrix results (every case, pass or fail), Lighthouse before/after with the pinned version and settings, the measured font payload and hero response size against their budgets, the 12 bug fixes, whether the timeline was upgraded or hand-rolled, and an explicit note that **no automated tests exist** so review rests on the preview deploy.
+Body contents are specified in Step 4.
 
 **Do not merge.** Pre-merge is a checkpoint; James approves.
 
@@ -1153,6 +1232,6 @@ The body must include: manual matrix results (every case, pass or fail), Lightho
 
 **Placeholder scan:** none. Every code step carries real code; every version is exact.
 
-**Type consistency:** `HeroImage` (Task 8) is referenced only after definition. `FormspreeUrl`/`MapsKey` are introduced in Task 3 as runtime `null` and typed in Task 7 — intentional, since TypeScript does not exist until Task 7. `createEmotionCache` is defined and consumed within Task 6. `chunk`/`shuffle` are defined in Task 2 before their Task 2 call sites.
+**Type consistency:** `HeroImage` (Task 8) is referenced only after definition. `FormspreeUrl`/`MapsKey` are introduced in Task 3 as runtime `null` and typed in Task 7 — intentional, since TypeScript does not exist until Task 7. `chunk`/`shuffle` are defined in Task 2 before their Task 2 call sites. The Atlantic palette is defined in Task 6 Step 3c and only *verified* in Task 8 Step 1 — it is never defined twice.
 
 **Known risk:** Task 6 is much larger than the others. It is not split because the `@mui/styles` removal is atomic — a half-migrated styling layer does not build.
