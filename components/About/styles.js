@@ -27,12 +27,6 @@ export default makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    "& > .react-reveal": {
-      padding: theme.spacing(3, 2),
-    },
-  },
-  garminContent: {
-    padding: theme.spacing(6, 0),
   },
   musicItem: {
     margin: "0 auto",

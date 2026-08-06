@@ -1,6 +1,6 @@
 import { isBrowser } from "react-device-detect";
 import { fadeDuration } from "./constants";
-import shuffle from "lodash.shuffle";
+import { shuffle } from "./array";
 import {
   BACKGROUNDS,
   MOBILE_BACKGROUNDS,
@@ -9,8 +9,6 @@ import {
   MOBILE_IMAGE_PATH,
   SPOTIFY_PLAYLISTS,
   FORMSPREE_URL,
-  GARMIN_API_DEV,
-  GARMIN_API_PROD,
 } from "./constants";
 
 export const getFadeDuration = () => fadeDuration;
@@ -58,26 +56,4 @@ export const getAge = (dateString) => {
   }
 
   return age;
-};
-
-export const fetchGarmin = async (path, params = {}) => {
-  const url = new URL(
-    process.env.STAGE !== "prod"
-      ? `${GARMIN_API_DEV}/${path}`
-      : `${GARMIN_API_PROD}/${path}`
-  );
-  url.search = new URLSearchParams(params).toString();
-  const response = await fetch(url);
-  return await response.json();
-};
-
-export const filterObject = (data, allowList) => {
-  return Object.keys(data)
-    .filter((key) => allowList.includes(key))
-    .reduce((obj, key) => {
-      return {
-        ...obj,
-        [key]: data[key],
-      };
-    }, {});
 };

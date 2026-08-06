@@ -13,7 +13,7 @@ import {
 } from "../../utils/constants";
 import { getBackground, getBackgroundUrls } from "../../utils/helpers";
 import Styles from "./styles";
-import chunk from "lodash.chunk";
+import { chunk } from "../../utils/array";
 
 const LeftButton = ({ onClick }) => {
   return (

@@ -1,15 +1,10 @@
 import React, { Component } from "react";
 import Link from "@mui/material/Link";
-import SmoothScroll from "smoothscroll-polyfill";
 
 class SmoothAnchor extends Component {
   constructor(props) {
     super(props);
     this.smoothScroll = this.smoothScroll.bind(this);
-  }
-
-  componentDidMount() {
-    SmoothScroll.polyfill();
   }
 
   smoothScroll(e) {
