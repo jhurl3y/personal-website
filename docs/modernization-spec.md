@@ -358,8 +358,32 @@ that ambiguity now, before planning:
       differently cropped, so it needs `<picture>`/`next/image` with explicit sources
       rather than a single `sizes` attribute. This replaces the broken `isBrowser`
       branch in 7.7.
-  - **This needs James to supply one short description and a location per image** —
-    see open question 15.4.
+  - **Resolved.** James confirmed the photographs are all travel shots, and the S3
+    bucket is reachable, so the images were retrieved and identified directly rather
+    than guessed at. The manifest below is the content, ready to implement:
+
+    | id | Location | `alt` |
+    |---|---|---|
+    | `first` | Table Mountain, Cape Town | Standing on the edge of Table Mountain looking down over Table Bay and the city of Cape Town at dusk |
+    | `one` | Cape Peninsula, Cape Town | Sitting on a stone wall above the Atlantic on the Cape Peninsula coast road, with a mountain headland in the haze behind |
+    | `two` | National Mall, Washington DC | Standing on the Capitol terrace with the National Mall and the Washington Monument stretching away behind |
+    | `three` | Grand Ole Opry, Nashville | Outside the floodlit Grand Ole Opry House in Nashville at night |
+    | `four` | Universal Studios, Los Angeles | In front of the waterfall beneath the Universal Studios Hollywood entrance sign |
+    | `five` | Golden Gate Bridge, San Francisco | Leaning on the red railing of the Golden Gate Bridge with the San Francisco skyline across the bay |
+    | `six` | Universal Studios, Los Angeles | Beside the "Welcome to Springfield" sign in the Simpsons area of Universal Studios Hollywood |
+    | `seven` | Machu Picchu, Peru | Standing above the Machu Picchu ruins with cloud breaking over the mountains behind |
+
+  - **Design refinement this unlocks.** The photographs are *global* travel (South
+    Africa, USA, Peru), not the Galway → Dublin → San Francisco career arc. That does
+    not weaken the Atlantic direction — it sharpens it into two complementary uses of
+    geography: the **hero coordinates change per slide** to show range, while the
+    **timeline spine holds the westward career arc**. Each slide's eyebrow shows its own
+    location and coordinates.
+  - **Two caveats worth your call** (neither blocks): `four` and `six` are both
+    Universal Studios Hollywood, so the 7-image mobile pool contains a duplicate
+    location; and that pool is what the desktop carousel now draws from too. If the
+    desktop-only images (`eight`…`fourteen`) hold more variety, adding mobile crops for
+    them is the fix — see section 4 of this list.
   - **Defined fallback if he declines:** treat the carousel as a decorative backdrop —
     `alt=""`, `aria-hidden` on the images, and remove the keyboard/dot controls so it
     is not an interactive element with no accessible content. The gallery framing in
@@ -609,15 +633,15 @@ All results reported plainly in the PR, including failures.
    control. If that bucket ever disappears the hero breaks. Worth moving into
    `public/` or a managed image host.
 2. The CV says "2021 - present" for the SurveyMonkey ML role. Still accurate?
-4. **Hero image descriptions — needed, but with a deterministic default so nothing
-   stalls.** Section 7a needs one short description and a location per slide: **8 in
-   total** — the local `first_image.webp` plus the **7 mobile-capable remote ids**.
+4. ~~**Hero image descriptions**~~ — **RESOLVED.** All 8 written; see the manifest in
+   §7a. The decorative fallback is no longer needed and that branch of the verification
+   matrix does not apply.
 
-   Not 15. Because selection now draws only from the mobile-capable pool on every
-   viewport (§7a), the other 7 desktop-only images are never rendered, so writing
-   metadata for them would be wasted work. **If you want those 7 back in rotation, the
-   fix is to add mobile crops for them** — at which point they need descriptions too and
-   this becomes 15. Worth deciding, since it halves the photographic variety.
+   **Still open:** whether to add mobile crops for the 7 desktop-only images
+   (`eight`…`fourteen`). Today they are never rendered, so the carousel draws from 7
+   photos of which 2 are the same location (Universal Studios). Adding crops would
+   restore the full 14 and need 7 more descriptions. Default if you say nothing: ship
+   with the 7.
 
    **Default if they are not supplied by the time step 8 begins:** the decorative
    fallback ships — `alt=""`, `aria-hidden` on the imagery, carousel controls removed,
