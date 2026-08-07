@@ -1,53 +1,44 @@
-Two of the three items deferred in the modernization spec — CI and automated tests — plus mobile fixes found while checking the result on a narrow viewport.
+The last of the three items deferred in the modernization spec. Pages Router still worked in Next 16, so this was never urgent — it lands now that CI and a test layer (#4) are in place to catch what it might break.
 
-**App Router migration is not here.** It restructures every entry point, and it lands better on top of these two than beside them. It continues on a separate branch based on this one.
+Rebased onto `main` at `d2b8046`, so this is a single commit with no #4 history replayed.
 
-## CI
+## What moved
 
-Runs `lint`, `format:check`, `typecheck`, `test` and `build` on every PR and on pushes to `main`.
+**`app/layout.tsx`** replaces `_app` and `_document`. The hand-written `<Head>` block becomes a `metadata` export, so the title, description, canonical, icons and both the `og:` and `twitter:` sets derive from one place instead of being written twice and drifting apart. `viewport` is its own export — leaving it inside `metadata` is deprecated and silently ignored.
 
-- Node comes from `.nvmrc`, so CI and local can't drift apart.
-- Steps use `if: !cancelled()`, so one push reports **every** failure rather than one per run.
-- `npm ci`, not `npm install` — it fails if `package.json` and the lockfile disagree, which is the point of running it on a PR.
-- Build runs last, with `FORMSPREE_TOKENS` and `GOOGLE_MAPS_API_KEY` **deliberately empty**: the site has to build and degrade without them.
-- Nothing interpolates untrusted input into a `run:` step.
+**`app/providers.tsx`** exists out of necessity, not preference. The theme carries functions (`breakpoints.up`, `spacing`), and a server component cannot pass a function to a client component — the build fails outright with `Functions cannot be passed directly to Client Components`. The theme has to be _imported_ on the client side of the boundary rather than passed across it.
 
-This closes a real gap — Vercel only builds. Nothing was running lint or typecheck on a PR, so a regression in either would have landed silently.
+**`app/page.tsx`** is a server component reading the env vars directly. That is all `getStaticProps` ever did here.
 
-## Tests — 45 across 6 files
+**The client boundary sits at `components/index.tsx`.** State, effects, event handlers and MUI's `sx` all require it, so the whole tree below is client. A finer-grained split would be churn for no gain on a single-page site where everything is interactive.
 
-Aimed at the code that has actually broken, not at coverage for its own sake.
+**`Layout`** loses `next/head` — no such thing in the App Router — and its `styled-jsx` global block, which would need a client component plus an SSR registry for two rules that were always global. They live in `src/styles.css` now.
 
-**Contact form (11).** Disabled with no token and posting nowhere; validation blocking submission; a malformed email; success; an unrecognised 500 body; a status-0 transport failure; `onerror`; still re-submittable after a failure. Several of these map to bugs that shipped — the 500 and status-0 paths both rendered an empty error box in production.
+## A correction to #3
 
-**smoothAnchor (9).** The scroll arithmetic, including an explicit regression guard for the 40px overshoot, the function-offset form, and the reduced-motion branch — `window.scroll({behavior:"smooth"})` ignores the CSS `scroll-behavior` override, so it has to be checked in JS.
+I reported best practices as **74 → 96** in #3. That was wrong, and it is in the merged PR body.
 
-**Map (3).** The no-key fallback, asserting the Google loader is _never mounted_ rather than merely hidden.
+Re-running it gives 74 consistently. I then built the pre-migration branch and measured it the same way: **also 74, with identical failing audits**. The 96 was a single run where the Spotify iframe had not finished mounting, so no third-party cookies were set.
 
-**useIsClient (2).** The server snapshot must be `false`, or the age and copyright year render at build time and go stale.
+The honest figure is **74 both before and after**. The failures are Spotify's third-party cookies and `/_vercel/insights` 404ing on localhost — neither ours to fix, and the second is a local-only artefact.
 
-**Helpers and array (20).** Env absence returning `null` rather than `""`, `getAge`'s birthday-not-yet-reached branch, hero slide selection, and a Fisher-Yates check that the last element can actually move.
+|                | before | after   |
+| -------------- | ------ | ------- |
+| performance    | 100    | **100** |
+| accessibility  | 98     | **98**  |
+| best practices | 74     | 74      |
+| SEO            | 100    | 100     |
 
-Two things worth knowing for future test work: a stubbed `XMLHttpRequest` missing the `DONE` constant makes the component's readystate guard return **silently** every time, and `@testing-library/dom` is a required peer of `jest-dom` that doesn't install on its own.
-
-## Mobile
-
-The hero was unusable below ~900px. The root cause was structural: `content` stacked a 93px navbar on top of a `height: 100%` hero, so it overflowed the viewport by exactly the navbar height and the role line landed on the carousel dots. It's a column flex now, with the hero taking the remaining space.
-
-|                                |                                                                                 |
-| ------------------------------ | ------------------------------------------------------------------------------- |
-| Nav collapsed only below 600px | Five links crowded the logo at 600–900px. Switches at `md`.                     |
-| Arrows took 64px a side        | Squeezed the name on narrow viewports. They scale down below `md`.              |
-| Name clamp floor 3.5rem        | Wide enough to overflow at 390px once the arrows took their share. Now 2.75rem. |
-
-Also removes a hidden `h1` carrying the page title. The hero name is a real visible `h1` now, so the page had **two** — and the title is already in `<title>` and the meta description.
+LCP 0.7s, FCP 0.2s. The route is still fully static — `Route (app) ○ /`.
 
 ## Verification
 
 `build` ✅ · `lint` ✅ (0 errors, 2 pre-existing `exhaustive-deps` warnings) · `format:check` ✅ · `typecheck` ✅ · `test` ✅ 45/45
 
-Checked in Chrome at narrow and desktop widths: no horizontal overflow at either, hamburger appears below `md` and not above, role line clears the dots by 6px narrow and 38px wide, one `h1`.
+Checked in Chrome against a production build: one `h1`, 7/7 hero slides loaded, 5 timeline cards, Spotify iframe present, fonts and the full Atlantic palette resolving across 522 CSS rules, canonical and `og:image` correct, no console errors and no hydration mismatches.
 
-**Caveat:** Chrome won't resize below ~606px on macOS, so narrow verification was at 606, not 390. The clamp and breakpoints should hold, but a real device check is worth doing.
+## Worth a look on the preview
 
-**Still unverified:** keyboard focus order, and reduced-motion end to end.
+Emotion SSR style tags dropped from 104 to 4, because `AppRouterCacheProvider` streams styles rather than inlining them all in `<head>`. Every computed style I checked resolves correctly, so this reads as a strategy change rather than lost styles — but **flash-of-unstyled-content would not show up in any check I ran**, and it is the one thing a router migration plausibly breaks. Worth watching the first paint on the preview deploy.
+
+Still unverified from earlier PRs: keyboard focus order, reduced-motion end to end, and a real sub-606px device.
