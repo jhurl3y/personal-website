@@ -6,15 +6,9 @@ import Container from "@mui/material/Container";
 import Navbar from "../Navbar";
 import Dot from "./Dot";
 import Slider from "./Slider";
-import {
-  PAGES,
-  LEFT_KEY,
-  RIGHT_KEY,
-  FIRST_IMAGE_PATH,
-} from "../../utils/constants";
-import { getBackground, getBackgroundUrls } from "../../utils/helpers";
+import { PAGES, LEFT_KEY, RIGHT_KEY, HERO_IMAGES } from "../../utils/constants";
+import { getHeroSlides } from "../../utils/helpers";
 import styles from "./styles";
-import { chunk } from "../../utils/array";
 
 const LeftButton = ({ onClick }) => {
   return (
@@ -33,11 +27,15 @@ const RightButton = ({ onClick }) => {
 };
 
 const Home = () => {
-  const backgroundUrls = getBackgroundUrls();
   const [index, setIndex] = useState(0);
   const [translateValue, setTranslateValue] = useState(0);
   const [shouldTransition, setSouldTransition] = useState(true);
-  const [backgrounds, setBackgrounds] = useState([FIRST_IMAGE_PATH]);
+
+  // The server renders slide 0 only - the local, deterministic hero. The rest
+  // are shuffled once after mount and held for the visit, so getStaticProps
+  // neither freezes the order at build time nor causes a hydration mismatch.
+  // No Math.random() runs during SSR or hydration.
+  const [slides, setSlides] = useState([HERO_IMAGES[0]]);
 
   // Bug 7.13: this was `new Array(n).fill(React.createRef())`, which puts the
   // SAME ref object in every slot - every slide shared one ref, so slideWidth()
@@ -62,7 +60,7 @@ const Home = () => {
   };
 
   const goToNextSlide = () => {
-    if (index === backgrounds.length - 1) {
+    if (index === slides.length - 1) {
       return;
     }
 
@@ -90,32 +88,13 @@ const Home = () => {
     }
   };
 
-  async function loadBackgrounds() {
-    // Backgrounds already fetched
-    if (backgrounds.length >= backgroundUrls.length) {
-      return;
-    }
-
-    // Split the backgrounds into chunks
-    const chunkedBackgroundUrls = chunk(backgroundUrls, 3);
-    chunkedBackgroundUrls.map((chunkOfBackgroundUrls) => {
-      // Fetch all backgrounds in a chunk at once
-      Promise.all(chunkOfBackgroundUrls.map((url) => getBackground(url))).then(
-        (fetchedBackgrounds) => {
-          setBackgrounds((backgrounds) => [
-            ...backgrounds,
-            ...fetchedBackgrounds,
-          ]);
-        }
-      );
-    });
-  }
-
-  // Same as componentDidMount; only execute on the first render
+  // The slide order is randomised, so it cannot be computed during render (it
+  // would reshuffle on every re-render) and so useIsClient does not help.
+  // Running once after hydration is the documented way to defer a client-only
+  // value, and the extra render is the point: it keeps SSR deterministic.
   useEffect(() => {
-    if (typeof window) {
-      loadBackgrounds();
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSlides(getHeroSlides());
   }, []);
 
   // Bug 7.11: onKeyDown used to be bound to `window`, so pressing an arrow key
@@ -140,7 +119,7 @@ const Home = () => {
         translateValue={translateValue}
         shouldTransition={shouldTransition}
         setSlideRef={setSlideRef}
-        backgrounds={backgrounds}
+        slides={slides}
       />
       <Box sx={styles.content}>
         <Navbar pages={PAGES} />
@@ -153,7 +132,7 @@ const Home = () => {
         </Container>
         {typeof window && (
           <Box sx={styles.dots}>
-            {backgrounds.map((_, i) => (
+            {slides.map((_, i) => (
               <Dot
                 i={i}
                 highlight={i === index}

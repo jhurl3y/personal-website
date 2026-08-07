@@ -32,7 +32,7 @@ const Section = forwardRef(({ children, id, offset }, ref) => {
 
 Section.displayName = "Section";
 
-const Component = ({ spotify, formspree, maps }) => {
+const Component = ({ formspree, maps }) => {
   const navRef = useRef(null);
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
@@ -66,7 +66,7 @@ const Component = ({ spotify, formspree, maps }) => {
         <Home />
       </Section>
       <Section id="about" ref={aboutRef} offset={navHeight}>
-        <About spotify={spotify} />
+        <About />
       </Section>
       <Section id="experience" ref={experienceRef} offset={navHeight}>
         <Experience />

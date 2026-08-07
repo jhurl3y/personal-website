@@ -1,34 +1,29 @@
-import { isBrowser } from "react-device-detect";
 import { fadeDuration } from "./constants";
 import { shuffle } from "./array";
 import {
-  BACKGROUNDS,
-  MOBILE_BACKGROUNDS,
+  HERO_IMAGES,
   NUMBER_OF_IMAGES,
-  DESKTOP_IMAGE_PATH,
-  MOBILE_IMAGE_PATH,
   SPOTIFY_PLAYLISTS,
   FORMSPREE_URL,
 } from "./constants";
 
 export const getFadeDuration = () => fadeDuration;
 
-export const getBackground = async (backgroundUrl) => {
-  const response = await fetch(backgroundUrl);
-  const image = await response.blob();
-  return URL.createObjectURL(image);
-};
-
 export const getSpotifyPlaylist = () => shuffle(SPOTIFY_PLAYLISTS)[0];
 
-export const getBackgroundUrls = () =>
-  isBrowser
-    ? shuffle(BACKGROUNDS)
-        .slice(0, NUMBER_OF_IMAGES)
-        .map((background) => `${DESKTOP_IMAGE_PATH}${background}.jpg`)
-    : shuffle(MOBILE_BACKGROUNDS).map(
-        (background) => `${MOBILE_IMAGE_PATH}${background}.jpg`
-      );
+// Bug 7.7: this used to branch on react-device-detect's `isBrowser`, which
+// reports server-vs-browser, NOT desktop-vs-mobile - so the image set was
+// chosen by render environment rather than viewport. Art direction now happens
+// in the markup via <picture>, and this only decides which images appear.
+//
+// Bug 7.9: the old getBackground() fetched each image and handed back a
+// URL.createObjectURL blob that was never revoked. It leaked, and it bypassed
+// next/image entirely. Gone - next/image fetches these directly now.
+export const getHeroSlides = () => {
+  const [first, ...rest] = HERO_IMAGES;
+  const selectable = rest.filter((image) => image.mobileSrc);
+  return [first, ...shuffle(selectable).slice(0, NUMBER_OF_IMAGES)];
+};
 
 export const validEmailRegex = RegExp(
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i

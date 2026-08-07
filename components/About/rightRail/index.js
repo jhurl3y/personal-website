@@ -3,12 +3,19 @@ import React from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import { useIsClient } from "../../../utils/useIsClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { aboutStrings } from "../../../utils/strings";
 import { getAge } from "../../../utils/helpers";
+import { BIRTH_DATE } from "../../../utils/constants";
 import styles from "./styles";
 
 const RightRail = () => {
+  // Client-only: under static generation a build-time age silently goes stale
+  // on the next birthday, and computing it during SSR risks a hydration
+  // mismatch when the date rolls over between build and view.
+  const age = useIsClient() ? getAge(BIRTH_DATE) : null;
+
   const { me, intro, iLike, code, sport, travel, friends } = aboutStrings;
 
   return (
@@ -16,7 +23,11 @@ const RightRail = () => {
       <Grid size={{ xs: 12 }}>
         <Container maxWidth={false} sx={styles.rightRailContent}>
           <Typography variant="h4">{me}</Typography>
-          <p>{intro.replace("{age}", getAge("1994/07/14"))}</p>
+          <p>
+            {age === null
+              ? intro.replace("{age} year old ", "")
+              : intro.replace("{age}", age)}
+          </p>
         </Container>
       </Grid>
       <Grid size={{ xs: 12 }}>

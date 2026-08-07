@@ -118,8 +118,8 @@ const Navbar = ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
               href={`#${pages[0]}`}
               title={pages[0]}
             >
-              {dark && <Image priority src={LogoLight} alt="logo" />}
-              {!dark && <Image priority src={LogoDark} alt="logo" />}
+              {dark && <Image src={LogoLight} alt="logo" />}
+              {!dark && <Image src={LogoDark} alt="logo" />}
             </Box>
             <Links selectedPage={page} pages={pages} dark={dark} />
             <MobileMenu pages={pages} dark={dark} />

@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { useIsClient } from "../../utils/useIsClient";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Linkedin from "../../public/static/assets/icons/linkedin.svg";
@@ -9,6 +10,10 @@ import { footerStrings } from "../../utils/strings";
 import styles from "./styles";
 
 const Footer = () => {
+  // Client-only: a build-time year goes stale on 1 January, and computing it
+  // during SSR risks a hydration mismatch across midnight on New Year's Eve.
+  const year = useIsClient() ? new Date().getFullYear() : null;
+
   return (
     <div>
       <Container sx={styles.container} maxWidth={false}>
@@ -18,43 +23,24 @@ const Footer = () => {
             title="linkedin"
             target="_blank"
           >
-            <Image
-              priority
-              src={Linkedin}
-              width="40px"
-              height="40px"
-              alt="linkedin"
-            />
+            <Image src={Linkedin} width="40px" height="40px" alt="linkedin" />
           </a>
           <a href="https://github.com/jhurl3y" title="github" target="_blank">
-            <Image
-              priority
-              src={Github}
-              width="40px"
-              height="40px"
-              alt="github"
-            />
+            <Image src={Github} width="40px" height="40px" alt="github" />
           </a>
           <a
             href="https://twitter.com/hurley_19"
             title="twitter"
             target="_blank"
           >
-            <Image
-              priority
-              src={Twitter}
-              width="40px"
-              height="40px"
-              alt="twitter"
-            />
+            <Image src={Twitter} width="40px" height="40px" alt="twitter" />
           </a>
         </Box>
         <Box sx={styles.disclaimer}>
           <Typography align="center">
-            {footerStrings.copyright.replace(
-              "{year}",
-              new Date().getFullYear()
-            )}
+            {year === null
+              ? ""
+              : footerStrings.copyright.replace("{year}", year)}
           </Typography>
           <Typography align="center">{footerStrings.rights}</Typography>
         </Box>

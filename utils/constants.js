@@ -15,32 +15,79 @@ import { skillStrings, experienceStrings } from "./strings";
 
 export const PAGES = ["home", "about", "experience", "contact"];
 
-export const BACKGROUNDS = [
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
-  "ten",
-  "eleven",
-  "twelve",
-  "thirteen",
-  "fourteen",
+const DESKTOP =
+  "https://hurley-site-images.s3-eu-west-1.amazonaws.com/minified_new/desktop/";
+const MOBILE =
+  "https://hurley-site-images.s3-eu-west-1.amazonaws.com/minified_new/mobile/";
+
+// Hero carousel manifest. Replaces the two bare id arrays (BACKGROUNDS /
+// MOBILE_BACKGROUNDS), which carried no alt text and no locations.
+//
+// Selection draws only from entries that have a mobileSrc, on every viewport.
+// The desktop bucket holds 14 images but only 7 have mobile crops; mixing the
+// pools breaks when a desktop visitor rotates into the mobile breakpoint,
+// because the chosen set is fixed for the visit and cannot be repaired after
+// the fact. Adding mobile crops for eight..fourteen would restore the rest.
+export const HERO_IMAGES = [
+  {
+    id: "first",
+    alt: "Standing on the edge of Table Mountain looking down over Table Bay and the city of Cape Town at dusk",
+    location: "Table Mountain, Cape Town",
+    desktopSrc: "/static/assets/images/first_image.webp",
+  },
+  {
+    id: "one",
+    alt: "Sitting on a stone wall above the Atlantic on the Cape Peninsula coast road, with a mountain headland in the haze behind",
+    location: "Cape Peninsula, Cape Town",
+    desktopSrc: `${DESKTOP}one.jpg`,
+    mobileSrc: `${MOBILE}one.jpg`,
+  },
+  {
+    id: "two",
+    alt: "Standing on the Capitol terrace with the National Mall and the Washington Monument stretching away behind",
+    location: "National Mall, Washington DC",
+    desktopSrc: `${DESKTOP}two.jpg`,
+    mobileSrc: `${MOBILE}two.jpg`,
+  },
+  {
+    id: "three",
+    alt: "Outside the floodlit Grand Ole Opry House in Nashville at night",
+    location: "Grand Ole Opry, Nashville",
+    desktopSrc: `${DESKTOP}three.jpg`,
+    mobileSrc: `${MOBILE}three.jpg`,
+  },
+  {
+    id: "four",
+    alt: "In front of the waterfall beneath the Universal Studios Hollywood entrance sign",
+    location: "Universal Studios, Los Angeles",
+    desktopSrc: `${DESKTOP}four.jpg`,
+    mobileSrc: `${MOBILE}four.jpg`,
+  },
+  {
+    id: "five",
+    alt: "Leaning on the red railing of the Golden Gate Bridge with the San Francisco skyline across the bay",
+    location: "Golden Gate Bridge, San Francisco",
+    desktopSrc: `${DESKTOP}five.jpg`,
+    mobileSrc: `${MOBILE}five.jpg`,
+  },
+  {
+    id: "six",
+    alt: 'Beside the "Welcome to Springfield" sign in the Simpsons area of Universal Studios Hollywood',
+    location: "Universal Studios, Los Angeles",
+    desktopSrc: `${DESKTOP}six.jpg`,
+    mobileSrc: `${MOBILE}six.jpg`,
+  },
+  {
+    id: "seven",
+    alt: "Standing above the Machu Picchu ruins with cloud breaking over the mountains behind",
+    location: "Machu Picchu, Peru",
+    desktopSrc: `${DESKTOP}seven.jpg`,
+    mobileSrc: `${MOBILE}seven.jpg`,
+  },
 ];
 
-export const MOBILE_BACKGROUNDS = [
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-];
+// Birth date was a literal buried in components/About/rightRail.
+export const BIRTH_DATE = "1994/07/14";
 
 export const FIRST_IMAGE_PATH = "/static/assets/images/first_image.webp";
 
@@ -166,73 +213,73 @@ export const SKILLS = [
     name: "web_development",
     title: "Web Development",
     content: skillStrings.webDevelopment,
-    icon: <Image priority src={WebDev} alt="web_development" />,
+    icon: <Image src={WebDev} alt="web_development" />,
   },
   {
     name: "python",
     title: "Python",
     content: skillStrings.python,
-    icon: <Image priority src={Python} alt="python" />,
+    icon: <Image src={Python} alt="python" />,
   },
   {
     name: "javascript",
     title: "Javascript",
     content: skillStrings.javascript,
-    icon: <Image priority src={Javascript} alt="javascript" />,
+    icon: <Image src={Javascript} alt="javascript" />,
   },
   {
     name: "ruby",
     title: "Ruby",
     content: skillStrings.ruby,
-    icon: <Image priority src={Ruby} alt="ruby" />,
+    icon: <Image src={Ruby} alt="ruby" />,
   },
   {
     name: "java",
     title: "Java",
     content: skillStrings.java,
-    icon: <Image priority src={Java} alt="java" />,
+    icon: <Image src={Java} alt="java" />,
   },
   {
     name: "git",
     title: "Git",
     content: skillStrings.git,
-    icon: <Image priority src={Git} alt="git" />,
+    icon: <Image src={Git} alt="git" />,
   },
   {
     name: "mobile_development",
     title: "Mobile Development",
     content: skillStrings.mobile,
-    icon: <Image priority src={Mobile} alt="mobile_development" />,
+    icon: <Image src={Mobile} alt="mobile_development" />,
   },
   {
     name: "algorithms",
     title: "Algorithms & Data Structures",
     content: skillStrings.algorithms,
-    icon: <Image priority src={Algorithms} alt="algorithms" />,
+    icon: <Image src={Algorithms} alt="algorithms" />,
   },
   {
     name: "a_b_testing",
     title: "A/B Testing",
     content: skillStrings.abTesting,
-    icon: <Image priority src={ABTesting} alt="a_b_testing" />,
+    icon: <Image src={ABTesting} alt="a_b_testing" />,
   },
   {
     name: "sql",
     title: "SQL",
     content: skillStrings.sql,
-    icon: <Image priority src={SQL} alt="sql" />,
+    icon: <Image src={SQL} alt="sql" />,
   },
   {
     name: "system_design",
     title: "System Design",
     content: skillStrings.systemDesign,
-    icon: <Image priority src={SystemDesign} alt="system_design" />,
+    icon: <Image src={SystemDesign} alt="system_design" />,
   },
   {
     name: "testing",
     title: "Testing",
     content: skillStrings.testing,
-    icon: <Image priority src={Testing} alt="testing" />,
+    icon: <Image src={Testing} alt="testing" />,
   },
 ];
 
