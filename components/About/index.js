@@ -95,16 +95,21 @@ const About = ({ spotify }) => {
         </Typography>
       </Slide>
       <Container sx={styles.musicContent}>
-        <Grid container spacing={6}>
+        {/* musicContent is display:flex, so this Grid container shrank to its
+            content width (300px) and the "100%" iframe had nothing to fill. */}
+        <Grid container spacing={6} sx={{ width: "100%" }}>
           <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={styles.musicItem}>
             <Slide duration={fadeDuration} direction="right" triggerOnce>
               <Suspense fallback={<SkeletonLoader />}>
+                {/* `wide` is what selects Spotify's horizontal player. Without
+                    it, react-spotify-embed v3 computes width = 300 and renders
+                    the narrow portrait card regardless of the width prop. */}
                 <Spotify
+                  wide
                   link={spotify}
                   title="spotify widget"
-                  width="100%"
                   height={WIDGET_HEIGHT}
-                  frameBorder="0"
+                  style={{ maxWidth: 640, margin: "0 auto" }}
                 />
               </Suspense>
             </Slide>
