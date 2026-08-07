@@ -90,15 +90,19 @@ const styles = {
     [theme.breakpoints.down("md")]: {
       paddingBottom: theme.spacing(9),
     },
-    color: theme.palette.chalk,
-    textShadow: "0 1px 24px rgba(0,0,0,0.55)",
+    color: theme.vars!.palette.text.primary,
+    backgroundColor:
+      "color-mix(in srgb, var(--james-hurley-palette-background-paper) 84%, transparent)",
+    backdropFilter: "blur(8px)",
+    padding: theme.spacing(6),
+    borderLeft: `4px solid ${theme.vars!.palette.signal}`,
   }),
   eyebrow: (theme: Theme) => ({
     ...OVERLINE,
     display: "flex",
     alignItems: "center",
     gap: theme.spacing(4),
-    color: theme.palette.seaGlass,
+    color: theme.vars!.palette.deepSea,
     marginBottom: theme.spacing(5),
     flexWrap: "wrap",
   }),
@@ -107,15 +111,14 @@ const styles = {
     display: "inline-block",
     width: theme.spacing(8),
     height: "1px",
-    backgroundColor: theme.palette.seaGlass,
+    backgroundColor: theme.vars!.palette.deepSea,
   }),
   coords: () => ({
     fontVariantNumeric: "tabular-nums",
     whiteSpace: "pre",
   }),
   place: (theme: Theme) => ({
-    color: theme.palette.chalk,
-    opacity: 0.85,
+    color: theme.vars!.palette.text.secondary,
   }),
   name: (theme: Theme) => ({
     ...DISPLAY,
@@ -125,18 +128,18 @@ const styles = {
     // would push "Hurley" wider than the viewport once the arrows take their
     // share of it.
     fontSize: "clamp(2.75rem, 11vw, 9rem)",
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.text.primary,
   }),
   role: (theme: Theme) => ({
     ...OVERLINE,
     marginTop: theme.spacing(5),
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.text.primary,
     letterSpacing: "0.16em",
   }),
   home: (theme: Theme) => ({
     flex: 1,
     minHeight: 0,
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.text.primary,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

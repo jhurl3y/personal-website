@@ -14,15 +14,12 @@ type ThemeToggleProps = { surface?: ThemeToggleSurface };
 const buttonSx = (surface: ThemeToggleSurface) => (theme: Theme) => ({
   width: 44,
   height: 44,
-  color:
-    surface === "overlay" ? theme.palette.chalk : theme.palette.text.primary,
-  border: `1px solid ${
-    surface === "overlay" ? "rgba(250, 250, 248, 0.46)" : theme.palette.divider
-  }`,
+  color: theme.vars!.palette.text.primary,
+  border: `1px solid ${theme.vars!.palette.divider}`,
   "&:hover": {
     backgroundColor:
       surface === "overlay"
-        ? "rgba(250, 250, 248, 0.14)"
+        ? "color-mix(in srgb, var(--james-hurley-palette-background-paper) 60%, transparent)"
         : theme.palette.action.hover,
   },
   "&:focus-visible": {

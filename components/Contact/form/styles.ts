@@ -35,7 +35,10 @@ const styles = {
     margin: `${theme.spacing(6)} auto`,
     padding: theme.spacing(3, 8),
   }),
-  submit: (theme: Theme) => ({ paddingTop: theme.spacing(6) }),
+  submit: (theme: Theme) => ({
+    paddingTop: theme.spacing(6),
+    textAlign: "center",
+  }),
 };
 
 export default styles;

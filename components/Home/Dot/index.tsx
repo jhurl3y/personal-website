@@ -20,7 +20,9 @@ const Dot = ({ i, highlight, onDotClick }: DotProps) => (
       sx={[
         styles.dot,
         (theme) => ({
-          backgroundColor: highlight ? theme.palette.chalk : theme.palette.mist,
+          backgroundColor: highlight
+            ? theme.vars!.palette.text.primary
+            : theme.vars!.palette.text.secondary,
         }),
       ]}
     >

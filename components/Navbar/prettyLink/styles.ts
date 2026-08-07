@@ -11,11 +11,11 @@ const common = (theme: Theme) => ({
 const styles = {
   solidLink: (theme: Theme) => ({
     ...common(theme),
-    color: theme.palette.text.primary,
+    color: theme.vars!.palette.text.primary,
   }),
   overlayLink: (theme: Theme) => ({
     ...common(theme),
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.text.primary,
   }),
 };
 

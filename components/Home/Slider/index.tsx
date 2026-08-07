@@ -1,6 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Image from "next/image";
+import { useColorScheme } from "@mui/material/styles";
 import { IMAGE_TRANSITION_DURATION } from "../../../utils/constants";
 import styles from "../styles";
 import type { HeroImage } from "../../../utils/types";
@@ -12,6 +13,8 @@ type ImageWrapperProps = { slide: HeroImage; preload: boolean };
 
 const ImageWrapper = React.forwardRef<HTMLDivElement, ImageWrapperProps>(
   ({ slide, preload }, ref) => {
+    const { colorScheme } = useColorScheme();
+
     return (
       <Box
         sx={styles.image}
@@ -37,7 +40,8 @@ const ImageWrapper = React.forwardRef<HTMLDivElement, ImageWrapperProps>(
           style={{
             objectFit: "cover",
             objectPosition: "50% 60%",
-            filter: "brightness(50%)",
+            filter:
+              colorScheme === "dark" ? "brightness(48%)" : "brightness(98%)",
           }}
         />
       </Box>

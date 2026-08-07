@@ -21,7 +21,7 @@ const Experience = () => {
       <Timeline />
       <Slide duration={fadeDuration} direction="left" triggerOnce>
         <Typography variant="h3" align="center" sx={styles.heading}>
-          Capabilities
+          Skills
         </Typography>
       </Slide>
       <Container maxWidth="lg" sx={styles.skills}>
