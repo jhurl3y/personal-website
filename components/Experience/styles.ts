@@ -13,7 +13,10 @@ const styles = {
     backgroundColor: theme.palette.slate,
     flexDirection: "column",
   }),
-  heading: (theme: Theme) => ({ padding: theme.spacing(9, 0, 8, 0) }),
+  heading: (theme: Theme) => ({
+    padding: theme.spacing(9, 0, 8, 0),
+    width: "100%",
+  }),
   skills: (theme: Theme) => ({ paddingBottom: theme.spacing(9) }),
   cv: (theme: Theme) => ({
     display: "flex",

@@ -6,11 +6,12 @@ import {
   DocumentHeadTags,
   documentGetInitialProps,
 } from "@mui/material-nextjs/v16-pagesRouter";
+import { fontVariables } from "../src/fonts";
 
 class MyDocument extends Document<DocumentProps & DocumentHeadTagsProps> {
   render() {
     return (
-      <Html lang="en">
+      <Html lang="en" className={fontVariables}>
         <Head>
           <DocumentHeadTags {...this.props} />
         </Head>

@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
  */
 export type SxEntry = SxProps<Theme>;
 
-/** A hero carousel slide. `mobileSrc` is absent for the local first slide. */
+/** A hero carousel slide. */
 export type HeroImage = {
   id: string;
   alt: string;
@@ -16,7 +16,6 @@ export type HeroImage = {
   /** Display-formatted lat/long, e.g. "33.9628°S  18.4098°E". */
   coords: string;
   desktopSrc: string;
-  mobileSrc?: string;
 };
 
 /**

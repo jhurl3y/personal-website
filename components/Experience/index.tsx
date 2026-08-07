@@ -14,13 +14,13 @@ const Experience = () => {
   return (
     <Container sx={styles.container} maxWidth={false}>
       <Slide duration={fadeDuration} direction="right" triggerOnce>
-        <Typography variant="h2" sx={styles.heading}>
+        <Typography variant="h2" align="center" sx={styles.heading}>
           {experienceStrings.experience}
         </Typography>
       </Slide>
       <Timeline />
       <Slide duration={fadeDuration} direction="left" triggerOnce>
-        <Typography variant="h3" sx={styles.heading}>
+        <Typography variant="h3" align="center" sx={styles.heading}>
           {experienceStrings.goodAt}
         </Typography>
       </Slide>

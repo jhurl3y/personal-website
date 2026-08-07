@@ -14,7 +14,7 @@ type SkillCardProps = {
 
 const SkillCard = ({ title, content, icon }: SkillCardProps) => {
   return (
-    <Card sx={styles.card} raised>
+    <Card sx={styles.card} elevation={0}>
       <CardContent>
         {icon}
         <Typography sx={styles.cardTitle} color="textPrimary" gutterBottom>

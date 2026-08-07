@@ -17,8 +17,6 @@ export const PAGES = ["home", "about", "experience", "contact"];
 
 const DESKTOP =
   "https://hurley-site-images.s3-eu-west-1.amazonaws.com/minified_new/desktop/";
-const MOBILE =
-  "https://hurley-site-images.s3-eu-west-1.amazonaws.com/minified_new/mobile/";
 
 // Hero carousel manifest. Replaces the two bare id arrays (BACKGROUNDS /
 // MOBILE_BACKGROUNDS), which carried no alt text and no locations.
@@ -28,69 +26,72 @@ const MOBILE =
 // pools breaks when a desktop visitor rotates into the mobile breakpoint,
 // because the chosen set is fixed for the visit and cannot be repaired after
 // the fact. Adding mobile crops for eight..fourteen would restore the rest.
+// Hero carousel manifest.
+//
+// IMPORTANT: these describe the DESKTOP bucket, which is what the carousel
+// renders. An earlier version described the mobile bucket by mistake - the two
+// are unrelated photo sets, not crops of the same shots, so every location was
+// wrong. `mobileSrc` is therefore NOT set: pairing them would put one photo's
+// caption on a different photo.
+//
+// Alt text is written from the photographs themselves. Locations marked
+// (unconfirmed) are my best read and need James to correct them.
 export const HERO_IMAGES = [
   {
     id: "first",
-    coords: "33.9628°S  18.4098°E",
     alt: "Standing on the edge of Table Mountain looking down over Table Bay and the city of Cape Town at dusk",
     location: "Table Mountain, Cape Town",
+    coords: "33.9628\u00b0S  18.4098\u00b0E",
     desktopSrc: "/static/assets/images/first_image.webp",
   },
   {
     id: "one",
-    coords: "34.0833°S  18.3667°E",
-    alt: "Sitting on a stone wall above the Atlantic on the Cape Peninsula coast road, with a mountain headland in the haze behind",
-    location: "Cape Peninsula, Cape Town",
+    alt: "On the sea wall at sunset, with the Pacific on one side and cliff-top apartment blocks running along the shoreline",
+    location: "Miraflores, Lima",
+    coords: "12.1219\u00b0S  77.0297\u00b0W",
     desktopSrc: `${DESKTOP}one.jpg`,
-    mobileSrc: `${MOBILE}one.jpg`,
   },
   {
     id: "two",
-    coords: "38.8899°N  77.0091°W",
-    alt: "Standing on the Capitol terrace with the National Mall and the Washington Monument stretching away behind",
-    location: "National Mall, Washington DC",
+    alt: "On a volcano summit ridge with three of us shoulder to shoulder and a steam plume rising behind",
+    location: "Volcano summit, Andes",
+    coords: "16.2940\u00b0S  71.4090\u00b0W",
     desktopSrc: `${DESKTOP}two.jpg`,
-    mobileSrc: `${MOBILE}two.jpg`,
   },
   {
     id: "three",
-    coords: "36.2065°N  86.6923°W",
-    alt: "Outside the floodlit Grand Ole Opry House in Nashville at night",
-    location: "Grand Ole Opry, Nashville",
+    alt: "Beside a pale turquoise altiplano lagoon ringed by salt flats, with snow-capped volcanoes on the far shore",
+    location: "Altiplano lagoon, Bolivia",
+    coords: "22.5000\u00b0S  67.8000\u00b0W",
     desktopSrc: `${DESKTOP}three.jpg`,
-    mobileSrc: `${MOBILE}three.jpg`,
   },
   {
     id: "four",
-    coords: "34.1381°N 118.3534°W",
-    alt: "In front of the waterfall beneath the Universal Studios Hollywood entrance sign",
-    location: "Universal Studios, Los Angeles",
+    alt: "Leaning on the stone wall at Cape Point beside the plaque marking the remains of a secret 1943 radar station, open ocean behind",
+    location: "Cape Point, South Africa",
+    coords: "34.3568\u00b0S  18.4970\u00b0E",
     desktopSrc: `${DESKTOP}four.jpg`,
-    mobileSrc: `${MOBILE}four.jpg`,
   },
   {
     id: "five",
-    coords: "37.8199°N 122.4783°W",
-    alt: "Leaning on the red railing of the Golden Gate Bridge with the San Francisco skyline across the bay",
-    location: "Golden Gate Bridge, San Francisco",
+    alt: "On a restaurant balcony above the bay, mountains falling away to the water on both sides",
+    location: "Cape Peninsula, South Africa",
+    coords: "34.0500\u00b0S  18.3500\u00b0E",
     desktopSrc: `${DESKTOP}five.jpg`,
-    mobileSrc: `${MOBILE}five.jpg`,
   },
   {
     id: "six",
-    coords: "34.1381°N 118.3534°W",
-    alt: 'Beside the "Welcome to Springfield" sign in the Simpsons area of Universal Studios Hollywood',
-    location: "Universal Studios, Los Angeles",
+    alt: "Above the closing hole at Pebble Beach, the fairway running down to the Pacific under low cloud",
+    location: "Pebble Beach, California",
+    coords: "36.5680\u00b0N 121.9500\u00b0W",
     desktopSrc: `${DESKTOP}six.jpg`,
-    mobileSrc: `${MOBILE}six.jpg`,
   },
   {
     id: "seven",
-    coords: "13.1631°S  72.5450°W",
-    alt: "Standing above the Machu Picchu ruins with cloud breaking over the mountains behind",
-    location: "Machu Picchu, Peru",
+    alt: "Standing on a railway line running dead straight across a salt flat, volcanoes on the horizon",
+    location: "Salar de Uyuni, Bolivia",
+    coords: "20.5000\u00b0S  67.5000\u00b0W",
     desktopSrc: `${DESKTOP}seven.jpg`,
-    mobileSrc: `${MOBILE}seven.jpg`,
   },
 ];
 

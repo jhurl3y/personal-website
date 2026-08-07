@@ -43,7 +43,12 @@ const Timeline = () => {
   });
 
   return (
-    <div style={{ ["--route-line" as string]: theme.palette.seaGlass }}>
+    <div
+      style={{
+        ["--route-line" as string]: theme.palette.seaGlass,
+        width: "100%",
+      }}
+    >
       <VerticalTimeline lineColor={theme.palette.seaGlass}>
         {timelineContent}
       </VerticalTimeline>

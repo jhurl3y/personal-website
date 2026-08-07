@@ -17,9 +17,18 @@ const styles = {
   card: (theme: Theme) => ({
     margin: theme.spacing(0, 6),
     height: "100%",
+    backgroundColor: theme.palette.limestone,
+    color: theme.palette.ink,
+    borderRadius: 0,
+    boxShadow: "none",
+    borderTop: `2px solid ${theme.palette.seaGlass}`,
     "& ul": { listStyleType: "none", margin: 0, padding: 0 },
   }),
-  cardTitle: () => ({ fontWeight: 600 }),
+  cardTitle: (theme: Theme) => ({
+    fontWeight: 600,
+    color: theme.palette.ink,
+    letterSpacing: "0.01em",
+  }),
   cardContent: (theme: Theme) => ({
     padding: theme.spacing(0, 6),
     listStyleType: "none",

@@ -7,6 +7,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import { AppCacheProvider } from "@mui/material-nextjs/v16-pagesRouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../src/theme";
+// Imported here as well as in _document. _document is server-only, so a
+// next/font CSS module referenced solely there never reaches the client
+// bundle and its custom properties resolve to nothing. The className that
+// actually defines them lives on <html> (see _document); this import is what
+// ships the stylesheet that backs it.
 import { fontVariables } from "../src/fonts";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -99,13 +104,12 @@ export default function MyApp(props: AppProps) {
         <meta property="og:url" content={metaStrings.url}></meta>
       </Head>
       <ThemeProvider theme={theme}>
+        <span className={fontVariables} hidden />
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <div className={fontVariables}>
-          <Component {...pageProps} />
-          <SpeedInsights />
-          <Analytics />
-        </div>
+        <Component {...pageProps} />
+        <SpeedInsights />
+        <Analytics />
       </ThemeProvider>
     </AppCacheProvider>
   );

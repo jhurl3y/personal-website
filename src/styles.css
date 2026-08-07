@@ -14,6 +14,20 @@
   width: 1px !important;
 }
 
+.vertical-timeline-element-date {
+  /*
+   * The library sets the date to the body ink colour at 0.7 opacity, which is
+   * near-invisible on the slate section - it assumes a light background.
+   * seaGlass at full opacity is 4.68:1 on slate, and matches the route line
+   * and the hero's coordinate eyebrow, so the dates read as part of the same
+   * system rather than as body copy.
+   */
+  color: var(--route-line, #7fa8a0) !important;
+  opacity: 1 !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
 .vertical-timeline-element-icon {
   box-shadow:
     0 0 0 3px #2b373b,

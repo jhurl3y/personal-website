@@ -11,7 +11,7 @@ const ContactDetails = () => {
     <Container maxWidth="md" sx={styles.contactDetails}>
       <Box sx={styles.emailPhoneContainer}>
         <FontAwesomeIcon icon="envelope" size="2x" className="highlight" />
-        <Typography sx={styles.emailPhone}>
+        <Typography align="center" sx={styles.emailPhone}>
           <Box
             component="a"
             href={`mailto:${EMAIL}`}
@@ -24,7 +24,7 @@ const ContactDetails = () => {
       </Box>
       <Box sx={styles.emailPhoneContainer}>
         <FontAwesomeIcon icon="phone" size="2x" className="highlight" />
-        <Typography sx={styles.emailPhone}>
+        <Typography align="center" sx={styles.emailPhone}>
           <Box
             component="a"
             href={`tel:${PHONE}`}

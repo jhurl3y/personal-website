@@ -64,9 +64,13 @@ const styles = {
     paddingBottom: "50px",
   }),
   map: (theme: Theme) => ({
-    height: "40vh",
+    // The map closes the Galway -> Dublin -> San Francisco arc, so it earns
+    // more height than the 40vh it had as a contact-section afterthought.
+    // Capped so it never exceeds the viewport on short windows.
+    height: "min(70vh, 640px)",
     width: "100%",
-    [theme.breakpoints.down("lg")]: { height: "50vh" },
+    borderTop: `1px solid ${theme.palette.seaGlass}`,
+    [theme.breakpoints.down("md")]: { height: "min(60vh, 420px)" },
   }),
 };
 

@@ -13,16 +13,19 @@ export const getSpotifyPlaylist = () => shuffle(SPOTIFY_PLAYLISTS)[0];
 
 // Bug 7.7: this used to branch on react-device-detect's `isBrowser`, which
 // reports server-vs-browser, NOT desktop-vs-mobile - so the image set was
-// chosen by render environment rather than viewport. Art direction now happens
-// in the markup via <picture>, and this only decides which images appear.
+// chosen by render environment rather than viewport.
 //
 // Bug 7.9: the old getBackground() fetched each image and handed back a
 // URL.createObjectURL blob that was never revoked. It leaked, and it bypassed
 // next/image entirely. Gone - next/image fetches these directly now.
+//
+// There is no desktop/mobile split any more: the two S3 buckets hold unrelated
+// photo sets rather than crops of the same shots, so serving the mobile one
+// would show different photographs than the alt text describes. next/image
+// handles sizing from the single source.
 export const getHeroSlides = () => {
   const [first, ...rest] = HERO_IMAGES;
-  const selectable = rest.filter((image) => image.mobileSrc);
-  return [first, ...shuffle(selectable).slice(0, NUMBER_OF_IMAGES)];
+  return [first, ...shuffle(rest).slice(0, NUMBER_OF_IMAGES)];
 };
 
 export const validEmailRegex = RegExp(
