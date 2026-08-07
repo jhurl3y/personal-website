@@ -41,7 +41,13 @@ class SmoothAnchor extends Component<SmoothAnchorProps> {
     const anchor = document.getElementById(href.slice(1));
     if (!anchor) return;
 
-    const offsetTop = anchor.getBoundingClientRect().top + window.scrollY - 40;
+    // No fudge factor here. Each Section already carries marginTop:-navHeight
+    // and paddingTop:navHeight, so landing its box at viewport 0 puts the
+    // content exactly under the sticky navbar. The hard-coded -40 this
+    // replaces predated bug 7.1, when navHeight was always undefined and the
+    // Section offsets never applied - it was compensating for a broken
+    // measurement, and once that was fixed it overshot by 40px.
+    const offsetTop = anchor.getBoundingClientRect().top + window.scrollY;
 
     // window.scroll({behavior:"smooth"}) is unaffected by the CSS
     // scroll-behavior override, so reduced motion is checked explicitly.
