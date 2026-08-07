@@ -1,15 +1,8 @@
 import { fadeDuration } from "./constants";
 import { shuffle } from "./array";
-import {
-  HERO_IMAGES,
-  NUMBER_OF_IMAGES,
-  SPOTIFY_PLAYLISTS,
-  FORMSPREE_URL,
-} from "./constants";
+import { HERO_IMAGES, NUMBER_OF_IMAGES, FORMSPREE_URL } from "./constants";
 
 export const getFadeDuration = () => fadeDuration;
-
-export const getSpotifyPlaylist = () => shuffle(SPOTIFY_PLAYLISTS)[0];
 
 // Bug 7.7: this used to branch on react-device-detect's `isBrowser`, which
 // reports server-vs-browser, NOT desktop-vs-mobile - so the image set was

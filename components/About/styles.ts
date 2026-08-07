@@ -6,11 +6,11 @@ import type { Theme } from "@mui/material/styles";
 const styles = {
   container: (theme: Theme) => ({
     height: "100%",
-    color: theme.palette.ink,
+    color: theme.vars!.palette.text.primary,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: theme.palette.limestone,
+    backgroundColor: theme.vars!.palette.aboutSurface,
     flexDirection: "column",
   }),
   heading: (theme: Theme) => ({
@@ -24,17 +24,17 @@ const styles = {
   // level, so the second overwrote the first and this flexDirection rule never
   // applied. Both rules now live on the elements they target.
   musicContent: (theme: Theme) => ({
-    margin: theme.spacing(6, 8, 10),
+    width: "100%",
+    margin: theme.spacing(6, 0, 10),
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
-      margin: theme.spacing(6, 8, 7),
+      margin: theme.spacing(6, 0, 7),
     },
   }),
-  musicItem: () => ({ margin: "0 auto" }),
   imageContainer: (theme: Theme) => ({
     paddingTop: theme.spacing(6),
     textAlign: "center",

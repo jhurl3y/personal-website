@@ -11,9 +11,16 @@ import type { PageProps } from "../../utils/types";
 import Details from "./details";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import { useColorScheme } from "@mui/material/styles";
 import Form from "./form";
 import { contactStrings } from "../../utils/strings";
-import { MAP_ZOOM, MAP_STYLES, fadeDuration } from "../../utils/constants";
+import {
+  DARK_MAP_STYLES,
+  EMAIL,
+  MAP_ZOOM,
+  MAP_STYLES,
+  fadeDuration,
+} from "../../utils/constants";
 
 const MapSkeletonLoader = () => {
   return (
@@ -54,6 +61,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 const Contact = ({ formspree, maps }: PageProps) => {
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [showDetails, setShowDetails] = useState(false);
+  const { colorScheme } = useColorScheme();
 
   const handleGalway = () => {
     setLocation(
@@ -67,6 +75,20 @@ const Contact = ({ formspree, maps }: PageProps) => {
     );
   };
 
+  const focusContactForm = () => {
+    const form = document.getElementById("contact-form");
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    form?.scrollIntoView({
+      behavior: reducedMotion ? "auto" : "smooth",
+      block: "center",
+    });
+    form
+      ?.querySelector<HTMLInputElement>("input")
+      ?.focus({ preventScroll: true });
+  };
+
   return (
     <Container sx={styles.container} maxWidth={false}>
       <Slide duration={fadeDuration} direction="up" triggerOnce>
@@ -75,7 +97,20 @@ const Contact = ({ formspree, maps }: PageProps) => {
         </Typography>
         <Container sx={styles.textSection} maxWidth="xs">
           <p dangerouslySetInnerHTML={{ __html: contactStrings.intro }} />
-          <p dangerouslySetInnerHTML={{ __html: contactStrings.questions }} />
+          <p>{contactStrings.questions}</p>
+          <Box sx={styles.primaryActions}>
+            <Button
+              component="a"
+              href={`mailto:${EMAIL}`}
+              variant="contained"
+              sx={styles.emailButton}
+            >
+              {contactStrings.emailMe}
+            </Button>
+            <Button onClick={focusContactForm} sx={styles.formButton}>
+              {contactStrings.useForm}
+            </Button>
+          </Box>
           <StyledButton
             href="#contact-map"
             sx={styles.button}
@@ -120,7 +155,7 @@ const Contact = ({ formspree, maps }: PageProps) => {
         <Map
           location={location}
           zoom={MAP_ZOOM}
-          mapStyles={MAP_STYLES}
+          mapStyles={colorScheme === "dark" ? DARK_MAP_STYLES : MAP_STYLES}
           title="contact-map"
           mapSx={styles.map}
           apiKey={maps}

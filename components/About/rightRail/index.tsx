@@ -18,6 +18,12 @@ const RightRail = () => {
   const age = useIsClient() ? getAge(BIRTH_DATE) : null;
 
   const { me, intro, iLike, code, sport, travel, friends } = aboutStrings;
+  const facts = [
+    { label: "Building", icon: "code", content: code },
+    { label: "Moving", icon: "heartbeat", content: sport },
+    { label: "Exploring", icon: "train", content: travel },
+    { label: "Connecting", icon: "users", content: friends },
+  ] as const;
 
   // MUI 9 dropped direction="column" from Grid - it is column-subdividing by
   // design, and the docs point at Stack for vertical layouts. This was silently
@@ -37,36 +43,21 @@ const RightRail = () => {
       <Grid size={{ xs: 12 }}>
         <Container maxWidth={false} sx={styles.rightRailContent}>
           <Typography variant="h4">{iLike}</Typography>
-          <Grid container spacing={2} sx={styles.icons}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <FontAwesomeIcon icon="code" size="2x" className="highlight" />
-              <Box component="p" sx={styles.skillText}>
-                {code}
+          <Stack sx={styles.facts}>
+            {facts.map((fact) => (
+              <Box key={fact.label} sx={styles.fact}>
+                <FontAwesomeIcon icon={fact.icon} size="lg" />
+                <Box>
+                  <Box component="p" sx={styles.factLabel}>
+                    {fact.label}
+                  </Box>
+                  <Box component="p" sx={styles.factText}>
+                    {fact.content}
+                  </Box>
+                </Box>
               </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <FontAwesomeIcon
-                icon="heartbeat"
-                size="2x"
-                className="highlight"
-              />
-              <Box component="p" sx={styles.skillText}>
-                {sport}
-              </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <FontAwesomeIcon icon="train" size="2x" className="highlight" />
-              <Box component="p" sx={styles.skillText}>
-                {travel}
-              </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <FontAwesomeIcon icon="users" size="2x" className="highlight" />
-              <Box component="p" sx={styles.skillText}>
-                {friends}
-              </Box>
-            </Grid>
-          </Grid>
+            ))}
+          </Stack>
         </Container>
       </Grid>
     </Stack>

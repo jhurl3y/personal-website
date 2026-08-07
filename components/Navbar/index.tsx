@@ -8,22 +8,30 @@ import Transition from "../Transition";
 import PrettyLink from "./prettyLink";
 import Link from "@mui/material/Link";
 import MobileMenu from "./mobileMenu";
+import ThemeToggle from "../ThemeToggle";
 import styles from "./styles";
 import { navbarStrings } from "../../utils/strings";
 import type { RefObject } from "react";
+import { useColorScheme } from "@mui/material/styles";
 
 type SectionRef = RefObject<HTMLDivElement | null>;
 
-type LinksProps = { selectedPage: string; pages: string[]; dark: boolean };
+export type NavbarSurface = "overlay" | "solid";
+
+type LinksProps = {
+  selectedPage: string;
+  pages: string[];
+  surface: NavbarSurface;
+};
 
 type NavbarProps = {
   pages: string[];
-  dark?: boolean;
+  surface?: NavbarSurface;
   navRef?: SectionRef | null;
   stickyRefs?: SectionRef[];
 };
 
-const Links = ({ selectedPage, pages, dark }: LinksProps) => {
+const Links = ({ selectedPage, pages, surface }: LinksProps) => {
   const links = pages.map((page: string, currentIndex: number) => {
     const needsExtraScroll = () => {
       const selectedIsTop = pages.indexOf(selectedPage) === 0;
@@ -38,7 +46,7 @@ const Links = ({ selectedPage, pages, dark }: LinksProps) => {
         href={`#${page}`}
         title={page}
         text={`${page}`}
-        dark={dark}
+        surface={surface}
         active={selectedPage === page}
         extraScroll={needsExtraScroll()}
       />
@@ -50,13 +58,15 @@ const Links = ({ selectedPage, pages, dark }: LinksProps) => {
       <>
         {links}
         <Link
-          key={navbarStrings.blog}
-          title={navbarStrings.blog}
+          key={navbarStrings.journal}
+          title={navbarStrings.journal}
           href="https://blog.jameshurley.ie"
-          target="_blank"
-          sx={[styles.link, dark ? styles.darkLink : styles.lightLink]}
+          sx={[
+            styles.link,
+            surface === "overlay" ? styles.overlayLink : styles.solidLink,
+          ]}
         >
-          {navbarStrings.blog}
+          {navbarStrings.journal}
         </Link>
       </>
     </Box>
@@ -65,7 +75,7 @@ const Links = ({ selectedPage, pages, dark }: LinksProps) => {
 
 const Navbar = ({
   pages,
-  dark = true,
+  surface = "overlay",
   navRef = null,
   stickyRefs = [],
 }: NavbarProps) => {
@@ -73,6 +83,8 @@ const Navbar = ({
   const [page, setPage] = useState(pages[0]);
   const [offsets, setOffsets] = useState<number[]>([]);
   const sticky = stickyRefs.length > 0;
+  const { colorScheme } = useColorScheme();
+  const usesLightLogo = surface === "overlay" || colorScheme === "dark";
 
   const getNewOffsets = () => {
     const newOffsets = new Array(stickyRefs.length).fill(0);
@@ -124,7 +136,7 @@ const Navbar = ({
     <Transition in={!sticky || visible} sticky={sticky}>
       <Container
         maxWidth={false}
-        sx={!dark ? styles.light : undefined}
+        sx={surface === "solid" ? styles.solid : undefined}
         ref={navRef}
       >
         <header>
@@ -135,11 +147,17 @@ const Navbar = ({
               href={`#${pages[0]}`}
               title={pages[0]}
             >
-              {dark && <Image src={LogoLight} alt="logo" />}
-              {!dark && <Image src={LogoDark} alt="logo" />}
+              {usesLightLogo ? (
+                <Image src={LogoLight} alt="James Hurley" />
+              ) : (
+                <Image src={LogoDark} alt="James Hurley" />
+              )}
             </Box>
-            <Links selectedPage={page} pages={pages} dark={dark} />
-            <MobileMenu pages={pages} dark={dark} />
+            <Links selectedPage={page} pages={pages} surface={surface} />
+            <Box sx={styles.themeToggle}>
+              <ThemeToggle surface={surface} />
+            </Box>
+            <MobileMenu pages={pages} surface={surface} />
           </Box>
         </header>
       </Container>

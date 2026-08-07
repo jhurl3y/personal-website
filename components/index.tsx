@@ -21,7 +21,7 @@ type SectionProps = {
 
 const rootSx = (theme: Theme) => ({
   height: "100%",
-  backgroundColor: theme.palette.slate,
+  backgroundColor: theme.vars!.palette.background.default,
 });
 
 const Section = forwardRef<HTMLDivElement, SectionProps>(
@@ -65,7 +65,7 @@ const Component = ({ formspree, maps }: PageProps) => {
   return (
     <Layout sx={rootSx}>
       <Navbar
-        dark={false}
+        surface="solid"
         pages={PAGES}
         navRef={navRef}
         stickyRefs={[homeRef, aboutRef, experienceRef, contactRef]}

@@ -18,6 +18,13 @@ export type HeroImage = {
   desktopSrc: string;
 };
 
+export type FeaturedPlaylist = {
+  href: string;
+  label: string;
+  title: string;
+  description: string;
+};
+
 /**
  * Absent env values are `null`, never `""`. The distinction matters: the
  * contact form and the map each degrade on `null`, and an empty string would

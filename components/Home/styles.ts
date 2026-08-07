@@ -71,6 +71,8 @@ const styles = {
     top: "0",
     display: "flex",
     flexDirection: "column",
+    background:
+      "linear-gradient(180deg, rgba(10, 16, 18, 0.34) 0%, transparent 34%, transparent 58%, rgba(10, 16, 18, 0.45) 100%)",
   }),
   // The hero copy sits left of centre so the name never lands on the horizon
   // line in the photographs, which is roughly centred in most of them.

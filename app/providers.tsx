@@ -50,8 +50,14 @@ library.add(
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <AppRouterCacheProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      <ThemeProvider
+        theme={theme}
+        defaultMode="system"
+        modeStorageKey="james-hurley-color-mode"
+        colorSchemeStorageKey="james-hurley-color-scheme"
+        disableTransitionOnChange
+      >
+        <CssBaseline enableColorScheme />
         {children}
       </ThemeProvider>
     </AppRouterCacheProvider>

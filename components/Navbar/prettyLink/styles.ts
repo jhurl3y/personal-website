@@ -9,8 +9,11 @@ const common = (theme: Theme) => ({
 });
 
 const styles = {
-  lightLink: (theme: Theme) => ({ ...common(theme), color: theme.palette.ink }),
-  darkLink: (theme: Theme) => ({
+  solidLink: (theme: Theme) => ({
+    ...common(theme),
+    color: theme.palette.text.primary,
+  }),
+  overlayLink: (theme: Theme) => ({
     ...common(theme),
     color: theme.palette.chalk,
   }),

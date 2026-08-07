@@ -6,11 +6,11 @@ import type { Theme } from "@mui/material/styles";
 const styles = {
   container: (theme: Theme) => ({
     height: "100%",
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.chalk,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: theme.palette.slate,
+    backgroundColor: theme.vars!.palette.experienceSurface,
     flexDirection: "column",
   }),
   heading: (theme: Theme) => ({

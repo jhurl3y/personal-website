@@ -13,6 +13,13 @@ declare module "@mui/material/styles" {
     signal: string;
     signalText: string;
     mist: string;
+    night: string;
+    nightRaised: string;
+    nightMuted: string;
+    aboutSurface: string;
+    experienceSurface: string;
+    contactSurface: string;
+    cardSurface: string;
   }
 
   interface PaletteOptions {
@@ -25,5 +32,12 @@ declare module "@mui/material/styles" {
     signal?: string;
     signalText?: string;
     mist?: string;
+    night?: string;
+    nightRaised?: string;
+    nightMuted?: string;
+    aboutSurface?: string;
+    experienceSurface?: string;
+    contactSurface?: string;
+    cardSurface?: string;
   }
 }

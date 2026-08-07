@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import { GoogleMap, Polyline, useJsApiLoader } from "@react-google-maps/api";
 import { LOCATIONS } from "../../utils/constants";
 import type { SxProps, Theme } from "@mui/material/styles";
@@ -83,13 +84,35 @@ const LoadedMap = ({
 
 // Shown when GOOGLE_MAPS_API_KEY is absent. Makes no network request.
 const MapFallback = () => (
-  <ul>
-    {LOCATIONS.map(({ name }) => (
-      <li key={name} style={{ listStyle: "none", textTransform: "capitalize" }}>
-        {name}
-      </li>
-    ))}
-  </ul>
+  <Box
+    sx={(theme) => {
+      const palette = theme.vars?.palette ?? theme.palette;
+
+      return {
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: theme.spacing(4),
+        backgroundColor: palette.experienceSurface,
+        color: palette.chalk,
+        textAlign: "center",
+      };
+    }}
+  >
+    <Typography component="p" variant="overline" sx={{ margin: 0 }}>
+      Route currently unavailable
+    </Typography>
+    <Typography component="p" sx={{ margin: 0 }}>
+      Galway · Dublin · San Francisco
+    </Typography>
+    <Box component="ul" sx={{ display: "none" }}>
+      {LOCATIONS.map(({ name }) => (
+        <li key={name}>{name}</li>
+      ))}
+    </Box>
+  </Box>
 );
 
 const MapContainer = ({

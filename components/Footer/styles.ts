@@ -6,12 +6,12 @@ import type { Theme } from "@mui/material/styles";
 const styles = {
   container: (theme: Theme) => ({
     height: "100%",
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.chalk,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    backgroundColor: theme.palette.slate,
+    backgroundColor: theme.vars!.palette.experienceSurface,
     padding: theme.spacing(11),
     [theme.breakpoints.down("lg")]: { padding: theme.spacing(10) },
     [theme.breakpoints.down("md")]: { padding: theme.spacing(9) },
