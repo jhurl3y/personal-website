@@ -1,133 +1,76 @@
-Brings a site last touched in June 2024 onto a current stack, fixes 20 bugs, and clears the dependency that was blocking everything else.
+Completes the modernization plan: Tasks 7, 8 and 9, plus the two visual issues from the merged preview.
 
-**This PR is Tasks 1–6 of a 10-task plan. Tasks 7–9 (TypeScript, redesign, performance) are not included** — see _What is not here_ below.
+Branched off `main` at `f7fb535` (the squash merge of #2), pulled fresh.
 
-## What changed
+## Lighthouse
 
-|                            | Before            | After                                |
-| -------------------------- | ----------------- | ------------------------------------ |
-| next                       | `latest` → 14.2.3 | **pinned 16.3.0**                    |
-| react / react-dom          | 18.2.0            | 19.2.8                               |
-| @mui/material              | 5.15.19           | 9.3.1                                |
-| @mui/styles                | 5.15.19           | **removed**                          |
-| FontAwesome core / adapter | 6.5.2 / 0.2.2     | 7.3.1 / 3.5.0                        |
-| Node                       | `>=18` (EOL)      | `>=22 <23`                           |
-| Tooling                    | none              | ESLint 10 flat, Prettier 3, tsconfig |
+Same pinned Lighthouse 12.8.2, desktop preset, identical flags. Baseline is the pre-modernization site.
 
-`"next": "latest"` was unpinned — any `npm install` could have jumped majors silently.
+|                | before #2 | now     |         |
+| -------------- | --------- | ------- | ------- |
+| performance    | 99        | **100** | +1      |
+| accessibility  | 95        | **98**  | +3      |
+| best practices | 74        | **96**  | **+22** |
+| SEO            | 100       | 100     | —       |
 
-**`@mui/styles` is gone.** It was legacy JSS, dead past MUI 6, and imported by 16 files. Emotion SSR now uses MUI's documented Pages Router integration on both sides; 104 style tags are inlined at SSR, so there's no flash of unstyled content. All 13 `makeStyles` modules and the one `withStyles` HOC became `sx`/`styled`, and all 14 legacy `<Grid item xs>` sites moved to `<Grid size={{...}}>` (MUI 9 removed the legacy Grid).
+LCP **0.7s**, FCP **0.2s**. Best practices moved on the deprecated-API and console-error audits.
 
-**Dead code:** the entire Garmin integration (never called), the unimported `styles/` directory, ~1 MB of unreferenced images, dead CSS, and five unused dependencies. First Load JS 250 kB → 244 kB before the MUI major.
+## Task 9 — performance
 
-## Bugs fixed — 20
+The page is now **prerendered as static HTML**. It was server-rendered on every request purely to read two env vars.
 
-Nine were found reading the code; eleven only by tooling, review, and finally loading it in a browser.
+Four values weren't actually static, and each is handled rather than frozen:
 
-1. **Sticky-nav offset never applied** — read `clientHeight` off the ref object, not the node, so it was always `undefined`. Now also re-measures on resize.
-2. **Four leaking no-op keydown listeners** — `removeEventListener` used a different function identity, so they never detached.
-3. **`ThemeProvider` imported from `@mui/styles`** — custom theme keys never reached MUI components.
-4. **styled-components SWC transform** enabled on an Emotion project.
-5. **`library.add()` inside the component body** — re-registered every icon on every render.
-6. **Unset `FORMSPREE_TOKENS` 500'd the whole page** — `.split()` on `undefined` inside data fetching.
-7. **Carousel arrow keys bound to `window`** — typing in the contact form advanced the hero. Now scoped to a focusable `role="region"`.
-8. **Form failures rendered a blank box** — `handleError` only matched `"empty"`/`"email"`, so a 500 body or a status-0 transport failure showed nothing. Added a generic fallback in an `aria-live` region, an explicit `onerror`, and a submitting state.
-9. **Form and map didn't degrade independently** — either missing key could disable both.
-10. **Every slide shared one ref object** — `new Array(n).fill(React.createRef())` puts the _same_ ref in every slot, so `slideWidth()` never measured the slide it thought it did. _(Found by the new linter.)_
-11. **`Box` system props silently dead** — MUI 9 removed shorthand props, so `<Box display="flex" mb={2}>` rendered with none of those styles. _(Found only by `tsc`; build and runtime both passed.)_
-12. **Duplicate breakpoint key** — `About/styles.js` declared `[theme.breakpoints.down("sm")]` twice, so the second overwrote the first and a mobile rule never applied.
-13. **Stray backtick** rendering after the charSet meta tag in `Layout`.
-14. **`#888888` caption text at 2.9:1** — failed WCAG AA. Replaced with a computed 5.82:1 token.
+- **Spotify playlist** is no longer a prop. The server renders a fixed-height skeleton and the iframe mounts **exactly once**, after the playlist is picked client-side. Rendering one and swapping it would have loaded two Spotify iframes per visit.
+- **Age and copyright year** compute during render behind a new `useIsClient()` built on `useSyncExternalStore` — no extra render, no hydration mismatch when a date rolls over.
+- **Formspree token** is build-time, accepted. Rotating client-side would ship every token to the browser.
 
-Four more were regressions this migration introduced, caught by Codex review of the branch diff before push. In each, an `sx` callback reached a prop expecting a class-name string, so React serialized the _function_ into the `class` attribute and the styles vanished:
+Replaces the two bare id arrays with a `HERO_IMAGES` manifest carrying alt text, a location and coordinates per slide — the carousel finally has real alternative text, **7 slides with 7 unique descriptions**.
 
-15. **Navbar layout, colours and sticky background** — the `Container`, the raw `<nav>`, the blog link, `PrettyLink` and the `MobileMenu` icon.
-16. **The map collapsed to zero height** — `styles.map` travelled through a `mapClasses` prop onto a raw `div`, so the `40vh`/`50vh` rule never generated.
-17. **All four contact inputs lost their background and text colour** — passed via `InputProps.className`.
-18. **CV link used `ink` on `slate`** — a pairing the theme itself documents as invalid.
+Fixes two spec bugs: `getBackgroundUrls` branched on `react-device-detect`'s `isBrowser`, which reports _server vs browser_, not _desktop vs mobile_, so the image set was chosen by render environment; and `getBackground()` handed back `URL.createObjectURL` blobs that were never revoked. Both gone, `react-device-detect` uninstalled.
 
-Verified after the fix: zero serialized functions in `class` attributes, and Emotion SSR style tags rose **88 → 104**, which is precisely the dropped styling now applying.
+Hero re-encoded 4032×2268 / 609 KB → 2560×1440 / 354 KB. Served responses are AVIF: **1920px = 102 KB**, inside the 150 KB budget. Removed the deprecated `priority` prop from all 18 sites; only the LCP hero preloads.
 
-Two more were **client-only crashes that every server-side check passed**, found by loading the preview in a real browser:
+**One bug found in the browser:** slides 1–6 never loaded at all. Native `loading="lazy"` only re-evaluates on scroll and resize, not on transform changes, so a `translateX` carousel never triggers it. (The blob-fetch removed above was incidentally what used to pull them in.)
 
-19. **`findDOMNode is not a function` — the page threw and died.** `react-transition-group` v4 falls back to `ReactDOM.findDOMNode` when a `Transition` has no `nodeRef`, and React 19 removed that API. The navbar transition threw on its first update. 4.4.5 is the latest release, so `nodeRef` is the fix rather than an upgrade. Audited every other dependency — this was the only one.
-20. **The hero image never rendered.** `layout="fill"`, `objectFit` and `objectPosition` are Next 12 `next/image` props; Next 13 moved them to `fill` + `style` and Next 16 ignores the old ones outright, so the hero showed as a bare background colour.
+## Task 7 — TypeScript
 
-Both were invisible to SSR: `curl` returned 200 with correct markup in each case.
+All 42 files are `.ts`/`.tsx`, `tsc --noEmit` is clean, `typecheck` is a gate. **No `any`, no `@ts-ignore`.** `react-vertical-timeline-component` ships no types, so it gets a local declaration covering only the props used here.
 
-## Design
+Absent env values are typed `string | null` rather than `""`, so the degraded state is compiler-enforced rather than a convention.
 
-The Atlantic palette landed early, because `theme.colors` has no MUI equivalent and the `styled` conversions needed real tokens. Every pairing is **computed, not estimated** — three earlier estimates were wrong:
+**It found four defects that the build, runtime, linter and Lighthouse all passed:**
 
-| Pairing              | Ratio   |                             |
-| -------------------- | ------- | --------------------------- |
-| ink / limestone      | 14.83:1 | AAA                         |
-| chalk / slate        | 11.73:1 | AAA                         |
-| deepSea / limestone  | 5.87:1  | AA — links on light         |
-| mist / limestone     | 5.82:1  | AA — muted text             |
-| seaGlass / slate     | 4.68:1  | AA — accent on dark only    |
-| seaGlass / limestone | 2.07:1  | **fails — never use**       |
-| signal / limestone   | 2.90:1  | **fails — decorative only** |
+1. **`styles.button` has never existed.** Contact references it for the Galway / San Francisco links; it isn't in `Contact/styles` and never was (it was `classes.button` before, equally undefined). Those links have been rendering unstyled.
+2. **Those links were 2.84:1** — `seaGlass` on `deepSea`, below AA. Now `chalk` at 7.12:1.
+3. **MUI 9 removed `direction="column"` from `Grid`** (it subdivides columns by design; the docs point at `Stack`). The About right rail's vertical layout was silently a no-op.
+4. **Footer icons passed `width="40px"`** to `next/image`, which wants a number.
 
-The full Atlantic layout, type scale and motion work is Task 8 and is not in this PR.
+That's now three MUI 9 breaking changes the upgrade swallowed silently — system props on `Box` (in #2), the legacy `Grid` API, and `Grid direction`. Each surfaced only under type checking.
+
+## Task 8 — Atlantic design direction
+
+**Type:** Archivo for display, Source Sans 3 for body, self-hosted via `next/font`. Coordinates and dates sit on tabular figures from the body face rather than a third family.
+
+The direction called for Archivo at the expanded end of its `wdth` axis. The variable font costs **87 KB against 14 KB** for the static 700 — 116 KB served vs 42 KB, over the 90 KB budget. **Took the budget:** 74 KB is a real cost and the width difference is subtle at display sizes. `font-stretch` would be inert on a static instance, so it's removed rather than left as a misleading no-op.
+
+**Hero (the signature):** the name set large with the coordinates of wherever the current photograph was taken sitting above it, changing as you move through the carousel — so it reads as somewhere actually been, not a caption. Positioned in the lower third: these photographs all put subject and horizon near the middle, so centred type lands on both, and low means the copy falls on darker ground where it's legible without a scrim.
+
+**Route line:** the timeline's rule is a 1px `seaGlass` hairline carrying the hero's eyebrow rule down the page. Icons keep their employer brand colours — those encode information the palette shouldn't flatten.
+
+**Reduced motion** now covers all four sources, not just the reveals: `react-awesome-reveal`, the hero, carousel transitions, and programmatic smooth scrolling. `window.scroll({behavior:"smooth"})` ignores the CSS `scroll-behavior` override, so `smoothAnchor` checks the media query itself.
+
+## The two issues from the merged preview
+
+- **Timeline blue** was a hardcoded `COLORS.lightBlue` (`#2194f3`), not the library CSS as first reported. The Task 6 conversion only rewrote `theme.colors.*` inside style modules, so three direct `COLORS.*` imports survived. Cards are now limestone on ink.
+- **Spotify was the narrow 300px player.** Two compounding causes: v3 computes `width = wide ? "100%" : 300` so it needs `wide`, _and_ its Grid container sat in a `display:flex` parent so it shrank to content width. Fixing either alone wouldn't have worked.
 
 ## Verification
 
-No automated tests exist and none were added — an explicitly accepted decision, recorded in the spec. Verification is manual.
+`build` ✅ · `lint` ✅ (0 errors, 2 pre-existing `exhaustive-deps` warnings) · `format:check` ✅ · `typecheck` ✅
 
-**Gates:** `build` ✅ · `lint` ✅ (0 errors, 3 pre-existing `exhaustive-deps` warnings) · `format:check` ✅ · `typecheck` — not a gate, see below.
+Every stage verified in Chrome against a production build, not just SSR — that's what missed the client-only crashes in #2. Confirmed: 7/7 hero slides load, age renders "32 year old", copyright shows the current year, 5 timeline cards, Spotify 640×450, contact map 527px, city links `chalk`, route line 1px `seaGlass`, no console errors, no hydration mismatches.
 
-**Lighthouse** (pinned 12.8.2, desktop preset, identical flags both runs):
-
-|                | before | after  |        |
-| -------------- | ------ | ------ | ------ |
-| performance    | 99     | 98     | −1     |
-| accessibility  | 95     | **98** | **+3** |
-| best-practices | 74     | 74     | 0      |
-| SEO            | 100    | 100    | 0      |
-
-The −1 on performance is noise on an already-99 desktop score, and **the performance work is Task 9, which is not in this PR**. Accessibility is up from the carousel region, the aria-live error region, and the contrast fixes. Best-practices is unchanged at 74; the failing audits are third-party cookies and console errors from the Spotify/Maps embeds.
-
-**Env degradation, verified by request:**
-
-| Case                 | Result                                        |
-| -------------------- | --------------------------------------------- |
-| Both vars unset      | HTTP 200 (was a 500)                          |
-| Both unset — form    | Disabled with explanation, no network request |
-| Both unset — map     | Static city fallback, no request to Google    |
-| Only Formspree unset | Form disabled, **map still works**            |
-| Only Maps key unset  | Map falls back, **form still works**          |
-
-**Codex review** of the full branch diff: converged to `NO_FINDINGS` after one round that caught four real regressions (15–18 above).
-
-**Browser verification** (Chrome, `next start` production build) — added after the preview crashed on bugs 19–20, which every server-side check had passed:
-
-| Check                            | Result                                                                        |
-| -------------------------------- | ----------------------------------------------------------------------------- |
-| Console on load and after scroll | No errors (only an expected invalid-Maps-key warning from the local test key) |
-| Hero image                       | Renders, correct `object-fit`                                                 |
-| Sticky-nav transition            | Fires without throwing                                                        |
-| Spotify embed                    | Live iframe, 300×450                                                          |
-| CV timeline                      | 5 elements rendered                                                           |
-| Contact map                      | **527 px tall** — the zero-height regression is gone                          |
-| Contact form                     | 4 fields with correct light backgrounds                                       |
-| Broken images                    | None                                                                          |
-
-**Still not verified:** keyboard focus order, reduced-motion, and the 375/768/1440 breakpoints. **The MUI 9 styling rewrite is the highest-risk change here** — six of its regressions were invisible to the build, and two were invisible to SSR as well. Please look at the preview rather than trusting the green gates.
-
-## What is not here
-
-- **Task 7 — TypeScript.** Started and deliberately reverted. The renames produced **202 type errors**, 133 of them implicit-`any` props needing interfaces across ~26 components. Landing a half-migrated tree with a failing `typecheck` gate would have been worse than not starting. The attempt paid for itself by surfacing bug 11 above.
-- **Task 8 — the Atlantic redesign** (layout, type scale, hero coordinates, motion). Only the palette landed.
-- **Task 9 — performance**: `getStaticProps`, `next/font`, responsive images, the 624 KB hero re-encode, and the `priority` → `preload` migration across 18 images.
-
-Suggested order: **9, then 7, then 8** — 9 is smallest with the most user-visible gain, and 8 reviews far better against a typed codebase.
-
-## Also worth knowing
-
-- The hero images live in an S3 bucket this repo doesn't control. If it disappears, the hero breaks.
-- Those mobile images are ~300 KB each at 1440×2560 — oversized for phones. Out of scope (external bucket).
-- The carousel draws from 7 mobile-capable images, two of which are the same location. Restoring the other seven means adding mobile crops.
-- All 8 hero images now have written alt text and locations (Cape Town ×2, Washington DC, Nashville, Los Angeles ×2, San Francisco, Machu Picchu), ready for Task 8.
+**Still worth your eyes:** keyboard focus order and the 375/768 breakpoints. I checked reduced-motion CSS ships but did not emulate the preference end to end.
 
 Spec: `docs/modernization-spec.md` · Plan: `docs/superpowers/plans/2026-08-06-modernization.md`
