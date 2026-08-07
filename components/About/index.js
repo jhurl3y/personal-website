@@ -22,14 +22,14 @@ const SkeletonLoader = () => {
         p: 2,
       }}
     >
-      <Box display="flex" alignItems="center" mb={2}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
         <Skeleton
           variant="rectangular"
           width={60}
           height={60}
           sx={{ borderRadius: 1 }}
         />
-        <Box ml={2} flex={1}>
+        <Box sx={{ ml: 2, flex: 1 }}>
           <Skeleton variant="text" width="60%" />
           <Skeleton variant="text" width="40%" />
         </Box>
@@ -38,14 +38,16 @@ const SkeletonLoader = () => {
       {[1, 2, 3, 4, 5].map((index) => (
         <Box
           key={index}
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={1}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 1,
+          }}
         >
-          <Box display="flex" alignItems="center">
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <Skeleton variant="text" width={20} />
-            <Box ml={2}>
+            <Box sx={{ ml: 2 }}>
               <Skeleton variant="text" width={200} />
               <Skeleton variant="text" width={150} />
             </Box>
