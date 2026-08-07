@@ -12,8 +12,7 @@ export default tseslint.config(
     // context API that ESLint 10 removed, throwing
     // "contextOrFilename.getFilename is not a function" while loading
     // react/display-name. Pinning the version explicitly skips that code path.
-    // Bumped to 19 in Task 5.
-    settings: { react: { version: "18.2" } },
+    settings: { react: { version: "19.2" } },
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": [

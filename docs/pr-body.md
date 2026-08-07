@@ -20,9 +20,9 @@ Brings a site last touched in June 2024 onto a current stack, fixes 14 bugs, and
 
 **Dead code:** the entire Garmin integration (never called), the unimported `styles/` directory, ~1 MB of unreferenced images, dead CSS, and five unused dependencies. First Load JS 250 kB → 244 kB before the MUI major.
 
-## Bugs fixed — 14
+## Bugs fixed — 18
 
-Nine were found reading the code, five only by tooling added here.
+Nine were found reading the code; nine only by tooling and review added here.
 
 1. **Sticky-nav offset never applied** — read `clientHeight` off the ref object, not the node, so it was always `undefined`. Now also re-measures on resize.
 2. **Four leaking no-op keydown listeners** — `removeEventListener` used a different function identity, so they never detached.
@@ -38,6 +38,15 @@ Nine were found reading the code, five only by tooling added here.
 12. **Duplicate breakpoint key** — `About/styles.js` declared `[theme.breakpoints.down("sm")]` twice, so the second overwrote the first and a mobile rule never applied.
 13. **Stray backtick** rendering after the charSet meta tag in `Layout`.
 14. **`#888888` caption text at 2.9:1** — failed WCAG AA. Replaced with a computed 5.82:1 token.
+
+Four more were regressions this migration introduced, caught by Codex review of the branch diff before push. In each, an `sx` callback reached a prop expecting a class-name string, so React serialized the _function_ into the `class` attribute and the styles vanished:
+
+15. **Navbar layout, colours and sticky background** — the `Container`, the raw `<nav>`, the blog link, `PrettyLink` and the `MobileMenu` icon.
+16. **The map collapsed to zero height** — `styles.map` travelled through a `mapClasses` prop onto a raw `div`, so the `40vh`/`50vh` rule never generated.
+17. **All four contact inputs lost their background and text colour** — passed via `InputProps.className`.
+18. **CV link used `ink` on `slate`** — a pairing the theme itself documents as invalid.
+
+Verified after the fix: zero serialized functions in `class` attributes, and Emotion SSR style tags rose **88 → 104**, which is precisely the dropped styling now applying.
 
 ## Design
 
@@ -82,7 +91,9 @@ The −1 on performance is noise on an already-99 desktop score, and **the perfo
 | Only Formspree unset | Form disabled, **map still works**            |
 | Only Maps key unset  | Map falls back, **form still works**          |
 
-**Not verified:** the full manual matrix from spec §14 — keyboard focus order, reduced-motion, and the 375/768/1440 breakpoints — needs a human on the preview deploy. The MUI 9 styling rewrite is the highest-risk change here and deserves a real look, even though the palette renders correctly and no old colours leak.
+**Codex review** of the full branch diff: converged to `NO_FINDINGS` after one round that caught four real regressions (15–18 above).
+
+**Not verified:** the full manual matrix from spec §14 — keyboard focus order, reduced-motion, and the 375/768/1440 breakpoints — needs a human on the preview deploy. **The MUI 9 styling rewrite is the highest-risk change here.** Four of its regressions were invisible to the build, the runtime and Lighthouse, and only turned up in review; please give the rendered pages a real look rather than trusting the green gates.
 
 ## What is not here
 
