@@ -21,7 +21,7 @@ export const experienceStrings = {
   surveymonkeyGrowthDate: "2018 - 2021",
   surveymonkeyMLDate: "2021 - present",
   surveymonkeyGrowthTitle: "Growth Engineer, Momentive (formerly SurveyMonkey)",
-  surveymonkeyMLTitle: "Machine Learning Engineer, SurveyMonkey",
+  surveymonkeyMLTitle: "Senior ML Engineer, SurveyMonkey",
   surveymonkeyMLLocation: "San Francisco, CA",
   surveymonkeyGrowthLocation: "Dublin, Ireland",
   surveymonkeyGrowthTasks:
@@ -45,7 +45,7 @@ export const experienceStrings = {
 };
 
 export const skillStrings = {
-  ai: "<ul><li>LLM apps &amp; agents</li><li>Tool use / MCP servers</li><li>Retrieval pipelines</li><li>Evals &amp; prompt design</li></ul>",
+  ai: "<ul><li>LLM apps &amp; agents</li><li>Tool use / MCP servers</li><li>Evals &amp; prompt design</li></ul>",
   python:
     "<ul><li>Python 3.11+</li><li>FastAPI</li><li>Pydantic</li><li>Poetry &amp; pytest</li></ul>",
   typescript:
@@ -62,7 +62,7 @@ export const skillStrings = {
     "<ul><li>Event-driven services</li><li>API design</li><li>Built from the ground up</li></ul>",
   testing:
     "<ul><li>pytest</li><li>Vitest</li><li>Playwright</li><li>CI test pipelines</li></ul>",
-  git: "<ul><li>GitHub</li><li>Trunk-based workflow</li><li>Code review</li></ul>",
+  git: "<ul><li>GitHub</li><li>Code review</li></ul>",
   abTesting:
     "<ul><li>Experimentation</li><li>Growth engineering</li><li>Metrics &amp; analysis</li></ul>",
   algorithms: "Good knowledge from studying &amp; using in practise",
