@@ -1,4 +1,4 @@
-Brings a site last touched in June 2024 onto a current stack, fixes 18 bugs, and clears the dependency that was blocking everything else.
+Brings a site last touched in June 2024 onto a current stack, fixes 20 bugs, and clears the dependency that was blocking everything else.
 
 **This PR is Tasks 1–6 of a 10-task plan. Tasks 7–9 (TypeScript, redesign, performance) are not included** — see _What is not here_ below.
 
@@ -20,9 +20,9 @@ Brings a site last touched in June 2024 onto a current stack, fixes 18 bugs, and
 
 **Dead code:** the entire Garmin integration (never called), the unimported `styles/` directory, ~1 MB of unreferenced images, dead CSS, and five unused dependencies. First Load JS 250 kB → 244 kB before the MUI major.
 
-## Bugs fixed — 18
+## Bugs fixed — 20
 
-Nine were found reading the code; nine only by tooling and review added here.
+Nine were found reading the code; eleven only by tooling, review, and finally loading it in a browser.
 
 1. **Sticky-nav offset never applied** — read `clientHeight` off the ref object, not the node, so it was always `undefined`. Now also re-measures on resize.
 2. **Four leaking no-op keydown listeners** — `removeEventListener` used a different function identity, so they never detached.
@@ -47,6 +47,13 @@ Four more were regressions this migration introduced, caught by Codex review of 
 18. **CV link used `ink` on `slate`** — a pairing the theme itself documents as invalid.
 
 Verified after the fix: zero serialized functions in `class` attributes, and Emotion SSR style tags rose **88 → 104**, which is precisely the dropped styling now applying.
+
+Two more were **client-only crashes that every server-side check passed**, found by loading the preview in a real browser:
+
+19. **`findDOMNode is not a function` — the page threw and died.** `react-transition-group` v4 falls back to `ReactDOM.findDOMNode` when a `Transition` has no `nodeRef`, and React 19 removed that API. The navbar transition threw on its first update. 4.4.5 is the latest release, so `nodeRef` is the fix rather than an upgrade. Audited every other dependency — this was the only one.
+20. **The hero image never rendered.** `layout="fill"`, `objectFit` and `objectPosition` are Next 12 `next/image` props; Next 13 moved them to `fill` + `style` and Next 16 ignores the old ones outright, so the hero showed as a bare background colour.
+
+Both were invisible to SSR: `curl` returned 200 with correct markup in each case.
 
 ## Design
 
@@ -93,7 +100,20 @@ The −1 on performance is noise on an already-99 desktop score, and **the perfo
 
 **Codex review** of the full branch diff: converged to `NO_FINDINGS` after one round that caught four real regressions (15–18 above).
 
-**Not verified:** the full manual matrix from spec §14 — keyboard focus order, reduced-motion, and the 375/768/1440 breakpoints — needs a human on the preview deploy. **The MUI 9 styling rewrite is the highest-risk change here.** Four of its regressions were invisible to the build, the runtime and Lighthouse, and only turned up in review; please give the rendered pages a real look rather than trusting the green gates.
+**Browser verification** (Chrome, `next start` production build) — added after the preview crashed on bugs 19–20, which every server-side check had passed:
+
+| Check                            | Result                                                                        |
+| -------------------------------- | ----------------------------------------------------------------------------- |
+| Console on load and after scroll | No errors (only an expected invalid-Maps-key warning from the local test key) |
+| Hero image                       | Renders, correct `object-fit`                                                 |
+| Sticky-nav transition            | Fires without throwing                                                        |
+| Spotify embed                    | Live iframe, 300×450                                                          |
+| CV timeline                      | 5 elements rendered                                                           |
+| Contact map                      | **527 px tall** — the zero-height regression is gone                          |
+| Contact form                     | 4 fields with correct light backgrounds                                       |
+| Broken images                    | None                                                                          |
+
+**Still not verified:** keyboard focus order, reduced-motion, and the 375/768/1440 breakpoints. **The MUI 9 styling rewrite is the highest-risk change here** — six of its regressions were invisible to the build, and two were invisible to SSR as well. Please look at the preview rather than trusting the green gates.
 
 ## What is not here
 

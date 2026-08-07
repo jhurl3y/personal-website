@@ -11,13 +11,20 @@ const ImageWrapper = React.forwardRef(({ image }, ref) => {
       ref={ref}
       style={{ position: "relative", width: "100%", height: "100%" }}
     >
+      {/* `layout`, `objectFit` and `objectPosition` are next/image props from
+          Next 12. Next 13 moved them into `fill` + `style`, and Next 16 ignores
+          the old ones entirely - which is why the hero rendered as a bare
+          background colour after the upgrade. */}
       <Image
         src={image}
-        layout="fill"
-        objectFit="cover"
-        objectPosition="50% 60%"
+        fill
+        sizes="100vw"
         alt="Background Image"
-        style={{ filter: "brightness(50%)" }}
+        style={{
+          objectFit: "cover",
+          objectPosition: "50% 60%",
+          filter: "brightness(50%)",
+        }}
       />
     </Box>
   );
