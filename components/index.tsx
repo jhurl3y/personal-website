@@ -7,7 +7,6 @@ import Contact from "./Contact";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { PAGES } from "../utils/constants";
-import Typography from "@mui/material/Typography";
 import { metaStrings } from "../utils/strings";
 import type { Theme } from "@mui/material/styles";
 import type { ReactNode } from "react";
@@ -71,9 +70,6 @@ const Component = ({ formspree, maps }: PageProps) => {
         stickyRefs={[homeRef, aboutRef, experienceRef, contactRef]}
       />
       <Section id="home" ref={homeRef}>
-        <Typography variant="h1" align="center" style={{ display: "none" }}>
-          {metaStrings.title}
-        </Typography>
         <Home />
       </Section>
       <Section id="about" ref={aboutRef} offset={navHeight}>

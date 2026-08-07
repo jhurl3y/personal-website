@@ -61,11 +61,16 @@ const styles = {
   }),
   slider: () => ({ position: "relative", height: "100%", width: "100%" }),
   image: () => ({ display: "inline-block", height: "100%", width: "100%" }),
+  // A column flex, so the hero fills whatever is left after the navbar. It
+  // used to stack a 93px navbar on top of a height:100% hero, overflowing the
+  // viewport by exactly the navbar height and pushing the copy onto the dots.
   content: () => ({
     position: "absolute",
     height: "100%",
     width: "100%",
     top: "0",
+    display: "flex",
+    flexDirection: "column",
   }),
   // The hero copy sits left of centre so the name never lands on the horizon
   // line in the photographs, which is roughly centred in most of them.
@@ -79,7 +84,12 @@ const styles = {
     // them, which is where the overlay is legible without a scrim.
     justifyContent: "flex-end",
     height: "100%",
-    paddingBottom: theme.spacing(9),
+    // Clears the carousel dots, which are absolutely positioned near the
+    // bottom - at narrow widths the role line was rendering underneath them.
+    paddingBottom: theme.spacing(10),
+    [theme.breakpoints.down("md")]: {
+      paddingBottom: theme.spacing(9),
+    },
     color: theme.palette.chalk,
     textShadow: "0 1px 24px rgba(0,0,0,0.55)",
   }),
@@ -111,7 +121,10 @@ const styles = {
     ...DISPLAY,
     margin: 0,
     lineHeight: 0.86,
-    fontSize: "clamp(3.5rem, 11vw, 9rem)",
+    // Floor is deliberately low: at 390px, 11vw is ~43px and a 3.5rem floor
+    // would push "Hurley" wider than the viewport once the arrows take their
+    // share of it.
+    fontSize: "clamp(2.75rem, 11vw, 9rem)",
     color: theme.palette.chalk,
   }),
   role: (theme: Theme) => ({
@@ -121,24 +134,41 @@ const styles = {
     letterSpacing: "0.16em",
   }),
   home: (theme: Theme) => ({
-    height: "100%",
+    flex: 1,
+    minHeight: 0,
     color: theme.palette.chalk,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
     filter: "unset",
-    paddingBottom: "10%",
+    // Was 10%, from when the copy was vertically centred. With the copy now
+    // bottom-aligned, that padding pushed the container past the viewport and
+    // the role line landed on top of the carousel dots. The copy manages its
+    // own bottom clearance instead.
+    paddingBottom: 0,
   }),
   dots: (theme: Theme) => ({
     position: "absolute",
     left: "50%",
-    bottom: theme.spacing(6),
+    bottom: theme.spacing(5),
     transform: "translate(-50%, -50%)",
     margin: "0 auto",
     fontSize: "1.125rem",
   }),
   dotContainer: () => ({ minWidth: "0px" }),
+  // The arrows flank the hero copy, so on a narrow viewport every pixel they
+  // take comes straight out of the name. Scale them down rather than letting
+  // them squeeze it.
+  arrow: (theme: Theme) => ({
+    minWidth: 0,
+    flexShrink: 0,
+    padding: theme.spacing(4),
+    [theme.breakpoints.down("md")]: {
+      padding: theme.spacing(2),
+      "& svg": { width: "1.5rem", height: "1.5rem" },
+    },
+  }),
   dot: () => ({
     height: "15px",
     width: "15px",
