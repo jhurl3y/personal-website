@@ -13,7 +13,7 @@ import type { HeroImage } from "../../utils/types";
 
 const LeftButton = ({ onClick }: { onClick: () => void }) => {
   return (
-    <Button color="inherit" onClick={onClick} title="left">
+    <Button color="inherit" onClick={onClick} title="left" sx={styles.arrow}>
       <FontAwesomeIcon icon="arrow-left" size="3x" className="highlight" />
     </Button>
   );
@@ -21,7 +21,7 @@ const LeftButton = ({ onClick }: { onClick: () => void }) => {
 
 const RightButton = ({ onClick }: { onClick: () => void }) => {
   return (
-    <Button color="inherit" onClick={onClick} title="right">
+    <Button color="inherit" onClick={onClick} title="right" sx={styles.arrow}>
       <FontAwesomeIcon icon="arrow-right" size="3x" className="highlight" />
     </Button>
   );

@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A newer push to the same branch makes the in-flight run redundant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Reads .nvmrc so CI and local can never drift apart.
+          node-version-file: .nvmrc
+          cache: npm
+
+      # `npm ci` rather than `npm install`: it installs exactly the lockfile and
+      # fails if package.json and package-lock.json disagree, which is the whole
+      # point of running this on a PR.
+      - run: npm ci
+
+      # Each step runs even if an earlier one failed, so a PR gets every problem
+      # in one pass instead of one per push.
+      - name: Lint
+        if: "!cancelled()"
+        run: npm run lint
+
+      - name: Format
+        if: "!cancelled()"
+        run: npm run format:check
+
+      - name: Typecheck
+        if: "!cancelled()"
+        run: npm run typecheck
+
+      - name: Test
+        if: "!cancelled()"
+        run: npm run test
+
+      # Build last: it is the slowest, and a failure here is usually a
+      # consequence of something the faster checks already reported.
+      - name: Build
+        if: "!cancelled()"
+        run: npm run build
+        env:
+          # Absent by design. The site must build and degrade gracefully
+          # without them - that behaviour is covered by the tests above.
+          FORMSPREE_TOKENS: ""
+          GOOGLE_MAPS_API_KEY: ""

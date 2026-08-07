@@ -17,7 +17,7 @@ const styles = {
     display: "flex",
     justifyContent: "flex-end",
     width: "100%",
-    [theme.breakpoints.down("sm")]: { display: "none" },
+    [theme.breakpoints.down("md")]: { display: "none" },
   }),
   link: (theme: Theme) => ({
     marginRight: theme.spacing(7),

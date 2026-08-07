@@ -7,7 +7,7 @@ const styles = {
   mobileNavigation: (theme: Theme) => ({
     display: "none",
     marginLeft: "auto",
-    [theme.breakpoints.down("sm")]: { display: "block" },
+    [theme.breakpoints.down("md")]: { display: "block" },
   }),
   menuItem: (theme: Theme) => ({
     color: theme.palette.ink,

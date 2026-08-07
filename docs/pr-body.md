@@ -1,76 +1,53 @@
-Completes the modernization plan: Tasks 7, 8 and 9, plus the two visual issues from the merged preview.
+Two of the three items deferred in the modernization spec — CI and automated tests — plus mobile fixes found while checking the result on a narrow viewport.
 
-Branched off `main` at `f7fb535` (the squash merge of #2), pulled fresh.
+**App Router migration is not here.** It restructures every entry point, and it lands better on top of these two than beside them. It continues on a separate branch based on this one.
 
-## Lighthouse
+## CI
 
-Same pinned Lighthouse 12.8.2, desktop preset, identical flags. Baseline is the pre-modernization site.
+Runs `lint`, `format:check`, `typecheck`, `test` and `build` on every PR and on pushes to `main`.
 
-|                | before #2 | now     |         |
-| -------------- | --------- | ------- | ------- |
-| performance    | 99        | **100** | +1      |
-| accessibility  | 95        | **98**  | +3      |
-| best practices | 74        | **96**  | **+22** |
-| SEO            | 100       | 100     | —       |
+- Node comes from `.nvmrc`, so CI and local can't drift apart.
+- Steps use `if: !cancelled()`, so one push reports **every** failure rather than one per run.
+- `npm ci`, not `npm install` — it fails if `package.json` and the lockfile disagree, which is the point of running it on a PR.
+- Build runs last, with `FORMSPREE_TOKENS` and `GOOGLE_MAPS_API_KEY` **deliberately empty**: the site has to build and degrade without them.
+- Nothing interpolates untrusted input into a `run:` step.
 
-LCP **0.7s**, FCP **0.2s**. Best practices moved on the deprecated-API and console-error audits.
+This closes a real gap — Vercel only builds. Nothing was running lint or typecheck on a PR, so a regression in either would have landed silently.
 
-## Task 9 — performance
+## Tests — 45 across 6 files
 
-The page is now **prerendered as static HTML**. It was server-rendered on every request purely to read two env vars.
+Aimed at the code that has actually broken, not at coverage for its own sake.
 
-Four values weren't actually static, and each is handled rather than frozen:
+**Contact form (11).** Disabled with no token and posting nowhere; validation blocking submission; a malformed email; success; an unrecognised 500 body; a status-0 transport failure; `onerror`; still re-submittable after a failure. Several of these map to bugs that shipped — the 500 and status-0 paths both rendered an empty error box in production.
 
-- **Spotify playlist** is no longer a prop. The server renders a fixed-height skeleton and the iframe mounts **exactly once**, after the playlist is picked client-side. Rendering one and swapping it would have loaded two Spotify iframes per visit.
-- **Age and copyright year** compute during render behind a new `useIsClient()` built on `useSyncExternalStore` — no extra render, no hydration mismatch when a date rolls over.
-- **Formspree token** is build-time, accepted. Rotating client-side would ship every token to the browser.
+**smoothAnchor (9).** The scroll arithmetic, including an explicit regression guard for the 40px overshoot, the function-offset form, and the reduced-motion branch — `window.scroll({behavior:"smooth"})` ignores the CSS `scroll-behavior` override, so it has to be checked in JS.
 
-Replaces the two bare id arrays with a `HERO_IMAGES` manifest carrying alt text, a location and coordinates per slide — the carousel finally has real alternative text, **7 slides with 7 unique descriptions**.
+**Map (3).** The no-key fallback, asserting the Google loader is _never mounted_ rather than merely hidden.
 
-Fixes two spec bugs: `getBackgroundUrls` branched on `react-device-detect`'s `isBrowser`, which reports _server vs browser_, not _desktop vs mobile_, so the image set was chosen by render environment; and `getBackground()` handed back `URL.createObjectURL` blobs that were never revoked. Both gone, `react-device-detect` uninstalled.
+**useIsClient (2).** The server snapshot must be `false`, or the age and copyright year render at build time and go stale.
 
-Hero re-encoded 4032×2268 / 609 KB → 2560×1440 / 354 KB. Served responses are AVIF: **1920px = 102 KB**, inside the 150 KB budget. Removed the deprecated `priority` prop from all 18 sites; only the LCP hero preloads.
+**Helpers and array (20).** Env absence returning `null` rather than `""`, `getAge`'s birthday-not-yet-reached branch, hero slide selection, and a Fisher-Yates check that the last element can actually move.
 
-**One bug found in the browser:** slides 1–6 never loaded at all. Native `loading="lazy"` only re-evaluates on scroll and resize, not on transform changes, so a `translateX` carousel never triggers it. (The blob-fetch removed above was incidentally what used to pull them in.)
+Two things worth knowing for future test work: a stubbed `XMLHttpRequest` missing the `DONE` constant makes the component's readystate guard return **silently** every time, and `@testing-library/dom` is a required peer of `jest-dom` that doesn't install on its own.
 
-## Task 7 — TypeScript
+## Mobile
 
-All 42 files are `.ts`/`.tsx`, `tsc --noEmit` is clean, `typecheck` is a gate. **No `any`, no `@ts-ignore`.** `react-vertical-timeline-component` ships no types, so it gets a local declaration covering only the props used here.
+The hero was unusable below ~900px. The root cause was structural: `content` stacked a 93px navbar on top of a `height: 100%` hero, so it overflowed the viewport by exactly the navbar height and the role line landed on the carousel dots. It's a column flex now, with the hero taking the remaining space.
 
-Absent env values are typed `string | null` rather than `""`, so the degraded state is compiler-enforced rather than a convention.
+|                                |                                                                                 |
+| ------------------------------ | ------------------------------------------------------------------------------- |
+| Nav collapsed only below 600px | Five links crowded the logo at 600–900px. Switches at `md`.                     |
+| Arrows took 64px a side        | Squeezed the name on narrow viewports. They scale down below `md`.              |
+| Name clamp floor 3.5rem        | Wide enough to overflow at 390px once the arrows took their share. Now 2.75rem. |
 
-**It found four defects that the build, runtime, linter and Lighthouse all passed:**
-
-1. **`styles.button` has never existed.** Contact references it for the Galway / San Francisco links; it isn't in `Contact/styles` and never was (it was `classes.button` before, equally undefined). Those links have been rendering unstyled.
-2. **Those links were 2.84:1** — `seaGlass` on `deepSea`, below AA. Now `chalk` at 7.12:1.
-3. **MUI 9 removed `direction="column"` from `Grid`** (it subdivides columns by design; the docs point at `Stack`). The About right rail's vertical layout was silently a no-op.
-4. **Footer icons passed `width="40px"`** to `next/image`, which wants a number.
-
-That's now three MUI 9 breaking changes the upgrade swallowed silently — system props on `Box` (in #2), the legacy `Grid` API, and `Grid direction`. Each surfaced only under type checking.
-
-## Task 8 — Atlantic design direction
-
-**Type:** Archivo for display, Source Sans 3 for body, self-hosted via `next/font`. Coordinates and dates sit on tabular figures from the body face rather than a third family.
-
-The direction called for Archivo at the expanded end of its `wdth` axis. The variable font costs **87 KB against 14 KB** for the static 700 — 116 KB served vs 42 KB, over the 90 KB budget. **Took the budget:** 74 KB is a real cost and the width difference is subtle at display sizes. `font-stretch` would be inert on a static instance, so it's removed rather than left as a misleading no-op.
-
-**Hero (the signature):** the name set large with the coordinates of wherever the current photograph was taken sitting above it, changing as you move through the carousel — so it reads as somewhere actually been, not a caption. Positioned in the lower third: these photographs all put subject and horizon near the middle, so centred type lands on both, and low means the copy falls on darker ground where it's legible without a scrim.
-
-**Route line:** the timeline's rule is a 1px `seaGlass` hairline carrying the hero's eyebrow rule down the page. Icons keep their employer brand colours — those encode information the palette shouldn't flatten.
-
-**Reduced motion** now covers all four sources, not just the reveals: `react-awesome-reveal`, the hero, carousel transitions, and programmatic smooth scrolling. `window.scroll({behavior:"smooth"})` ignores the CSS `scroll-behavior` override, so `smoothAnchor` checks the media query itself.
-
-## The two issues from the merged preview
-
-- **Timeline blue** was a hardcoded `COLORS.lightBlue` (`#2194f3`), not the library CSS as first reported. The Task 6 conversion only rewrote `theme.colors.*` inside style modules, so three direct `COLORS.*` imports survived. Cards are now limestone on ink.
-- **Spotify was the narrow 300px player.** Two compounding causes: v3 computes `width = wide ? "100%" : 300` so it needs `wide`, _and_ its Grid container sat in a `display:flex` parent so it shrank to content width. Fixing either alone wouldn't have worked.
+Also removes a hidden `h1` carrying the page title. The hero name is a real visible `h1` now, so the page had **two** — and the title is already in `<title>` and the meta description.
 
 ## Verification
 
-`build` ✅ · `lint` ✅ (0 errors, 2 pre-existing `exhaustive-deps` warnings) · `format:check` ✅ · `typecheck` ✅
+`build` ✅ · `lint` ✅ (0 errors, 2 pre-existing `exhaustive-deps` warnings) · `format:check` ✅ · `typecheck` ✅ · `test` ✅ 45/45
 
-Every stage verified in Chrome against a production build, not just SSR — that's what missed the client-only crashes in #2. Confirmed: 7/7 hero slides load, age renders "32 year old", copyright shows the current year, 5 timeline cards, Spotify 640×450, contact map 527px, city links `chalk`, route line 1px `seaGlass`, no console errors, no hydration mismatches.
+Checked in Chrome at narrow and desktop widths: no horizontal overflow at either, hamburger appears below `md` and not above, role line clears the dots by 6px narrow and 38px wide, one `h1`.
 
-**Still worth your eyes:** keyboard focus order and the 375/768 breakpoints. I checked reduced-motion CSS ships but did not emulate the preference end to end.
+**Caveat:** Chrome won't resize below ~606px on macOS, so narrow verification was at 606, not 390. The clamp and breakpoints should hold, but a real device check is worth doing.
 
-Spec: `docs/modernization-spec.md` · Plan: `docs/superpowers/plans/2026-08-06-modernization.md`
+**Still unverified:** keyboard focus order, and reduced-motion end to end.
