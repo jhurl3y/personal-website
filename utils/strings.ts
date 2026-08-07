@@ -2,9 +2,9 @@ export const aboutStrings = {
   about: "About",
   me: "Me:",
   intro:
-    "Hi, I'm James. Thanks for visiting my site. I'm a {age} year old fullstack software/ML engineer living in San Francisco, CA. I grew up in the lovely city of Galway in the west and lived there most of my life. You can read a little bit more about me below, and scroll through the pictures above.",
+    "Hi, I'm James. Thanks for visiting my site. I'm a {age} year old fullstack software and AI engineer living in San Francisco, CA. I grew up in the lovely city of Galway in the west and lived there most of my life. You can read a little bit more about me below, and scroll through the pictures above.",
   iLike: "What I like:",
-  code: "Really passionate about all things tech. Love clean code, simple designs and playing with new tech.",
+  code: "Really passionate about all things tech. Most of my time now goes on building with LLMs - agents, tool use and the infrastructure around them. Love clean code and simple designs.",
   sport:
     "I played hurling at a high level during school - love keeping fit, going to the gym and eating well.",
   travel:
@@ -45,22 +45,27 @@ export const experienceStrings = {
 };
 
 export const skillStrings = {
-  webDevelopment:
-    "<ul><li>HTML/CSS</li><li>Templating langauges</li><li>Responsive Design</li><li>SEO</li></ul>",
+  ai: "<ul><li>LLM apps &amp; agents</li><li>Tool use / MCP servers</li><li>Retrieval pipelines</li><li>Evals &amp; prompt design</li></ul>",
   python:
-    "<ul><li>Python 2/3</li><li>Jinja</li><li>Pyramid/Flask</li><li></li></ul>",
-  javascript:
-    "<ul><li>Backbone.js</li><li>React/Redux</li><li>JQuery</li><li></li></ul>",
-  ruby: "<ul><li>Rails/Padrino</li><li>Active Record</li></ul>",
-  java: "<ul><li>OOP</li><li>Eclipse</li></ul>",
-  git: "<ul><li>GitHub</li><li>Gitlab</li></ul>",
-  mobile: "<ul><li>Android</li><li>React Native</li></ul>",
-  algorithms: "Good knowledge from studying & using in practise",
-  abTesting: "<ul><li>Experimentation</li><li>Growth Hacking</li></ul>",
-  sql: "<ul><li>Relational Databases</li><li>Queries</li><li>MySQL</li></ul>",
-  systemDesign: "Have designed/built systems from the ground up",
+    "<ul><li>Python 3.11+</li><li>FastAPI</li><li>Pydantic</li><li>Poetry &amp; pytest</li></ul>",
+  typescript:
+    "<ul><li>TypeScript</li><li>React</li><li>Next.js App Router</li><li>Node.js</li></ul>",
+  webDevelopment:
+    "<ul><li>Responsive design</li><li>Accessibility</li><li>Tailwind &amp; MUI</li><li>SEO</li></ul>",
+  cloud:
+    "<ul><li>AWS Lambda</li><li>API Gateway</li><li>SQS &amp; SNS</li><li>S3 &amp; DynamoDB</li></ul>",
+  infrastructure:
+    "<ul><li>Terraform</li><li>Docker</li><li>GitHub Actions</li><li>Monitoring &amp; alerting</li></ul>",
+  databases:
+    "<ul><li>Postgres</li><li>DynamoDB</li><li>Schema design</li><li>Migrations</li></ul>",
+  systemDesign:
+    "<ul><li>Event-driven services</li><li>API design</li><li>Built from the ground up</li></ul>",
   testing:
-    "<ul><li>Unit Tests</li><li>Integration Tests</li><li>JS/Python/Ruby</li></ul>",
+    "<ul><li>pytest</li><li>Vitest</li><li>Playwright</li><li>CI test pipelines</li></ul>",
+  git: "<ul><li>GitHub</li><li>Trunk-based workflow</li><li>Code review</li></ul>",
+  abTesting:
+    "<ul><li>Experimentation</li><li>Growth engineering</li><li>Metrics &amp; analysis</li></ul>",
+  algorithms: "Good knowledge from studying &amp; using in practise",
 };
 
 export const contactStrings = {
@@ -91,9 +96,9 @@ export const metaStrings = {
   title: "James Hurley: The Personal Website of James Hurley",
   author: "James Hurley",
   keywords:
-    "James Hurley, James, Hurley, Personal Website, Website, Galway, Dublin, SurveyMonkey, Ex Ordo, NUIG, Rahoon, React, Python, NextJS, Docker, Python, Ruby, Javascript",
+    "James Hurley, James, Hurley, Personal Website, Website, Galway, Dublin, San Francisco, SurveyMonkey, Ex Ordo, NUIG, Software Engineer, AI Engineer, LLM, Agents, MCP, Python, FastAPI, TypeScript, React, NextJS, AWS, Terraform, Docker, Postgres",
   description:
-    "Check out my personal website built with React and NextJS. Learn a bit about me, see what I'm interested in and reach out if you want to connect.",
+    "Personal site of James Hurley, a fullstack software and AI engineer. Learn a bit about me, see what I'm working with and reach out if you want to connect.",
   twitterSite: "@hurley_19",
   url: "https://jameshurley.ie",
   cookies: "I use cookies to enhance this site.",

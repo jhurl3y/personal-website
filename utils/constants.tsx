@@ -1,12 +1,12 @@
 import Image from "next/image";
+import AI from "../public/static/assets/icons/ai.svg";
 import Python from "../public/static/assets/icons/python.svg";
-import Ruby from "../public/static/assets/icons/ruby.svg";
 import Javascript from "../public/static/assets/icons/javascript.svg";
 import WebDev from "../public/static/assets/icons/web_dev.svg";
-import Java from "../public/static/assets/icons/java.svg";
+import Cloud from "../public/static/assets/icons/cloud.svg";
+import Infrastructure from "../public/static/assets/icons/infrastructure.svg";
 import Git from "../public/static/assets/icons/git.svg";
 import Algorithms from "../public/static/assets/icons/algorithms.svg";
-import Mobile from "../public/static/assets/icons/mobile.svg";
 import ABTesting from "../public/static/assets/icons/a_b_testing.svg";
 import SQL from "../public/static/assets/icons/sql.svg";
 import SystemDesign from "../public/static/assets/icons/system_design.svg";
@@ -20,13 +20,6 @@ const DESKTOP =
 
 // Hero carousel manifest. Replaces the two bare id arrays (BACKGROUNDS /
 // MOBILE_BACKGROUNDS), which carried no alt text and no locations.
-//
-// Selection draws only from entries that have a mobileSrc, on every viewport.
-// The desktop bucket holds 14 images but only 7 have mobile crops; mixing the
-// pools breaks when a desktop visitor rotates into the mobile breakpoint,
-// because the chosen set is fixed for the visit and cannot be repaired after
-// the fact. Adding mobile crops for eight..fourteen would restore the rest.
-// Hero carousel manifest.
 //
 // IMPORTANT: these describe the DESKTOP bucket, which is what the carousel
 // renders. An earlier version described the mobile bucket by mistake - the two
@@ -217,12 +210,16 @@ export const MAP_STYLES = [
   },
 ];
 
+// Ordered most to least current, so the first row carries what I actually work
+// with day to day. Java (Eclipse), Ruby, Backbone and Android were dropped -
+// they were accurate in 2018 and hadn't been touched since. Ruby still appears
+// in the Ex Ordo timeline entry, which is where dated experience belongs.
 export const SKILLS = [
   {
-    name: "web_development",
-    title: "Web Development",
-    content: skillStrings.webDevelopment,
-    icon: <Image src={WebDev} alt="web_development" />,
+    name: "ai",
+    title: "AI & LLM Engineering",
+    content: skillStrings.ai,
+    icon: <Image src={AI} alt="ai" />,
   },
   {
     name: "python",
@@ -231,52 +228,22 @@ export const SKILLS = [
     icon: <Image src={Python} alt="python" />,
   },
   {
-    name: "javascript",
-    title: "Javascript",
-    content: skillStrings.javascript,
-    icon: <Image src={Javascript} alt="javascript" />,
+    name: "typescript",
+    title: "TypeScript",
+    content: skillStrings.typescript,
+    icon: <Image src={Javascript} alt="typescript" />,
   },
   {
-    name: "ruby",
-    title: "Ruby",
-    content: skillStrings.ruby,
-    icon: <Image src={Ruby} alt="ruby" />,
+    name: "cloud",
+    title: "Cloud & Serverless",
+    content: skillStrings.cloud,
+    icon: <Image src={Cloud} alt="cloud" />,
   },
   {
-    name: "java",
-    title: "Java",
-    content: skillStrings.java,
-    icon: <Image src={Java} alt="java" />,
-  },
-  {
-    name: "git",
-    title: "Git",
-    content: skillStrings.git,
-    icon: <Image src={Git} alt="git" />,
-  },
-  {
-    name: "mobile_development",
-    title: "Mobile Development",
-    content: skillStrings.mobile,
-    icon: <Image src={Mobile} alt="mobile_development" />,
-  },
-  {
-    name: "algorithms",
-    title: "Algorithms & Data Structures",
-    content: skillStrings.algorithms,
-    icon: <Image src={Algorithms} alt="algorithms" />,
-  },
-  {
-    name: "a_b_testing",
-    title: "A/B Testing",
-    content: skillStrings.abTesting,
-    icon: <Image src={ABTesting} alt="a_b_testing" />,
-  },
-  {
-    name: "sql",
-    title: "SQL",
-    content: skillStrings.sql,
-    icon: <Image src={SQL} alt="sql" />,
+    name: "infrastructure",
+    title: "Infrastructure & CI/CD",
+    content: skillStrings.infrastructure,
+    icon: <Image src={Infrastructure} alt="infrastructure" />,
   },
   {
     name: "system_design",
@@ -285,10 +252,40 @@ export const SKILLS = [
     icon: <Image src={SystemDesign} alt="system_design" />,
   },
   {
+    name: "web_development",
+    title: "Web Development",
+    content: skillStrings.webDevelopment,
+    icon: <Image src={WebDev} alt="web_development" />,
+  },
+  {
+    name: "databases",
+    title: "Databases",
+    content: skillStrings.databases,
+    icon: <Image src={SQL} alt="databases" />,
+  },
+  {
     name: "testing",
     title: "Testing",
     content: skillStrings.testing,
     icon: <Image src={Testing} alt="testing" />,
+  },
+  {
+    name: "git",
+    title: "Git",
+    content: skillStrings.git,
+    icon: <Image src={Git} alt="git" />,
+  },
+  {
+    name: "a_b_testing",
+    title: "A/B Testing",
+    content: skillStrings.abTesting,
+    icon: <Image src={ABTesting} alt="a_b_testing" />,
+  },
+  {
+    name: "algorithms",
+    title: "Algorithms & Data Structures",
+    content: skillStrings.algorithms,
+    icon: <Image src={Algorithms} alt="algorithms" />,
   },
 ];
 
