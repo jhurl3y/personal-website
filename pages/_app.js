@@ -3,6 +3,11 @@ import Head from "next/head";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@mui/material/styles";
+// Interim only. Bug 7.3 correctly moves ThemeProvider to @mui/material/styles,
+// but @mui/styles' makeStyles reads from its OWN context, so the surviving JSS
+// modules lose `theme.colors` and throw. Both providers are needed until Task 6
+// deletes @mui/styles; this import goes with it.
+import { ThemeProvider as JssThemeProvider } from "@mui/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../src/theme";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -93,11 +98,15 @@ export default function MyApp({ Component, pageProps }) {
         <meta property="og:url" content={metaStrings.url}></meta>
       </Head>
       <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Component {...pageProps} />
-        <SpeedInsights />
-        <Analytics />
+        {/* JssThemeProvider is interim scaffolding for the remaining
+            @mui/styles modules; it is removed in Task 6 with @mui/styles. */}
+        <JssThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Component {...pageProps} />
+          <SpeedInsights />
+          <Analytics />
+        </JssThemeProvider>
       </ThemeProvider>
     </>
   );
