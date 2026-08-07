@@ -1,3 +1,12 @@
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+}
+
 .is-sticky {
   position: -webkit-sticky; /* Safari */
   position: sticky;
