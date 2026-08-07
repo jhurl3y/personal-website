@@ -25,19 +25,21 @@ import "react-vertical-timeline-component/style.min.css";
 import { metaStrings } from "../utils/strings";
 import "../src/styles.css";
 
-export default function MyApp({ Component, pageProps }) {
-  // add icons
-  library.add(
-    faCode,
-    faHeartbeat,
-    faTrain,
-    faUsers,
-    faEnvelope,
-    faPhone,
-    faArrowLeft,
-    faArrowRight
-  );
+// Bug 7.5: this ran inside the component body, so it re-registered every icon
+// on every render. The library is global and idempotent - module scope is where
+// it belongs.
+library.add(
+  faCode,
+  faHeartbeat,
+  faTrain,
+  faUsers,
+  faEnvelope,
+  faPhone,
+  faArrowLeft,
+  faArrowRight
+);
 
+export default function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
