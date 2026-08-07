@@ -1,35 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCode,
-  faHeartbeat,
-  faTrain,
-  faUsers,
-  faEnvelope,
-  faPhone,
-  faArrowLeft,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
 import { fontVariables } from "../src/fonts";
 import Providers from "./providers";
 import { metaStrings } from "../utils/strings";
 import "react-vertical-timeline-component/style.min.css";
 import "../src/styles.css";
 
-// Module scope, not a component body - the library is global and idempotent,
-// and registering per render re-registered every icon on every render.
-library.add(
-  faCode,
-  faHeartbeat,
-  faTrain,
-  faUsers,
-  faEnvelope,
-  faPhone,
-  faArrowLeft,
-  faArrowRight
-);
+// The FontAwesome library is registered in providers.tsx, not here - it has to
+// run on the client to survive hydration. See the comment there.
 
 const OG_IMAGE = `${metaStrings.url}/static/assets/images/about_meta.png`;
 
