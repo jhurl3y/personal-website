@@ -42,9 +42,7 @@ const Links = ({ selectedPage, pages, dark }) => {
           title={navbarStrings.blog}
           href="https://blog.jameshurley.ie"
           target="_blank"
-          className={`${styles.link} ${
-            dark ? styles.darkLink : styles.lightLink
-          }`}
+          sx={[styles.link, dark ? styles.darkLink : styles.lightLink]}
         >
           {navbarStrings.blog}
         </Link>
@@ -109,11 +107,11 @@ const Navbar = ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
     <Transition in={!sticky || visible} sticky={sticky}>
       <Container
         maxWidth={false}
-        className={`${!dark ? styles.light : ""}`}
+        sx={!dark ? styles.light : undefined}
         ref={navRef}
       >
         <header>
-          <nav sx={styles.container}>
+          <Box component="nav" sx={styles.container}>
             <Box
               component="a"
               sx={styles.logo}
@@ -125,7 +123,7 @@ const Navbar = ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
             </Box>
             <Links selectedPage={page} pages={pages} dark={dark} />
             <MobileMenu pages={pages} dark={dark} />
-          </nav>
+          </Box>
         </header>
       </Container>
     </Transition>

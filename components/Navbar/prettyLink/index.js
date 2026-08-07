@@ -15,7 +15,7 @@ const PrettyLink = ({
       underline={active ? "always" : "hover"}
       href={href}
       title={title}
-      className={dark ? styles.darkLink : styles.lightLink}
+      sx={dark ? styles.darkLink : styles.lightLink}
       extraScroll={extraScroll}
     >
       {text}

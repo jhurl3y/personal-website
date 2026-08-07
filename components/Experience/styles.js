@@ -17,7 +17,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    color: theme.palette.ink,
+    color: theme.palette.chalk,
     "& > span": { marginLeft: theme.spacing(3) },
   }),
 };

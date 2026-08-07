@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import Box from "@mui/material/Box";
 import { GoogleMap, Polyline, useJsApiLoader } from "@react-google-maps/api";
 import { LOCATIONS } from "../../utils/constants";
 
@@ -71,7 +72,7 @@ const MapContainer = ({
   showPolyline = false,
   polylineData = [],
   polylineOptions = {},
-  mapClasses,
+  mapSx,
   apiKey,
 }) => {
   const center = useMemo(() => ({ lng, lat }), [lng, lat]);
@@ -86,7 +87,7 @@ const MapContainer = ({
   );
 
   return (
-    <div id={title} className={mapClasses}>
+    <Box id={title} sx={mapSx}>
       {apiKey ? (
         <LoadedMap
           apiKey={apiKey}
@@ -100,7 +101,7 @@ const MapContainer = ({
       ) : (
         <MapFallback />
       )}
-    </div>
+    </Box>
   );
 };
 

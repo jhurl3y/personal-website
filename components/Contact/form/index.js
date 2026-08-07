@@ -223,9 +223,7 @@ const ContactForm = ({ formspree }) => {
               value={firstName}
               onChange={(e) => handleFieldChange("firstName", e.target.value)}
               onBlur={() => handleBlur("firstName")}
-              InputProps={{
-                className: styles.input,
-              }}
+              slotProps={{ input: { sx: styles.input } }}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 12, md: 6 }} sx={styles.textField}>
@@ -240,9 +238,7 @@ const ContactForm = ({ formspree }) => {
               value={lastName}
               onChange={(e) => handleFieldChange("lastName", e.target.value)}
               onBlur={() => handleBlur("lastName")}
-              InputProps={{
-                className: styles.input,
-              }}
+              slotProps={{ input: { sx: styles.input } }}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={styles.textField}>
@@ -257,9 +253,7 @@ const ContactForm = ({ formspree }) => {
               value={email}
               onChange={(e) => handleFieldChange("email", e.target.value)}
               onBlur={() => handleBlur("email")}
-              InputProps={{
-                className: styles.input,
-              }}
+              slotProps={{ input: { sx: styles.input } }}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={styles.textField}>
@@ -276,9 +270,7 @@ const ContactForm = ({ formspree }) => {
               value={message}
               onChange={(e) => handleFieldChange("message", e.target.value)}
               onBlur={() => handleBlur("message")}
-              InputProps={{
-                className: styles.input,
-              }}
+              slotProps={{ input: { sx: styles.input } }}
             />
           </Grid>
         </Grid>

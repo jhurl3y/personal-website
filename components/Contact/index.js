@@ -116,7 +116,7 @@ const Contact = ({ formspree, maps }) => {
           zoom={MAP_ZOOM}
           mapStyles={MAP_STYLES}
           title="contact-map"
-          mapClasses={styles.map}
+          mapSx={styles.map}
           apiKey={maps}
         />
       </Suspense>

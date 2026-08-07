@@ -28,9 +28,7 @@ const MobileMenu = ({ pages, dark }) => {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <MenuIcon
-          className={!dark ? styles.darkMenuIcon : styles.lightMenuIcon}
-        />
+        <MenuIcon sx={!dark ? styles.darkMenuIcon : styles.lightMenuIcon} />
       </IconButton>
       <Menu
         id="hamburger-menu"
