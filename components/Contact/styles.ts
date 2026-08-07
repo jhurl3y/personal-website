@@ -6,18 +6,37 @@ import type { Theme } from "@mui/material/styles";
 const styles = {
   container: (theme: Theme) => ({
     height: "100%",
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.chalk,
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "column",
-    backgroundColor: theme.palette.deepSea,
+    backgroundColor: theme.vars!.palette.contactSurface,
     padding: 0,
   }),
   heading: (theme: Theme) => ({ padding: theme.spacing(9, 0, 7, 0) }),
   textSection: (theme: Theme) => ({
     padding: theme.spacing(0, 4, 3, 4),
     textAlign: "center",
+  }),
+  primaryActions: (theme: Theme) => ({
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: theme.spacing(3),
+    margin: theme.spacing(5, 0),
+  }),
+  emailButton: (theme: Theme) => ({
+    backgroundColor: theme.vars!.palette.seaGlass,
+    color: theme.vars!.palette.ink,
+    textTransform: "none",
+    "&:hover": { backgroundColor: theme.vars!.palette.chalk },
+  }),
+  formButton: (theme: Theme) => ({
+    color: theme.vars!.palette.chalk,
+    textDecoration: "underline",
+    textUnderlineOffset: "0.24em",
+    textTransform: "none",
   }),
   detailsContainer: (theme: Theme) => ({
     display: "flex",
@@ -35,26 +54,26 @@ const styles = {
   // was never defined, so the Galway / San Francisco links rendered unstyled.
   // TypeScript caught it; nothing else ever would have.
   button: (theme: Theme) => ({
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.chalk,
     textDecoration: "underline",
     textUnderlineOffset: "0.25em",
     padding: theme.spacing(2, 3),
   }),
   showButton: (theme: Theme) => ({
     marginBottom: theme.spacing(8),
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.chalk,
     padding: theme.spacing(3, 5),
-    "&:hover": { backgroundColor: theme.palette.slate },
+    "&:hover": { backgroundColor: theme.vars!.palette.experienceSurface },
   }),
   orDivider: (theme: Theme) => ({
     borderTop: "0px",
-    borderBottom: `1px solid ${theme.palette.chalk}`,
+    borderBottom: `1px solid ${theme.vars!.palette.chalk}`,
     height: "20px",
     marginBottom: "50px",
   }),
   orBubble: (theme: Theme) => ({
-    backgroundColor: theme.palette.deepSea,
-    color: theme.palette.chalk,
+    backgroundColor: theme.vars!.palette.contactSurface,
+    color: theme.vars!.palette.chalk,
     width: "100px",
     marginLeft: "auto",
     marginRight: "auto",
@@ -69,7 +88,7 @@ const styles = {
     // Capped so it never exceeds the viewport on short windows.
     height: "min(70vh, 640px)",
     width: "100%",
-    borderTop: `1px solid ${theme.palette.seaGlass}`,
+    borderTop: `1px solid ${theme.vars!.palette.seaGlass}`,
     [theme.breakpoints.down("md")]: { height: "min(60vh, 420px)" },
   }),
 };

@@ -4,18 +4,20 @@ import type { Theme } from "@mui/material/styles";
 // Each entry is `(theme: Theme) => ({...})`, which MUI's `sx` prop accepts directly,
 // so no hook call is needed at the call site.
 const styles = {
-  light: (theme: Theme) => ({
-    backgroundColor: theme.palette.chalk,
+  solid: (theme: Theme) => ({
+    backgroundColor: theme.palette.background.paper,
     boxShadow: `0px ${theme.spacing(6)} ${theme.spacing(6)} 0px rgba(0,0,0,.1)`,
   }),
   container: (theme: Theme) => ({
     display: "flex",
+    alignItems: "center",
     padding: theme.spacing(6, 0),
   }),
   logo: () => ({ textDecoration: "none" }),
   navigation: (theme: Theme) => ({
     display: "flex",
     justifyContent: "flex-end",
+    alignItems: "center",
     width: "100%",
     [theme.breakpoints.down("md")]: { display: "none" },
   }),
@@ -24,8 +26,13 @@ const styles = {
     fontSize: "1.375rem",
     textDecoration: "none",
   }),
-  lightLink: (theme: Theme) => ({ color: theme.palette.ink }),
-  darkLink: (theme: Theme) => ({ color: theme.palette.chalk }),
+  overlayLink: (theme: Theme) => ({ color: theme.palette.chalk }),
+  solidLink: (theme: Theme) => ({ color: theme.palette.text.primary }),
+  themeToggle: (theme: Theme) => ({
+    display: "block",
+    marginRight: theme.spacing(5),
+    [theme.breakpoints.down("md")]: { display: "none" },
+  }),
 };
 
 export default styles;

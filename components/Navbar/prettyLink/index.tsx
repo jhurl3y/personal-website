@@ -1,11 +1,12 @@
 import SmoothAnchor from "../smoothAnchor";
 import styles from "./styles";
+import type { NavbarSurface } from "..";
 
 type PrettyLinkProps = {
   href: string;
   text: string;
   title?: string;
-  dark?: boolean;
+  surface?: NavbarSurface;
   active?: boolean;
   extraScroll?: boolean;
 };
@@ -14,7 +15,7 @@ const PrettyLink = ({
   href,
   text,
   title = "",
-  dark = true,
+  surface = "overlay",
   active = false,
   extraScroll = false,
 }: PrettyLinkProps) => {
@@ -24,7 +25,7 @@ const PrettyLink = ({
       underline={active ? "always" : "hover"}
       href={href}
       title={title}
-      sx={dark ? styles.darkLink : styles.lightLink}
+      sx={surface === "overlay" ? styles.overlayLink : styles.solidLink}
       extraScroll={extraScroll}
     >
       {text}

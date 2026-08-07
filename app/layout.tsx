@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import { fontVariables } from "../src/fonts";
 import Providers from "./providers";
 import { metaStrings } from "../utils/strings";
@@ -73,8 +74,14 @@ export default function RootLayout({
   return (
     // The font variables must sit on <html>: CssBaseline sets font-family on
     // body, and custom properties defined lower down are out of scope there.
-    <html lang="en" className={fontVariables}>
+    <html lang="en" className={fontVariables} suppressHydrationWarning>
       <body>
+        <InitColorSchemeScript
+          attribute="class"
+          defaultMode="system"
+          modeStorageKey="james-hurley-color-mode"
+          colorSchemeStorageKey="james-hurley-color-scheme"
+        />
         <Providers>
           {children}
           <SpeedInsights />

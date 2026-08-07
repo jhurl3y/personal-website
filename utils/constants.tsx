@@ -12,6 +12,7 @@ import SQL from "../public/static/assets/icons/sql.svg";
 import SystemDesign from "../public/static/assets/icons/system_design.svg";
 import Testing from "../public/static/assets/icons/testing.svg";
 import { skillStrings, experienceStrings } from "./strings";
+import type { FeaturedPlaylist } from "./types";
 
 export const PAGES = ["home", "about", "experience", "contact"];
 
@@ -210,6 +211,51 @@ export const MAP_STYLES = [
   },
 ];
 
+export const DARK_MAP_STYLES = [
+  {
+    elementType: "geometry",
+    stylers: [{ color: "#172126" }],
+  },
+  {
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#BFC8CA" }],
+  },
+  {
+    elementType: "labels.text.stroke",
+    stylers: [{ color: "#172126" }],
+  },
+  {
+    featureType: "administrative",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#213035" }],
+  },
+  {
+    featureType: "poi",
+    elementType: "all",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [{ color: "#2B373B" }],
+  },
+  {
+    featureType: "road",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#BFC8CA" }],
+  },
+  {
+    featureType: "transit",
+    elementType: "all",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#2F5D57" }],
+  },
+];
+
 // Ordered most to least current, so the first row carries what I actually work
 // with day to day. Java (Eclipse), Ruby, Backbone and Android were dropped -
 // they were accurate in 2018 and hadn't been touched since. Ruby still appears
@@ -289,6 +335,29 @@ export const SKILLS = [
   },
 ];
 
+export const CAPABILITY_GROUPS = [
+  {
+    title: "AI & ML",
+    icon: SKILLS[0].icon,
+    skills: [SKILLS[0], SKILLS[1]],
+  },
+  {
+    title: "Product Engineering",
+    icon: SKILLS[2].icon,
+    skills: [SKILLS[2], SKILLS[6], SKILLS[10]],
+  },
+  {
+    title: "Systems",
+    icon: SKILLS[3].icon,
+    skills: [SKILLS[3], SKILLS[4], SKILLS[5], SKILLS[7]],
+  },
+  {
+    title: "Engineering Craft",
+    icon: SKILLS[8].icon,
+    skills: [SKILLS[8], SKILLS[9], SKILLS[11]],
+  },
+];
+
 export const experience = [
   {
     color: "#ffe11b",
@@ -337,12 +406,14 @@ export const experience = [
 
 export const fadeDuration = 300;
 
-export const SPOTIFY_PLAYLISTS = [
-  "https://open.spotify.com/playlist/37i9dQZF1EpAh9wBJPJbF3",
-  "https://open.spotify.com/playlist/4Jb4PDWREzNnbZcOHPcZPy",
-];
+export const FEATURED_PLAYLIST: FeaturedPlaylist = {
+  href: "https://open.spotify.com/playlist/37i9dQZF1EpAh9wBJPJbF3",
+  label: "Current rotation",
+  title: "A soundtrack for the road",
+  description: "A selection of what I have been listening to lately.",
+};
 
-export const WIDGET_HEIGHT = 450;
+export const WIDGET_HEIGHT = 352;
 
 export const TRANSITION_DURATION = 300;
 

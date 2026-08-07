@@ -13,8 +13,23 @@ const styles = {
   textField: (theme: Theme) => ({ padding: theme.spacing(0, 3) }),
   input: (theme: Theme) => ({
     overflow: "hidden",
-    color: theme.palette.ink,
-    backgroundColor: `${theme.palette.chalk} !important`,
+    color: theme.vars!.palette.text.primary,
+    backgroundColor: `${theme.vars!.palette.background.paper} !important`,
+    "& .MuiInputBase-input": { color: theme.vars!.palette.text.primary },
+    "& .MuiInputLabel-root": { color: theme.vars!.palette.text.secondary },
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.vars!.palette.divider,
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.vars!.palette.seaGlass,
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.vars!.palette.signal,
+    },
+    "& input:-webkit-autofill": {
+      WebkitBoxShadow: `0 0 0 100px ${theme.vars!.palette.background.paper} inset`,
+      WebkitTextFillColor: theme.vars!.palette.text.primary,
+    },
   }),
   button: (theme: Theme) => ({
     margin: `${theme.spacing(6)} auto`,

@@ -16,11 +16,11 @@ const styles = {
   }),
   emailPhone: (theme: Theme) => ({ paddingTop: theme.spacing(4) }),
   mailto: (theme: Theme) => ({
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.chalk,
     textDecoration: "none",
   }),
   tel: (theme: Theme) => ({
-    color: theme.palette.chalk,
+    color: theme.vars!.palette.chalk,
     textDecoration: "none",
   }),
 };

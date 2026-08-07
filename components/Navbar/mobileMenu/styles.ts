@@ -10,15 +10,16 @@ const styles = {
     [theme.breakpoints.down("md")]: { display: "block" },
   }),
   menuItem: (theme: Theme) => ({
-    color: theme.palette.ink,
+    color: theme.palette.text.primary,
     textDecoration: "none",
   }),
   link: (theme: Theme) => ({
     textDecoration: "none",
-    color: theme.palette.ink,
+    color: theme.palette.text.primary,
   }),
-  darkMenuIcon: (theme: Theme) => ({ color: theme.palette.ink }),
-  lightMenuIcon: (theme: Theme) => ({ color: theme.palette.chalk }),
+  solidMenuIcon: (theme: Theme) => ({ color: theme.palette.text.primary }),
+  overlayMenuIcon: (theme: Theme) => ({ color: theme.palette.chalk }),
+  themeMenuItem: () => ({ justifyContent: "flex-end" }),
 };
 
 export default styles;

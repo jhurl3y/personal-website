@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import { useState } from "react";
-import IconButton from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -8,8 +8,16 @@ import SmoothAnchor from "../smoothAnchor";
 import styles from "./styles";
 import Link from "@mui/material/Link";
 import { navbarStrings } from "../../../utils/strings";
+import ThemeToggle from "../../ThemeToggle";
+import type { NavbarSurface } from "..";
 
-const MobileMenu = ({ pages, dark }: { pages: string[]; dark: boolean }) => {
+const MobileMenu = ({
+  pages,
+  surface,
+}: {
+  pages: string[];
+  surface: NavbarSurface;
+}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -28,7 +36,13 @@ const MobileMenu = ({ pages, dark }: { pages: string[]; dark: boolean }) => {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <MenuIcon sx={!dark ? styles.darkMenuIcon : styles.lightMenuIcon} />
+        <MenuIcon
+          sx={
+            surface === "overlay"
+              ? styles.overlayMenuIcon
+              : styles.solidMenuIcon
+          }
+        />
       </IconButton>
       <Menu
         id="hamburger-menu"
@@ -50,14 +64,18 @@ const MobileMenu = ({ pages, dark }: { pages: string[]; dark: boolean }) => {
           </SmoothAnchor>
         ))}
         <Link
-          key={navbarStrings.blog}
-          title={navbarStrings.blog}
+          key={navbarStrings.journal}
+          title={navbarStrings.journal}
           href="https://blog.jameshurley.ie"
-          target="_blank"
           sx={styles.link}
         >
-          <MenuItem key={navbarStrings.blog}>{navbarStrings.blog}</MenuItem>
+          <MenuItem key={navbarStrings.journal} onClick={handleClose}>
+            {navbarStrings.journal}
+          </MenuItem>
         </Link>
+        <MenuItem disableRipple sx={styles.themeMenuItem}>
+          <ThemeToggle />
+        </MenuItem>
       </Menu>
     </Box>
   );

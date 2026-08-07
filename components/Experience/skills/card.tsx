@@ -8,11 +8,11 @@ import styles from "./styles";
 
 type SkillCardProps = {
   title: string;
-  content: string;
   icon: ReactNode;
+  skills: { title: string; content: string }[];
 };
 
-const SkillCard = ({ title, content, icon }: SkillCardProps) => {
+const SkillCard = ({ title, skills, icon }: SkillCardProps) => {
   return (
     <Card sx={styles.card} elevation={0}>
       <CardContent>
@@ -20,10 +20,26 @@ const SkillCard = ({ title, content, icon }: SkillCardProps) => {
         <Typography sx={styles.cardTitle} color="textPrimary" gutterBottom>
           {title}
         </Typography>
-        <Box
-          sx={styles.cardContent}
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+        <Box sx={styles.tags}>
+          {skills.map((skill) => (
+            <Box component="span" key={skill.title} sx={styles.tag}>
+              {skill.title}
+            </Box>
+          ))}
+        </Box>
+        <Box sx={styles.skillDetails}>
+          {skills.map((skill) => (
+            <Box key={skill.title} sx={styles.skillDetail}>
+              <Typography component="h4" sx={styles.skillTitle}>
+                {skill.title}
+              </Typography>
+              <Box
+                sx={styles.cardContent}
+                dangerouslySetInnerHTML={{ __html: skill.content }}
+              />
+            </Box>
+          ))}
+        </Box>
       </CardContent>
     </Card>
   );

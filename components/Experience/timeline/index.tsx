@@ -19,17 +19,17 @@ const Timeline = () => {
         // section behind them. Limestone cards with ink text give 14.83:1 and
         // read as deliberate against the dark background.
         contentStyle={{
-          background: theme.palette.limestone,
-          color: theme.palette.ink,
+          background: theme.vars!.palette.background.paper,
+          color: theme.vars!.palette.text.primary,
           boxShadow: "none",
         }}
         contentArrowStyle={{
-          borderRight: `7px solid ${theme.palette.limestone}`,
+          borderRight: `7px solid ${theme.vars!.palette.background.paper}`,
         }}
         date={date}
         // `color` is the employer's brand mark, so it stays as-is - it carries
         // information the palette shouldn't flatten.
-        iconStyle={{ background: color, color: theme.palette.chalk }}
+        iconStyle={{ background: color, color: theme.vars!.palette.chalk }}
         icon={type == "work" ? <Work /> : <School />}
       >
         <div>
@@ -45,11 +45,11 @@ const Timeline = () => {
   return (
     <div
       style={{
-        ["--route-line" as string]: theme.palette.seaGlass,
+        ["--route-line" as string]: theme.vars!.palette.seaGlass,
         width: "100%",
       }}
     >
-      <VerticalTimeline lineColor={theme.palette.seaGlass}>
+      <VerticalTimeline lineColor={theme.vars!.palette.seaGlass}>
         {timelineContent}
       </VerticalTimeline>
     </div>

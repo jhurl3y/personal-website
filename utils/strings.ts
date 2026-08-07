@@ -70,9 +70,9 @@ export const skillStrings = {
 
 export const contactStrings = {
   contact: "Contact",
-  intro: "Thank you for taking the time to visit my site.",
-  questions:
-    " If you have any questions please don't hesitate to reach out! <strong>or</strong> catch me for a pint in",
+  intro:
+    "Have a project, an idea, or just want to say hello? Email is the quickest way to reach me.",
+  questions: "You can also catch me for a pint in",
   galway: "Galway",
   or: "or",
   dublin: "Dublin",
@@ -83,6 +83,8 @@ export const contactStrings = {
   email: "Email",
   question: "Question?",
   send: "Submit",
+  emailMe: "Email me",
+  useForm: "Use the contact form",
   showDetails: "Show Contact Details",
   thanks: "Thanks! I will get back to you shortly.",
 };
@@ -104,4 +106,4 @@ export const metaStrings = {
   cookies: "I use cookies to enhance this site.",
 };
 
-export const navbarStrings = { blog: "blog" };
+export const navbarStrings = { journal: "journal ↗" };
