@@ -43,7 +43,14 @@ class SmoothAnchor extends Component<SmoothAnchorProps> {
 
     const offsetTop = anchor.getBoundingClientRect().top + window.scrollY - 40;
 
-    window.scroll({ top: offsetTop - offset(), behavior: "smooth" });
+    // window.scroll({behavior:"smooth"}) is unaffected by the CSS
+    // scroll-behavior override, so reduced motion is checked explicitly.
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const behavior: ScrollBehavior = reduced ? "auto" : "smooth";
+
+    window.scroll({ top: offsetTop - offset(), behavior });
 
     this.props.onClick?.(e);
 
@@ -53,7 +60,7 @@ class SmoothAnchor extends Component<SmoothAnchorProps> {
     // to run again. A hack; worth replacing with an IntersectionObserver.
     if (this.props.extraScroll) {
       setTimeout(() => {
-        window.scroll({ top: offsetTop, behavior: "smooth" });
+        window.scroll({ top: offsetTop, behavior });
       }, 200);
     }
   }

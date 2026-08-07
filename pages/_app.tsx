@@ -7,6 +7,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { AppCacheProvider } from "@mui/material-nextjs/v16-pagesRouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../src/theme";
+import { fontVariables } from "../src/fonts";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCode,
@@ -100,9 +101,11 @@ export default function MyApp(props: AppProps) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component {...pageProps} />
-        <SpeedInsights />
-        <Analytics />
+        <div className={fontVariables}>
+          <Component {...pageProps} />
+          <SpeedInsights />
+          <Analytics />
+        </div>
       </ThemeProvider>
     </AppCacheProvider>
   );

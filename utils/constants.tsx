@@ -31,12 +31,14 @@ const MOBILE =
 export const HERO_IMAGES = [
   {
     id: "first",
+    coords: "33.9628°S  18.4098°E",
     alt: "Standing on the edge of Table Mountain looking down over Table Bay and the city of Cape Town at dusk",
     location: "Table Mountain, Cape Town",
     desktopSrc: "/static/assets/images/first_image.webp",
   },
   {
     id: "one",
+    coords: "34.0833°S  18.3667°E",
     alt: "Sitting on a stone wall above the Atlantic on the Cape Peninsula coast road, with a mountain headland in the haze behind",
     location: "Cape Peninsula, Cape Town",
     desktopSrc: `${DESKTOP}one.jpg`,
@@ -44,6 +46,7 @@ export const HERO_IMAGES = [
   },
   {
     id: "two",
+    coords: "38.8899°N  77.0091°W",
     alt: "Standing on the Capitol terrace with the National Mall and the Washington Monument stretching away behind",
     location: "National Mall, Washington DC",
     desktopSrc: `${DESKTOP}two.jpg`,
@@ -51,6 +54,7 @@ export const HERO_IMAGES = [
   },
   {
     id: "three",
+    coords: "36.2065°N  86.6923°W",
     alt: "Outside the floodlit Grand Ole Opry House in Nashville at night",
     location: "Grand Ole Opry, Nashville",
     desktopSrc: `${DESKTOP}three.jpg`,
@@ -58,6 +62,7 @@ export const HERO_IMAGES = [
   },
   {
     id: "four",
+    coords: "34.1381°N 118.3534°W",
     alt: "In front of the waterfall beneath the Universal Studios Hollywood entrance sign",
     location: "Universal Studios, Los Angeles",
     desktopSrc: `${DESKTOP}four.jpg`,
@@ -65,6 +70,7 @@ export const HERO_IMAGES = [
   },
   {
     id: "five",
+    coords: "37.8199°N 122.4783°W",
     alt: "Leaning on the red railing of the Golden Gate Bridge with the San Francisco skyline across the bay",
     location: "Golden Gate Bridge, San Francisco",
     desktopSrc: `${DESKTOP}five.jpg`,
@@ -72,6 +78,7 @@ export const HERO_IMAGES = [
   },
   {
     id: "six",
+    coords: "34.1381°N 118.3534°W",
     alt: 'Beside the "Welcome to Springfield" sign in the Simpsons area of Universal Studios Hollywood',
     location: "Universal Studios, Los Angeles",
     desktopSrc: `${DESKTOP}six.jpg`,
@@ -79,6 +86,7 @@ export const HERO_IMAGES = [
   },
   {
     id: "seven",
+    coords: "13.1631°S  72.5450°W",
     alt: "Standing above the Machu Picchu ruins with cloud breaking over the mountains behind",
     location: "Machu Picchu, Peru",
     desktopSrc: `${DESKTOP}seven.jpg`,

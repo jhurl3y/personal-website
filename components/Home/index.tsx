@@ -126,8 +126,32 @@ const Home = () => {
         <Navbar pages={PAGES} />
         <Container sx={styles.home} maxWidth={false}>
           <LeftButton onClick={goToPrevSlide} />
-          <Container maxWidth="lg" fixed>
-            {" "}
+          <Container maxWidth="lg" fixed sx={styles.heroCopy}>
+            {/* The signature: the name set large, with the coordinates of
+                wherever the current photograph was taken sitting above it. The
+                eyebrow changes as you move through the carousel, so the hero
+                reads as a place you have actually been rather than a caption. */}
+            <Box sx={styles.eyebrow} aria-live="polite">
+              <Box
+                component="span"
+                sx={styles.eyebrowRule}
+                aria-hidden="true"
+              />
+              <Box component="span" sx={styles.coords}>
+                {slides[index]?.coords}
+              </Box>
+              <Box component="span" sx={styles.place}>
+                {slides[index]?.location}
+              </Box>
+            </Box>
+            <Box component="h1" sx={styles.name}>
+              James
+              <br />
+              Hurley
+            </Box>
+            <Box sx={styles.role}>
+              Fullstack &amp; machine learning engineer
+            </Box>
           </Container>
           <RightButton onClick={goToNextSlide} />
         </Container>

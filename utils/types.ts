@@ -13,6 +13,8 @@ export type HeroImage = {
   id: string;
   alt: string;
   location: string;
+  /** Display-formatted lat/long, e.g. "33.9628°S  18.4098°E". */
+  coords: string;
   desktopSrc: string;
   mobileSrc?: string;
 };

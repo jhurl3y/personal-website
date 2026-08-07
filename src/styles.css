@@ -3,9 +3,58 @@
   position: sticky;
 }
 
+/*
+ * The timeline's vertical rule is the route line - the same device as the
+ * hero's coordinate eyebrow, carried down the page. The library ships a thick
+ * light-grey bar; a hairline in seaGlass reads as a route rather than a
+ * container edge.
+ */
+.vertical-timeline::before {
+  background: var(--route-line, #7fa8a0) !important;
+  width: 1px !important;
+}
+
+.vertical-timeline-element-icon {
+  box-shadow:
+    0 0 0 3px #2b373b,
+    inset 0 1px 0 rgba(0, 0, 0, 0.08),
+    0 2px 0 4px rgba(0, 0, 0, 0.05) !important;
+}
+
 @media only screen and (max-width: 600px) {
   .vertical-timeline--animate * {
     animation: 0s !important;
     visibility: visible !important;
+  }
+}
+
+/*
+ * Reduced motion. Four separate sources of movement on this page, and all of
+ * them have to stop:
+ *   1. react-awesome-reveal section reveals
+ *   2. the hero load sequence
+ *   3. smooth anchor scrolling (also set on html in Layout)
+ *   4. the carousel's translateX transition
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* react-awesome-reveal starts elements hidden and animates them in; with
+     animations off they must not be left invisible. */
+  .vertical-timeline--animate *,
+  [class*="animate__"] {
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }

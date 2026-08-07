@@ -42,7 +42,13 @@ const Timeline = () => {
     );
   });
 
-  return <VerticalTimeline>{timelineContent}</VerticalTimeline>;
+  return (
+    <div style={{ ["--route-line" as string]: theme.palette.seaGlass }}>
+      <VerticalTimeline lineColor={theme.palette.seaGlass}>
+        {timelineContent}
+      </VerticalTimeline>
+    </div>
+  );
 };
 
 export default Timeline;

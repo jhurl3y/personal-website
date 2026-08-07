@@ -25,13 +25,38 @@ const ATLANTIC = {
   mist: "#4A585D",
 };
 
+const FALLBACK = 'system-ui, -apple-system, "Segoe UI", sans-serif';
+const BODY_STACK = `var(--font-body), ${FALLBACK}`;
+const DISPLAY_STACK = `var(--font-display), ${FALLBACK}`;
+
+const DISPLAY = {
+  fontFamily: DISPLAY_STACK,
+  fontWeight: 700,
+  letterSpacing: "-0.005em",
+};
+
 const theme = responsiveFontSizes(
   createTheme({
     spacing: (factor: number) =>
       [0, 2, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128][factor],
     typography: {
       fontSize: 16,
-      fontFamily: ['"Roboto"', "sans-serif"].join(","),
+      fontFamily: BODY_STACK,
+      // Display variants use Archivo at the expanded end of its wdth axis.
+      // `axes: ["wdth"]` only loads the axis; font-stretch is what applies it.
+      h1: DISPLAY,
+      h2: DISPLAY,
+      h3: DISPLAY,
+      h4: { ...DISPLAY, fontWeight: 600 },
+      // Coordinates, dates and the skills grid line up on tabular figures.
+      overline: {
+        fontFamily: BODY_STACK,
+        fontVariantNumeric: "tabular-nums",
+        letterSpacing: "0.12em",
+        fontSize: "0.8125rem",
+        fontWeight: 600,
+        lineHeight: 1.6,
+      },
     },
     palette: {
       ...ATLANTIC,
