@@ -1,23 +1,19 @@
-import { makeStyles } from "@mui/styles";
-
-export default makeStyles((theme) => ({
-  mobileNavigation: {
+// sx-callback style objects. Replaces the @mui/styles makeStyles module.
+// Each entry is `(theme) => ({...})`, which MUI's `sx` prop accepts directly,
+// so no hook call is needed at the call site.
+const styles = {
+  mobileNavigation: (theme) => ({
     display: "none",
     marginLeft: "auto",
-  },
-  menuItem: {
-    color: theme.colors.black,
+    [theme.breakpoints.down("sm")]: { display: "block" },
+  }),
+  menuItem: (theme) => ({
+    color: theme.palette.ink,
     textDecoration: "none",
-  },
-  link: {
-    textDecoration: "none",
-    color: theme.colors.black,
-  },
-  darkMenuIcon: { color: theme.colors.black },
-  lightMenuIcon: { color: theme.colors.white },
-  [theme.breakpoints.down("sm")]: {
-    mobileNavigation: {
-      display: "block",
-    },
-  },
-}));
+  }),
+  link: (theme) => ({ textDecoration: "none", color: theme.palette.ink }),
+  darkMenuIcon: (theme) => ({ color: theme.palette.ink }),
+  lightMenuIcon: (theme) => ({ color: theme.palette.chalk }),
+};
+
+export default styles;

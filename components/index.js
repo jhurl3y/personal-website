@@ -1,6 +1,5 @@
 import React, { forwardRef, useRef, useEffect, useState } from "react";
 import Layout from "./Layout";
-import { makeStyles } from "@mui/styles";
 import Home from "./Home";
 import About from "./About";
 import Experience from "./Experience";
@@ -11,12 +10,10 @@ import { PAGES } from "../utils/constants";
 import Typography from "@mui/material/Typography";
 import { metaStrings } from "../utils/strings";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100%",
-    backgroundColor: theme.colors.black,
-  },
-}));
+const rootSx = (theme) => ({
+  height: "100%",
+  backgroundColor: theme.palette.slate,
+});
 
 const Section = forwardRef(({ children, id, offset }, ref) => {
   let styles = offset
@@ -33,8 +30,9 @@ const Section = forwardRef(({ children, id, offset }, ref) => {
   );
 });
 
+Section.displayName = "Section";
+
 const Component = ({ spotify, formspree, maps }) => {
-  const classes = useStyles();
   const navRef = useRef(null);
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
@@ -42,19 +40,19 @@ const Component = ({ spotify, formspree, maps }) => {
   const contactRef = useRef(null);
   const [navHeight, setNavHeight] = useState(0);
 
+  // Bug 7.1: this previously read `navRef.clientHeight` off the ref object
+  // rather than the node, so it was always undefined and every Section offset
+  // was falsy - the sticky-nav scroll offset never applied. Also re-measures on
+  // resize, which it never did.
   useEffect(() => {
-    setNavHeight(navRef.clientHeight);
-
-    // disable radio button keydown event
-    window.addEventListener("keydown", () => null);
-
-    return () => {
-      window.removeEventListener("keydown", () => null);
-    };
+    const measure = () => setNavHeight(navRef.current?.clientHeight ?? 0);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
   return (
-    <Layout className={classes.root} title={metaStrings.title}>
+    <Layout sx={rootSx} title={metaStrings.title}>
       <Navbar
         dark={false}
         pages={PAGES}

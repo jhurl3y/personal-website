@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -8,7 +8,7 @@ import { Skeleton } from "@mui/material";
 import { Slide } from "react-awesome-reveal";
 import RightRail from "./rightRail";
 import { aboutStrings } from "../../utils/strings";
-import Styles from "./styles";
+import styles from "./styles";
 import { WIDGET_HEIGHT, fadeDuration } from "../../utils/constants";
 import { Spotify } from "react-spotify-embed";
 
@@ -22,14 +22,14 @@ const SkeletonLoader = () => {
         p: 2,
       }}
     >
-      <Box display="flex" alignItems="center" mb={2}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
         <Skeleton
           variant="rectangular"
           width={60}
           height={60}
           sx={{ borderRadius: 1 }}
         />
-        <Box ml={2} flex={1}>
+        <Box sx={{ ml: 2, flex: 1 }}>
           <Skeleton variant="text" width="60%" />
           <Skeleton variant="text" width="40%" />
         </Box>
@@ -38,14 +38,16 @@ const SkeletonLoader = () => {
       {[1, 2, 3, 4, 5].map((index) => (
         <Box
           key={index}
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={1}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 1,
+          }}
         >
-          <Box display="flex" alignItems="center">
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <Skeleton variant="text" width={20} />
-            <Box ml={2}>
+            <Box sx={{ ml: 2 }}>
               <Skeleton variant="text" width={200} />
               <Skeleton variant="text" width={150} />
             </Box>
@@ -57,30 +59,19 @@ const SkeletonLoader = () => {
   );
 };
 
-export default ({ spotify }) => {
-  const classes = Styles();
-
-  // disable radio button keydown event
-  useEffect(() => {
-    window.addEventListener("keydown", () => null);
-
-    return () => {
-      window.removeEventListener("keydown", () => null);
-    };
-  }, []);
-
+const About = ({ spotify }) => {
   return (
-    <Container className={classes.container} maxWidth={false}>
+    <Container sx={styles.container} maxWidth={false}>
       <Slide duration={fadeDuration} direction="right" triggerOnce>
-        <Typography variant="h2" align="center" className={classes.heading}>
+        <Typography variant="h2" align="center" sx={styles.heading}>
           {aboutStrings.about}
         </Typography>
       </Slide>
-      <Container className={classes.aboutContent}>
+      <Container sx={styles.aboutContent}>
         <Grid container>
-          <Grid item sm={12} md={6}>
+          <Grid size={{ sm: 12, md: 6 }}>
             <Slide duration={fadeDuration} direction="left" triggerOnce>
-              <Container maxWidth={false} className={classes.imageContainer}>
+              <Container maxWidth={false} sx={styles.imageContainer}>
                 <Image
                   src="/static/assets/images/about.webp"
                   width={499}
@@ -91,7 +82,7 @@ export default ({ spotify }) => {
               </Container>
             </Slide>
           </Grid>
-          <Grid item sm={12} md={6}>
+          <Grid size={{ sm: 12, md: 6 }}>
             <Slide duration={fadeDuration} direction="right" triggerOnce>
               <RightRail />
             </Slide>
@@ -99,13 +90,13 @@ export default ({ spotify }) => {
         </Grid>
       </Container>
       <Slide duration={fadeDuration} direction="left" triggerOnce>
-        <Typography variant="h2" align="center" className={classes.subHeading}>
+        <Typography variant="h2" align="center" sx={styles.subHeading}>
           {aboutStrings.music}
         </Typography>
       </Slide>
-      <Container className={classes.musicContent}>
+      <Container sx={styles.musicContent}>
         <Grid container spacing={6}>
-          <Grid item xs={12} sm={12} md={12} className={classes.musicItem}>
+          <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={styles.musicItem}>
             <Slide duration={fadeDuration} direction="right" triggerOnce>
               <Suspense fallback={<SkeletonLoader />}>
                 <Spotify
@@ -123,3 +114,5 @@ export default ({ spotify }) => {
     </Container>
   );
 };
+
+export default About;

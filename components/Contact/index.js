@@ -1,17 +1,17 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import { Slide } from "react-awesome-reveal";
-import Styles from "./styles";
+import styles from "./styles";
 import Map from "../Map";
 import { LOCATIONS } from "../../utils/constants";
 import Details from "./details";
 import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
 import Form from "./form";
 import { contactStrings } from "../../utils/strings";
-import { withStyles } from "@mui/styles";
 import { MAP_ZOOM, MAP_STYLES, fadeDuration } from "../../utils/constants";
 
 const MapSkeletonLoader = () => {
@@ -42,27 +42,16 @@ const MapSkeletonLoader = () => {
   );
 };
 
-const StyledButton = withStyles((theme) => ({
-  root: {
-    color: "#46bcec",
-    background: "transparent",
-    textTransform: "none",
-  },
-}))(Button);
+// The one withStyles HOC in the codebase, now a styled() declaration.
+const StyledButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.seaGlass,
+  background: "transparent",
+  textTransform: "none",
+}));
 
-export default ({ formspree, maps }) => {
-  const classes = Styles();
+const Contact = ({ formspree, maps }) => {
   const [location, setLocation] = useState(LOCATIONS[0]);
   const [showDetails, setShowDetails] = useState(false);
-
-  // disable radio button keydown event
-  useEffect(() => {
-    window.addEventListener("keydown", () => null);
-
-    return () => {
-      window.removeEventListener("keydown", () => null);
-    };
-  }, []);
 
   const handleGalway = () => {
     setLocation(LOCATIONS.find((location) => location.name === "galway"));
@@ -73,17 +62,17 @@ export default ({ formspree, maps }) => {
   };
 
   return (
-    <Container className={classes.container} maxWidth={false}>
+    <Container sx={styles.container} maxWidth={false}>
       <Slide duration={fadeDuration} direction="up" triggerOnce>
-        <Typography variant="h2" align="center" className={classes.heading}>
+        <Typography variant="h2" align="center" sx={styles.heading}>
           {contactStrings.contact}
         </Typography>
-        <Container className={classes.textSection} maxWidth="xs">
+        <Container sx={styles.textSection} maxWidth="xs">
           <p dangerouslySetInnerHTML={{ __html: contactStrings.intro }} />
           <p dangerouslySetInnerHTML={{ __html: contactStrings.questions }} />
           <StyledButton
             href="#contact-map"
-            className={classes.button}
+            sx={styles.button}
             onClick={handleGalway}
             title={contactStrings.galway}
           >
@@ -92,27 +81,27 @@ export default ({ formspree, maps }) => {
           {contactStrings.or}
           <StyledButton
             href="#contact-map"
-            className={classes.button}
+            sx={styles.button}
             onClick={handleSF}
             title={contactStrings.sf}
           >
             {contactStrings.sf}
           </StyledButton>
         </Container>
-        <Container className={classes.formContainer} maxWidth={false}>
+        <Container sx={styles.formContainer} maxWidth={false}>
           <Form formspree={formspree} />
         </Container>
         <Container maxWidth="xs">
-          <div className={classes.orDivider}>
-            <div className={classes.orBubble}>{contactStrings.or}</div>
-          </div>
+          <Box sx={styles.orDivider}>
+            <Box sx={styles.orBubble}>{contactStrings.or}</Box>
+          </Box>
         </Container>
-        <Container className={classes.detailsContainer} maxWidth={false}>
+        <Container sx={styles.detailsContainer} maxWidth={false}>
           {!showDetails && (
             <Button
               color="primary"
               disableRipple
-              className={classes.showButton}
+              sx={styles.showButton}
               onClick={() => setShowDetails(true)}
             >
               {contactStrings.showDetails}
@@ -127,10 +116,12 @@ export default ({ formspree, maps }) => {
           zoom={MAP_ZOOM}
           mapStyles={MAP_STYLES}
           title="contact-map"
-          mapClasses={classes.map}
+          mapSx={styles.map}
           apiKey={maps}
         />
       </Suspense>
     </Container>
   );
 };
+
+export default Contact;

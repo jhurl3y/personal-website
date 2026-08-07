@@ -1,28 +1,25 @@
+import Box from "@mui/material/Box";
 import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import Styles from "./styles";
+import styles from "./styles";
 
-export default ({ title, content, icon }) => {
-  const classes = Styles();
-
+const SkillCard = ({ title, content, icon }) => {
   return (
-    <Card className={classes.card} raised>
+    <Card sx={styles.card} raised>
       <CardContent>
         {icon}
-        <Typography
-          className={classes.cardTitle}
-          color="textPrimary"
-          gutterBottom
-        >
+        <Typography sx={styles.cardTitle} color="textPrimary" gutterBottom>
           {title}
         </Typography>
-        <div
-          className={classes.cardContent}
+        <Box
+          sx={styles.cardContent}
           dangerouslySetInnerHTML={{ __html: content }}
         />
       </CardContent>
     </Card>
   );
 };
+
+export default SkillCard;

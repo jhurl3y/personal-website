@@ -1,16 +1,16 @@
 import React from "react";
 import Document, { Head, Main, NextScript, Html } from "next/document";
-import { ServerStyleSheets } from "@mui/styles";
+import {
+  DocumentHeadTags,
+  documentGetInitialProps,
+} from "@mui/material-nextjs/v16-pagesRouter";
 
 class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-          />
+          <DocumentHeadTags {...this.props} />
         </Head>
         <body>
           <Main />
@@ -21,48 +21,10 @@ class MyDocument extends Document {
   }
 }
 
-MyDocument.getInitialProps = async (ctx) => {
-  // Resolution order
-  //
-  // On the server:
-  // 1. app.getInitialProps
-  // 2. page.getInitialProps
-  // 3. document.getInitialProps
-  // 4. app.render
-  // 5. page.render
-  // 6. document.render
-  //
-  // On the server with error:
-  // 1. document.getInitialProps
-  // 2. app.render
-  // 3. page.render
-  // 4. document.render
-  //
-  // On the client
-  // 1. app.getInitialProps
-  // 2. page.getInitialProps
-  // 3. app.render
-  // 4. page.render
-
-  // Render app and page and get the context of the page with collected side effects.
-  const sheets = new ServerStyleSheets();
-  const originalRenderPage = ctx.renderPage;
-
-  ctx.renderPage = () =>
-    originalRenderPage({
-      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
-    });
-
-  const initialProps = await Document.getInitialProps(ctx);
-  const css = sheets.toString();
-
-  return {
-    ...initialProps,
-    // Styles fragment is rendered after the app and page rendering finish.
-    styles: (
-      <style id="jss-server-side" dangerouslySetInnerHTML={{ __html: css }} />
-    ),
-  };
-};
+// Emotion SSR via MUI's documented Pages Router integration. This replaces the
+// legacy JSS ServerStyleSheets collection, which went with @mui/styles. No
+// custom cache is passed: the package's default is used on both sides, so the
+// server and browser cache keys cannot drift apart.
+MyDocument.getInitialProps = async (ctx) => await documentGetInitialProps(ctx);
 
 export default MyDocument;

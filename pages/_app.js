@@ -2,10 +2,11 @@ import React from "react";
 import Head from "next/head";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeProvider } from "@mui/styles";
+import { ThemeProvider } from "@mui/material/styles";
+import { AppCacheProvider } from "@mui/material-nextjs/v16-pagesRouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../src/theme";
-const { library } = require("@fortawesome/fontawesome-svg-core");
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCode,
   faHeartbeat,
@@ -20,21 +21,24 @@ import "react-vertical-timeline-component/style.min.css";
 import { metaStrings } from "../utils/strings";
 import "../src/styles.css";
 
-export default function MyApp({ Component, pageProps }) {
-  // add icons
-  library.add(
-    faCode,
-    faHeartbeat,
-    faTrain,
-    faUsers,
-    faEnvelope,
-    faPhone,
-    faArrowLeft,
-    faArrowRight
-  );
+// Bug 7.5: this ran inside the component body, so it re-registered every icon
+// on every render. The library is global and idempotent - module scope is where
+// it belongs.
+library.add(
+  faCode,
+  faHeartbeat,
+  faTrain,
+  faUsers,
+  faEnvelope,
+  faPhone,
+  faArrowLeft,
+  faArrowRight
+);
 
+export default function MyApp(props) {
+  const { Component, pageProps } = props;
   return (
-    <>
+    <AppCacheProvider {...props}>
       <Head>
         <title>{metaStrings.title}</title>
         <link
@@ -99,6 +103,6 @@ export default function MyApp({ Component, pageProps }) {
         <SpeedInsights />
         <Analytics />
       </ThemeProvider>
-    </>
+    </AppCacheProvider>
   );
 }

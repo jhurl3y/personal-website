@@ -1,22 +1,21 @@
+import Box from "@mui/material/Box";
 import { Slide } from "react-awesome-reveal";
 import Grid from "@mui/material/Grid";
 import Card from "./card";
-import Styles from "./styles";
+import styles from "./styles";
 import { SKILLS } from "../../../utils/constants";
 import { fadeDuration } from "../../../utils/constants";
 
-export default () => {
-  const classes = Styles();
-
+const Skills = () => {
   return (
-    <Grid container direction="row" className={classes.cards}>
+    <Grid container direction="row" sx={styles.cards}>
       {SKILLS.map(({ title, content, icon }, i) => {
         return (
-          <Grid item xs={12} sm={6} md={3} key={i}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={i}>
             <Slide duration={fadeDuration} direction="right" triggerOnce>
-              <div className={classes.cardContainer}>
+              <Box sx={styles.cardContainer}>
                 <Card title={title} content={content} icon={icon} />
-              </div>
+              </Box>
             </Slide>
           </Grid>
         );
@@ -24,3 +23,5 @@ export default () => {
     </Grid>
   );
 };
+
+export default Skills;

@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import React, { useState, useEffect } from "react";
 import LogoDark from "../../public/static/assets/icons/hurley-dark.svg";
 import LogoLight from "../../public/static/assets/icons/hurley-white.svg";
@@ -7,10 +8,10 @@ import Transition from "../Transition";
 import PrettyLink from "./prettyLink";
 import Link from "@mui/material/Link";
 import MobileMenu from "./mobileMenu";
-import Styles from "./styles";
+import styles from "./styles";
 import { navbarStrings } from "../../utils/strings";
 
-const Links = ({ selectedPage, pages, dark, classes }) => {
+const Links = ({ selectedPage, pages, dark }) => {
   const links = pages.map((page, currentIndex) => {
     const needsExtraScroll = () => {
       const selectedIsTop = pages.indexOf(selectedPage) === 0;
@@ -33,7 +34,7 @@ const Links = ({ selectedPage, pages, dark, classes }) => {
   });
 
   return (
-    <div className={classes.navigation}>
+    <Box sx={styles.navigation}>
       <>
         {links}
         <Link
@@ -41,19 +42,16 @@ const Links = ({ selectedPage, pages, dark, classes }) => {
           title={navbarStrings.blog}
           href="https://blog.jameshurley.ie"
           target="_blank"
-          className={`${classes.link} ${
-            dark ? classes.darkLink : classes.lightLink
-          }`}
+          sx={[styles.link, dark ? styles.darkLink : styles.lightLink]}
         >
           {navbarStrings.blog}
         </Link>
       </>
-    </div>
+    </Box>
   );
 };
 
-export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
-  const classes = Styles();
+const Navbar = ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(pages[0]);
   const [offsets, setOffsets] = useState([]);
@@ -109,25 +107,27 @@ export default ({ pages, dark = true, navRef = null, stickyRefs = [] }) => {
     <Transition in={!sticky || visible} sticky={sticky}>
       <Container
         maxWidth={false}
-        className={`${!dark ? classes.light : ""}`}
+        sx={!dark ? styles.light : undefined}
         ref={navRef}
       >
         <header>
-          <nav className={classes.container}>
-            <a className={classes.logo} href={`#${pages[0]}`} title={pages[0]}>
+          <Box component="nav" sx={styles.container}>
+            <Box
+              component="a"
+              sx={styles.logo}
+              href={`#${pages[0]}`}
+              title={pages[0]}
+            >
               {dark && <Image priority src={LogoLight} alt="logo" />}
               {!dark && <Image priority src={LogoDark} alt="logo" />}
-            </a>
-            <Links
-              selectedPage={page}
-              pages={pages}
-              dark={dark}
-              classes={classes}
-            />
+            </Box>
+            <Links selectedPage={page} pages={pages} dark={dark} />
             <MobileMenu pages={pages} dark={dark} />
-          </nav>
+          </Box>
         </header>
       </Container>
     </Transition>
   );
 };
+
+export default Navbar;

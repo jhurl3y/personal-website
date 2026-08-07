@@ -1,35 +1,45 @@
+import Box from "@mui/material/Box";
 import React from "react";
 import Image from "next/image";
 import { IMAGE_TRANSITION_DURATION } from "../../../utils/constants";
+import styles from "../styles";
 
-const ImageWrapper = React.forwardRef(({ image, classes }, ref) => {
+const ImageWrapper = React.forwardRef(({ image }, ref) => {
   return (
-    <div
-      className={classes.image}
+    <Box
+      sx={styles.image}
       ref={ref}
       style={{ position: "relative", width: "100%", height: "100%" }}
     >
+      {/* `layout`, `objectFit` and `objectPosition` are next/image props from
+          Next 12. Next 13 moved them into `fill` + `style`, and Next 16 ignores
+          the old ones entirely - which is why the hero rendered as a bare
+          background colour after the upgrade. */}
       <Image
         src={image}
-        layout="fill"
-        objectFit="cover"
-        objectPosition="50% 60%"
+        fill
+        sizes="100vw"
         alt="Background Image"
-        style={{ filter: "brightness(50%)" }}
+        style={{
+          objectFit: "cover",
+          objectPosition: "50% 60%",
+          filter: "brightness(50%)",
+        }}
       />
-    </div>
+    </Box>
   );
 });
 
-export default ({
-  classes,
+ImageWrapper.displayName = "ImageWrapper";
+
+const Slider = ({
   translateValue,
   shouldTransition,
-  refs,
+  setSlideRef,
   backgrounds,
 }) => (
-  <div
-    className={classes.slider}
+  <Box
+    sx={styles.slider}
     style={{
       display: "flex",
       transform: `translateX(${translateValue}px)`,
@@ -41,7 +51,9 @@ export default ({
     }}
   >
     {backgrounds.map((image, i) => (
-      <ImageWrapper key={i} image={image} classes={classes} ref={refs[i]} />
+      <ImageWrapper key={i} image={image} ref={setSlideRef(i)} />
     ))}
-  </div>
+  </Box>
 );
+
+export default Slider;

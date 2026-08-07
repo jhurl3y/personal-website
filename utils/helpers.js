@@ -1,6 +1,6 @@
 import { isBrowser } from "react-device-detect";
 import { fadeDuration } from "./constants";
-import shuffle from "lodash.shuffle";
+import { shuffle } from "./array";
 import {
   BACKGROUNDS,
   MOBILE_BACKGROUNDS,
@@ -9,8 +9,6 @@ import {
   MOBILE_IMAGE_PATH,
   SPOTIFY_PLAYLISTS,
   FORMSPREE_URL,
-  GARMIN_API_DEV,
-  GARMIN_API_PROD,
 } from "./constants";
 
 export const getFadeDuration = () => fadeDuration;
@@ -36,16 +34,22 @@ export const validEmailRegex = RegExp(
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
 );
 
+// Bug 7.6: this used to call `tokens.split(",")` unguarded, so an unset
+// FORMSPREE_TOKENS threw inside data fetching and 500'd the whole page.
+// Returns null instead, and the contact form renders disabled (bug 7.10).
 export const getFormspreeUrl = () => {
   const tokens = process.env.FORMSPREE_TOKENS;
-  const token = shuffle(tokens.split(","))[0];
+  if (!tokens) return null;
 
-  return `${FORMSPREE_URL}/${token}`;
+  const list = tokens.split(",").filter(Boolean);
+  if (list.length === 0) return null;
+
+  return `${FORMSPREE_URL}/${shuffle(list)[0]}`;
 };
 
-export const getGoogleMapsKey = () => {
-  return process.env.GOOGLE_MAPS_API_KEY;
-};
+// Bug 7.10: null rather than undefined, so the absent case is explicit and the
+// map renders a static fallback instead of mounting the Google loader.
+export const getGoogleMapsKey = () => process.env.GOOGLE_MAPS_API_KEY || null;
 
 export const getAge = (dateString) => {
   const today = new Date();
@@ -58,26 +62,4 @@ export const getAge = (dateString) => {
   }
 
   return age;
-};
-
-export const fetchGarmin = async (path, params = {}) => {
-  const url = new URL(
-    process.env.STAGE !== "prod"
-      ? `${GARMIN_API_DEV}/${path}`
-      : `${GARMIN_API_PROD}/${path}`
-  );
-  url.search = new URLSearchParams(params).toString();
-  const response = await fetch(url);
-  return await response.json();
-};
-
-export const filterObject = (data, allowList) => {
-  return Object.keys(data)
-    .filter((key) => allowList.includes(key))
-    .reduce((obj, key) => {
-      return {
-        ...obj,
-        [key]: data[key],
-      };
-    }, {});
 };

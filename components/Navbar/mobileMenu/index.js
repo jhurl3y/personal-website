@@ -1,15 +1,15 @@
+import Box from "@mui/material/Box";
 import { useState } from "react";
 import IconButton from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import SmoothAnchor from "../smoothAnchor";
-import Styles from "./styles";
+import styles from "./styles";
 import Link from "@mui/material/Link";
 import { navbarStrings } from "../../../utils/strings";
 
-export default ({ pages, dark }) => {
-  const classes = Styles();
+const MobileMenu = ({ pages, dark }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -21,16 +21,14 @@ export default ({ pages, dark }) => {
   };
 
   return (
-    <div className={classes.mobileNavigation}>
+    <Box sx={styles.mobileNavigation}>
       <IconButton
         aria-label="more"
         aria-controls="hamburger-menu"
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <MenuIcon
-          className={!dark ? classes.darkMenuIcon : classes.lightMenuIcon}
-        />
+        <MenuIcon sx={!dark ? styles.darkMenuIcon : styles.lightMenuIcon} />
       </IconButton>
       <Menu
         id="hamburger-menu"
@@ -44,7 +42,7 @@ export default ({ pages, dark }) => {
             key={i}
             href={`#${page}`}
             title={page}
-            className={classes.menuItem}
+            sx={styles.menuItem}
           >
             <MenuItem key={i} onClick={handleClose}>
               {page}
@@ -56,11 +54,13 @@ export default ({ pages, dark }) => {
           title={navbarStrings.blog}
           href="https://blog.jameshurley.ie"
           target="_blank"
-          className={classes.link}
+          sx={styles.link}
         >
           <MenuItem key={navbarStrings.blog}>{navbarStrings.blog}</MenuItem>
         </Link>
       </Menu>
-    </div>
+    </Box>
   );
 };
+
+export default MobileMenu;

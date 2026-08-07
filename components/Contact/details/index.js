@@ -1,31 +1,42 @@
+import Box from "@mui/material/Box";
 import React from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Styles from "./styles";
+import styles from "./styles";
 import { PHONE, EMAIL } from "../../../utils/constants";
 
-export default () => {
-  const classes = Styles();
-
+const ContactDetails = () => {
   return (
-    <Container maxWidth="md" align="center" className={classes.contactDetails}>
-      <div className={classes.emailPhoneContainer}>
+    <Container maxWidth="md" align="center" sx={styles.contactDetails}>
+      <Box sx={styles.emailPhoneContainer}>
         <FontAwesomeIcon icon="envelope" size="2x" className="highlight" />
-        <Typography className={classes.emailPhone}>
-          <a href={`mailto:${EMAIL}`} className={classes.mailto} title="email">
+        <Typography sx={styles.emailPhone}>
+          <Box
+            component="a"
+            href={`mailto:${EMAIL}`}
+            sx={styles.mailto}
+            title="email"
+          >
             {EMAIL}
-          </a>
+          </Box>
         </Typography>
-      </div>
-      <div className={classes.emailPhoneContainer}>
+      </Box>
+      <Box sx={styles.emailPhoneContainer}>
         <FontAwesomeIcon icon="phone" size="2x" className="highlight" />
-        <Typography className={classes.emailPhone}>
-          <a href={`tel:${PHONE}`} className={classes.tel} title="phone">
+        <Typography sx={styles.emailPhone}>
+          <Box
+            component="a"
+            href={`tel:${PHONE}`}
+            sx={styles.tel}
+            title="phone"
+          >
             {PHONE}
-          </a>
+          </Box>
         </Typography>
-      </div>
+      </Box>
     </Container>
   );
 };
+
+export default ContactDetails;

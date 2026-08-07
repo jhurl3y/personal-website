@@ -1,31 +1,20 @@
-import { makeStyles } from "@mui/styles";
-
-export default makeStyles((theme) => ({
-  contactDetails: {
+// sx-callback style objects. Replaces the @mui/styles makeStyles module.
+// Each entry is `(theme) => ({...})`, which MUI's `sx` prop accepts directly,
+// so no hook call is needed at the call site.
+const styles = {
+  contactDetails: (theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  },
-  emailPhoneContainer: {
+    [theme.breakpoints.down("sm")]: { flexDirection: "column" },
+  }),
+  emailPhoneContainer: (theme) => ({
     padding: theme.spacing(2, 8, 8, 8),
-  },
-  emailPhone: {
-    paddingTop: theme.spacing(4),
-  },
-  mailto: {
-    color: theme.colors.white,
-    textDecoration: "none",
-  },
-  tel: {
-    color: theme.colors.white,
-    textDecoration: "none",
-  },
-  [theme.breakpoints.down("xs")]: {
-    contactDetails: {
-      flexDirection: "column",
-    },
-    emailPhoneContainer: {
-      paddingBottom: theme.spacing(6),
-    },
-  },
-}));
+    [theme.breakpoints.down("sm")]: { paddingBottom: theme.spacing(6) },
+  }),
+  emailPhone: (theme) => ({ paddingTop: theme.spacing(4) }),
+  mailto: (theme) => ({ color: theme.palette.chalk, textDecoration: "none" }),
+  tel: (theme) => ({ color: theme.palette.chalk, textDecoration: "none" }),
+};
+
+export default styles;

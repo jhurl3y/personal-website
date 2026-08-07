@@ -1,20 +1,26 @@
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { COLORS } from "../../../utils/constants";
+import styles from "../styles";
 
-export default ({ i, highlight, onDotClick, classes }) => (
+const Dot = ({ i, highlight, onDotClick }) => (
   <Button
     onClick={() => onDotClick(i)}
-    className={classes.dotContainer}
+    sx={styles.dotContainer}
     key={i}
     title={`dot-${i}`}
   >
-    <span
-      className={classes.dot}
-      style={{
-        backgroundColor: `${highlight ? COLORS.white : COLORS.mediumGrey}`,
-      }}
+    <Box
+      component="span"
+      sx={[
+        styles.dot,
+        (theme) => ({
+          backgroundColor: highlight ? theme.palette.chalk : theme.palette.mist,
+        }),
+      ]}
     >
       {""}
-    </span>
+    </Box>
   </Button>
 );
+
+export default Dot;

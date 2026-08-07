@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Container from "@mui/material/Container";
@@ -12,8 +13,8 @@ import {
   FIRST_IMAGE_PATH,
 } from "../../utils/constants";
 import { getBackground, getBackgroundUrls } from "../../utils/helpers";
-import Styles from "./styles";
-import chunk from "lodash.chunk";
+import styles from "./styles";
+import { chunk } from "../../utils/array";
 
 const LeftButton = ({ onClick }) => {
   return (
@@ -31,26 +32,24 @@ const RightButton = ({ onClick }) => {
   );
 };
 
-export default () => {
-  const classes = Styles();
+const Home = () => {
   const backgroundUrls = getBackgroundUrls();
   const [index, setIndex] = useState(0);
   const [translateValue, setTranslateValue] = useState(0);
   const [shouldTransition, setSouldTransition] = useState(true);
   const [backgrounds, setBackgrounds] = useState([FIRST_IMAGE_PATH]);
 
-  const [refs] = useState(
-    new Array([FIRST_IMAGE_PATH, ...backgroundUrls].length).fill(
-      React.createRef()
-    )
-  );
-
-  const slideWidth = () => {
-    if (refs[index] && refs[index] != undefined) {
-      return refs[index].current.clientWidth;
-    }
-    return 0;
+  // Bug 7.13: this was `new Array(n).fill(React.createRef())`, which puts the
+  // SAME ref object in every slot - every slide shared one ref, so slideWidth()
+  // never measured the slide it thought it was measuring. Creating the refs
+  // during render also tripped react-hooks/refs. A single ref holding an array
+  // of nodes, populated by callback refs, fixes both.
+  const slideRefs = useRef([]);
+  const setSlideRef = (i) => (node) => {
+    slideRefs.current[i] = node;
   };
+
+  const slideWidth = () => slideRefs.current[index]?.clientWidth ?? 0;
 
   const goToPrevSlide = () => {
     if (index === 0) {
@@ -119,28 +118,33 @@ export default () => {
     }
   }, []);
 
+  // Bug 7.11: onKeyDown used to be bound to `window`, so pressing an arrow key
+  // while typing in the contact form advanced the hero carousel further up the
+  // page. It is now bound to the focusable carousel region below, so it only
+  // fires when the carousel itself has focus. Resize stays on window.
   useEffect(() => {
     window.addEventListener("resize", onResize);
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("keydown", onKeyDown);
-    };
+    return () => window.removeEventListener("resize", onResize);
   }, [index, translateValue]);
 
   return (
-    <div className={classes.outer}>
+    <Box
+      sx={styles.outer}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Travel photographs"
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+    >
       <Slider
-        classes={classes}
         translateValue={translateValue}
         shouldTransition={shouldTransition}
-        refs={refs}
+        setSlideRef={setSlideRef}
         backgrounds={backgrounds}
       />
-      <div className={classes.content}>
+      <Box sx={styles.content}>
         <Navbar pages={PAGES} />
-        <Container className={classes.home} maxWidth={false}>
+        <Container sx={styles.home} maxWidth={false}>
           <LeftButton onClick={goToPrevSlide} />
           <Container maxWidth="lg" fixed>
             {" "}
@@ -148,19 +152,20 @@ export default () => {
           <RightButton onClick={goToNextSlide} />
         </Container>
         {typeof window && (
-          <div className={classes.dots}>
+          <Box sx={styles.dots}>
             {backgrounds.map((_, i) => (
               <Dot
                 i={i}
                 highlight={i === index}
                 onDotClick={onDotClick}
-                classes={classes}
                 key={i}
               />
             ))}
-          </div>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
+
+export default Home;

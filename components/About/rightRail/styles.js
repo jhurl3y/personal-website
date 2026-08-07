@@ -1,21 +1,14 @@
-import { makeStyles } from "@mui/styles";
-
-export default makeStyles((theme) => ({
-  rightRail: {
-    padding: theme.spacing(6, 6, 6, 8),
-  },
-  rightRailContent: {
+// sx-callback style objects. Replaces the @mui/styles makeStyles module.
+// Each entry is `(theme) => ({...})`, which MUI's `sx` prop accepts directly,
+// so no hook call is needed at the call site.
+const styles = {
+  rightRail: (theme) => ({ padding: theme.spacing(6, 6, 6, 8) }),
+  rightRailContent: (theme) => ({
     paddingBottom: theme.spacing(6),
-  },
-  icons: {
-    padding: theme.spacing(6, 0),
-  },
-  skillText: {
-    paddingRight: theme.spacing(4),
-  },
-  [theme.breakpoints.down("xs")]: {
-    rightRailContent: {
-      textAlign: "center",
-    },
-  },
-}));
+    [theme.breakpoints.down("sm")]: { textAlign: "center" },
+  }),
+  icons: (theme) => ({ padding: theme.spacing(6, 0) }),
+  skillText: (theme) => ({ paddingRight: theme.spacing(4) }),
+};
+
+export default styles;
