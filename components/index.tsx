@@ -1,3 +1,5 @@
+"use client";
+
 import React, { forwardRef, useRef, useEffect, useState } from "react";
 import Layout from "./Layout";
 import Home from "./Home";
@@ -7,7 +9,6 @@ import Contact from "./Contact";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { PAGES } from "../utils/constants";
-import { metaStrings } from "../utils/strings";
 import type { Theme } from "@mui/material/styles";
 import type { ReactNode } from "react";
 import type { PageProps } from "../utils/types";
@@ -62,7 +63,7 @@ const Component = ({ formspree, maps }: PageProps) => {
   }, []);
 
   return (
-    <Layout sx={rootSx} title={metaStrings.title}>
+    <Layout sx={rootSx}>
       <Navbar
         dark={false}
         pages={PAGES}
