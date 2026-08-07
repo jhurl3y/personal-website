@@ -854,6 +854,30 @@ git commit -m "refactor: replace @mui/styles JSS layer with MUI 9 styled/sx"
 
 ---
 
+## Status: Tasks 1-6 shipped, 7-9 deferred
+
+Tasks 1 through 6 are complete and on `feat/modernize-2026`. **Tasks 7, 8 and 9
+are not in this PR** and remain to be done.
+
+Task 7 was started and reverted deliberately. The renames to `.ts`/`.tsx` were
+applied and `tsc` run, which produced **202 errors** — 133 of them implicit-`any`
+props needing hand-written interfaces across ~26 components. That is its own
+piece of work, and landing a half-migrated tree with a failing `typecheck` gate
+would have been worse than not starting. The renames were reversed; the tree is
+clean and every gate passes.
+
+The attempt paid for itself: it surfaced a **real visual regression** nothing
+else caught (see the Box/`sx` commit). MUI 9 removed system shorthand props from
+`Box`, so pre-existing `<Box display="flex" mb={2}>` markup rendered with none of
+those styles. The build passed, the runtime passed, and only `tsc` objected.
+That fix is included.
+
+**Recommended order for the follow-up PRs:** Task 9 (performance) first — it is
+the smallest and delivers the most user-visible gain — then Task 7, then Task 8.
+Task 8's redesign is much easier to review against a typed codebase.
+
+---
+
 ## Task 7: TypeScript migration
 
 **Files:**
