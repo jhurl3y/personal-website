@@ -1,4 +1,4 @@
-Brings a site last touched in June 2024 onto a current stack, fixes 14 bugs, and clears the dependency that was blocking everything else.
+Brings a site last touched in June 2024 onto a current stack, fixes 18 bugs, and clears the dependency that was blocking everything else.
 
 **This PR is Tasks 1–6 of a 10-task plan. Tasks 7–9 (TypeScript, redesign, performance) are not included** — see _What is not here_ below.
 
@@ -16,7 +16,7 @@ Brings a site last touched in June 2024 onto a current stack, fixes 14 bugs, and
 
 `"next": "latest"` was unpinned — any `npm install` could have jumped majors silently.
 
-**`@mui/styles` is gone.** It was legacy JSS, dead past MUI 6, and imported by 16 files. Emotion SSR now uses MUI's documented Pages Router integration on both sides; 88 style tags are inlined at SSR, so there's no flash of unstyled content. All 13 `makeStyles` modules and the one `withStyles` HOC became `sx`/`styled`, and all 14 legacy `<Grid item xs>` sites moved to `<Grid size={{...}}>` (MUI 9 removed the legacy Grid).
+**`@mui/styles` is gone.** It was legacy JSS, dead past MUI 6, and imported by 16 files. Emotion SSR now uses MUI's documented Pages Router integration on both sides; 104 style tags are inlined at SSR, so there's no flash of unstyled content. All 13 `makeStyles` modules and the one `withStyles` HOC became `sx`/`styled`, and all 14 legacy `<Grid item xs>` sites moved to `<Grid size={{...}}>` (MUI 9 removed the legacy Grid).
 
 **Dead code:** the entire Garmin integration (never called), the unimported `styles/` directory, ~1 MB of unreferenced images, dead CSS, and five unused dependencies. First Load JS 250 kB → 244 kB before the MUI major.
 
