@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
@@ -5,7 +6,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { contactStrings } from "../../../utils/strings";
 import { validEmailRegex } from "../../../utils/helpers";
-import Styles from "./styles";
+import styles from "./styles";
 
 const noErrors = {
   firstName: "",
@@ -21,7 +22,6 @@ const UNAVAILABLE =
   "The contact form is unavailable right now. You can reach me by email instead.";
 
 const ContactForm = ({ formspree }) => {
-  const classes = Styles();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -202,7 +202,7 @@ const ContactForm = ({ formspree }) => {
   };
 
   return (
-    <Container maxWidth="sm" align="center" className={classes.container}>
+    <Container maxWidth="sm" align="center" sx={styles.container}>
       <form
         noValidate
         autoComplete="off"
@@ -211,7 +211,7 @@ const ContactForm = ({ formspree }) => {
         method="POST"
       >
         <Grid container>
-          <Grid item xs={12} sm={12} md={6} className={classes.textField}>
+          <Grid size={{ xs: 12, sm: 12, md: 6 }} sx={styles.textField}>
             <TextField
               fullWidth
               label={contactStrings.firstName}
@@ -224,11 +224,11 @@ const ContactForm = ({ formspree }) => {
               onChange={(e) => handleFieldChange("firstName", e.target.value)}
               onBlur={() => handleBlur("firstName")}
               InputProps={{
-                className: classes.input,
+                className: styles.input,
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={12} md={6} className={classes.textField}>
+          <Grid size={{ xs: 12, sm: 12, md: 6 }} sx={styles.textField}>
             <TextField
               fullWidth
               label={contactStrings.lastName}
@@ -241,11 +241,11 @@ const ContactForm = ({ formspree }) => {
               onChange={(e) => handleFieldChange("lastName", e.target.value)}
               onBlur={() => handleBlur("lastName")}
               InputProps={{
-                className: classes.input,
+                className: styles.input,
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={12} md={12} className={classes.textField}>
+          <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={styles.textField}>
             <TextField
               fullWidth
               label={contactStrings.email}
@@ -258,11 +258,11 @@ const ContactForm = ({ formspree }) => {
               onChange={(e) => handleFieldChange("email", e.target.value)}
               onBlur={() => handleBlur("email")}
               InputProps={{
-                className: classes.input,
+                className: styles.input,
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={12} md={12} className={classes.textField}>
+          <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={styles.textField}>
             <TextField
               fullWidth
               multiline
@@ -277,12 +277,12 @@ const ContactForm = ({ formspree }) => {
               onChange={(e) => handleFieldChange("message", e.target.value)}
               onBlur={() => handleBlur("message")}
               InputProps={{
-                className: classes.input,
+                className: styles.input,
               }}
             />
           </Grid>
         </Grid>
-        <div className={classes.submit}>
+        <Box sx={styles.submit}>
           {/* Bug 7.12: there was no general error output at all, so any failure
               handleError did not recognise showed the user nothing. */}
           {submitError && (
@@ -297,14 +297,14 @@ const ContactForm = ({ formspree }) => {
             <Button
               variant="contained"
               color="primary"
-              className={classes.button}
+              sx={styles.button}
               type="submit"
               disabled={isDisabled || isSubmitting}
             >
               {contactStrings.send}
             </Button>
           )}
-        </div>
+        </Box>
       </form>
     </Container>
   );

@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Linkedin from "../../public/static/assets/icons/linkedin.svg";
@@ -5,15 +6,13 @@ import Github from "../../public/static/assets/icons/github.svg";
 import Twitter from "../../public/static/assets/icons/twitter.svg";
 import Image from "next/image";
 import { footerStrings } from "../../utils/strings";
-import Styles from "./styles";
+import styles from "./styles";
 
 const Footer = () => {
-  const classes = Styles();
-
   return (
     <div>
-      <Container className={classes.container} maxWidth={false}>
-        <div className={classes.social}>
+      <Container sx={styles.container} maxWidth={false}>
+        <Box sx={styles.social}>
           <a
             href="https://www.linkedin.com/in/jhurley1/"
             title="linkedin"
@@ -49,8 +48,8 @@ const Footer = () => {
               alt="twitter"
             />
           </a>
-        </div>
-        <div className={classes.disclaimer}>
+        </Box>
+        <Box sx={styles.disclaimer}>
           <Typography align="center">
             {footerStrings.copyright.replace(
               "{year}",
@@ -58,7 +57,7 @@ const Footer = () => {
             )}
           </Typography>
           <Typography align="center">{footerStrings.rights}</Typography>
-        </div>
+        </Box>
       </Container>
     </div>
   );

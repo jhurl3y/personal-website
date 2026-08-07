@@ -8,7 +8,7 @@ import { Skeleton } from "@mui/material";
 import { Slide } from "react-awesome-reveal";
 import RightRail from "./rightRail";
 import { aboutStrings } from "../../utils/strings";
-import Styles from "./styles";
+import styles from "./styles";
 import { WIDGET_HEIGHT, fadeDuration } from "../../utils/constants";
 import { Spotify } from "react-spotify-embed";
 
@@ -58,20 +58,18 @@ const SkeletonLoader = () => {
 };
 
 const About = ({ spotify }) => {
-  const classes = Styles();
-
   return (
-    <Container className={classes.container} maxWidth={false}>
+    <Container sx={styles.container} maxWidth={false}>
       <Slide duration={fadeDuration} direction="right" triggerOnce>
-        <Typography variant="h2" align="center" className={classes.heading}>
+        <Typography variant="h2" align="center" sx={styles.heading}>
           {aboutStrings.about}
         </Typography>
       </Slide>
-      <Container className={classes.aboutContent}>
+      <Container sx={styles.aboutContent}>
         <Grid container>
-          <Grid item sm={12} md={6}>
+          <Grid size={{ sm: 12, md: 6 }}>
             <Slide duration={fadeDuration} direction="left" triggerOnce>
-              <Container maxWidth={false} className={classes.imageContainer}>
+              <Container maxWidth={false} sx={styles.imageContainer}>
                 <Image
                   src="/static/assets/images/about.webp"
                   width={499}
@@ -82,7 +80,7 @@ const About = ({ spotify }) => {
               </Container>
             </Slide>
           </Grid>
-          <Grid item sm={12} md={6}>
+          <Grid size={{ sm: 12, md: 6 }}>
             <Slide duration={fadeDuration} direction="right" triggerOnce>
               <RightRail />
             </Slide>
@@ -90,13 +88,13 @@ const About = ({ spotify }) => {
         </Grid>
       </Container>
       <Slide duration={fadeDuration} direction="left" triggerOnce>
-        <Typography variant="h2" align="center" className={classes.subHeading}>
+        <Typography variant="h2" align="center" sx={styles.subHeading}>
           {aboutStrings.music}
         </Typography>
       </Slide>
-      <Container className={classes.musicContent}>
+      <Container sx={styles.musicContent}>
         <Grid container spacing={6}>
-          <Grid item xs={12} sm={12} md={12} className={classes.musicItem}>
+          <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={styles.musicItem}>
             <Slide duration={fadeDuration} direction="right" triggerOnce>
               <Suspense fallback={<SkeletonLoader />}>
                 <Spotify

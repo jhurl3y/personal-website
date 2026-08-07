@@ -1,11 +1,13 @@
+import Box from "@mui/material/Box";
 import React from "react";
 import Image from "next/image";
 import { IMAGE_TRANSITION_DURATION } from "../../../utils/constants";
+import styles from "../styles";
 
-const ImageWrapper = React.forwardRef(({ image, classes }, ref) => {
+const ImageWrapper = React.forwardRef(({ image }, ref) => {
   return (
-    <div
-      className={classes.image}
+    <Box
+      sx={styles.image}
       ref={ref}
       style={{ position: "relative", width: "100%", height: "100%" }}
     >
@@ -17,21 +19,20 @@ const ImageWrapper = React.forwardRef(({ image, classes }, ref) => {
         alt="Background Image"
         style={{ filter: "brightness(50%)" }}
       />
-    </div>
+    </Box>
   );
 });
 
 ImageWrapper.displayName = "ImageWrapper";
 
 const Slider = ({
-  classes,
   translateValue,
   shouldTransition,
   setSlideRef,
   backgrounds,
 }) => (
-  <div
-    className={classes.slider}
+  <Box
+    sx={styles.slider}
     style={{
       display: "flex",
       transform: `translateX(${translateValue}px)`,
@@ -43,14 +44,9 @@ const Slider = ({
     }}
   >
     {backgrounds.map((image, i) => (
-      <ImageWrapper
-        key={i}
-        image={image}
-        classes={classes}
-        ref={setSlideRef(i)}
-      />
+      <ImageWrapper key={i} image={image} ref={setSlideRef(i)} />
     ))}
-  </div>
+  </Box>
 );
 
 export default Slider;

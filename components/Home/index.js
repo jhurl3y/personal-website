@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import React, { useState, useEffect, useRef } from "react";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +13,7 @@ import {
   FIRST_IMAGE_PATH,
 } from "../../utils/constants";
 import { getBackground, getBackgroundUrls } from "../../utils/helpers";
-import Styles from "./styles";
+import styles from "./styles";
 import { chunk } from "../../utils/array";
 
 const LeftButton = ({ onClick }) => {
@@ -32,7 +33,6 @@ const RightButton = ({ onClick }) => {
 };
 
 const Home = () => {
-  const classes = Styles();
   const backgroundUrls = getBackgroundUrls();
   const [index, setIndex] = useState(0);
   const [translateValue, setTranslateValue] = useState(0);
@@ -128,8 +128,8 @@ const Home = () => {
   }, [index, translateValue]);
 
   return (
-    <div
-      className={classes.outer}
+    <Box
+      sx={styles.outer}
       role="region"
       aria-roledescription="carousel"
       aria-label="Travel photographs"
@@ -137,15 +137,14 @@ const Home = () => {
       onKeyDown={onKeyDown}
     >
       <Slider
-        classes={classes}
         translateValue={translateValue}
         shouldTransition={shouldTransition}
         setSlideRef={setSlideRef}
         backgrounds={backgrounds}
       />
-      <div className={classes.content}>
+      <Box sx={styles.content}>
         <Navbar pages={PAGES} />
-        <Container className={classes.home} maxWidth={false}>
+        <Container sx={styles.home} maxWidth={false}>
           <LeftButton onClick={goToPrevSlide} />
           <Container maxWidth="lg" fixed>
             {" "}
@@ -153,20 +152,19 @@ const Home = () => {
           <RightButton onClick={goToNextSlide} />
         </Container>
         {typeof window && (
-          <div className={classes.dots}>
+          <Box sx={styles.dots}>
             {backgrounds.map((_, i) => (
               <Dot
                 i={i}
                 highlight={i === index}
                 onDotClick={onDotClick}
-                classes={classes}
                 key={i}
               />
             ))}
-          </div>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

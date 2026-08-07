@@ -1,28 +1,25 @@
-import { makeStyles } from "@mui/styles";
-
-export default makeStyles((theme) => ({
-  container: {
+// sx-callback style objects. Replaces the @mui/styles makeStyles module.
+// Each entry is `(theme) => ({...})`, which MUI's `sx` prop accepts directly,
+// so no hook call is needed at the call site.
+const styles = {
+  container: (theme) => ({
     height: "100%",
-    color: theme.colors.white,
+    color: theme.palette.chalk,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: theme.colors.darkBlue,
+    backgroundColor: theme.palette.slate,
     flexDirection: "column",
-  },
-  heading: {
-    padding: theme.spacing(9, 0, 8, 0),
-  },
-  skills: {
-    paddingBottom: theme.spacing(9),
-  },
-  cv: {
+  }),
+  heading: (theme) => ({ padding: theme.spacing(9, 0, 8, 0) }),
+  skills: (theme) => ({ paddingBottom: theme.spacing(9) }),
+  cv: (theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    color: theme.colors.black,
-    "& > span": {
-      marginLeft: theme.spacing(3),
-    },
-  },
-}));
+    color: theme.palette.ink,
+    "& > span": { marginLeft: theme.spacing(3) },
+  }),
+};
+
+export default styles;
