@@ -41,7 +41,9 @@ const ImageWrapper = React.forwardRef<HTMLDivElement, ImageWrapperProps>(
             objectFit: "cover",
             objectPosition: "50% 60%",
             filter:
-              colorScheme === "dark" ? "brightness(48%)" : "brightness(98%)",
+              colorScheme === "dark"
+                ? "brightness(46%) saturate(82%)"
+                : "brightness(76%) saturate(100%)",
           }}
         />
       </Box>

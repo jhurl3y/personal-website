@@ -71,6 +71,8 @@ const styles = {
     top: "0",
     display: "flex",
     flexDirection: "column",
+    background:
+      "linear-gradient(180deg, rgba(10, 16, 18, 0.34) 0%, transparent 34%, transparent 58%, rgba(10, 16, 18, 0.45) 100%)",
   }),
   // The hero copy sits left of centre so the name never lands on the horizon
   // line in the photographs, which is roughly centred in most of them.
@@ -90,19 +92,15 @@ const styles = {
     [theme.breakpoints.down("md")]: {
       paddingBottom: theme.spacing(9),
     },
-    color: theme.vars!.palette.text.primary,
-    backgroundColor:
-      "color-mix(in srgb, var(--james-hurley-palette-background-paper) 84%, transparent)",
-    backdropFilter: "blur(8px)",
-    padding: theme.spacing(6),
-    borderLeft: `4px solid ${theme.vars!.palette.signal}`,
+    color: theme.palette.chalk,
+    textShadow: "0 1px 24px rgba(0,0,0,0.55)",
   }),
   eyebrow: (theme: Theme) => ({
     ...OVERLINE,
     display: "flex",
     alignItems: "center",
     gap: theme.spacing(4),
-    color: theme.vars!.palette.deepSea,
+    color: theme.palette.seaGlass,
     marginBottom: theme.spacing(5),
     flexWrap: "wrap",
   }),
@@ -111,14 +109,15 @@ const styles = {
     display: "inline-block",
     width: theme.spacing(8),
     height: "1px",
-    backgroundColor: theme.vars!.palette.deepSea,
+    backgroundColor: theme.palette.seaGlass,
   }),
   coords: () => ({
     fontVariantNumeric: "tabular-nums",
     whiteSpace: "pre",
   }),
   place: (theme: Theme) => ({
-    color: theme.vars!.palette.text.secondary,
+    color: theme.palette.chalk,
+    opacity: 0.85,
   }),
   name: (theme: Theme) => ({
     ...DISPLAY,
@@ -128,18 +127,18 @@ const styles = {
     // would push "Hurley" wider than the viewport once the arrows take their
     // share of it.
     fontSize: "clamp(2.75rem, 11vw, 9rem)",
-    color: theme.vars!.palette.text.primary,
+    color: theme.palette.chalk,
   }),
   role: (theme: Theme) => ({
     ...OVERLINE,
     marginTop: theme.spacing(5),
-    color: theme.vars!.palette.text.primary,
+    color: theme.palette.chalk,
     letterSpacing: "0.16em",
   }),
   home: (theme: Theme) => ({
     flex: 1,
     minHeight: 0,
-    color: theme.vars!.palette.text.primary,
+    color: theme.palette.chalk,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

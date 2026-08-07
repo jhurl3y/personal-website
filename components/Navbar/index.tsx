@@ -84,7 +84,7 @@ const Navbar = ({
   const [offsets, setOffsets] = useState<number[]>([]);
   const sticky = stickyRefs.length > 0;
   const { colorScheme } = useColorScheme();
-  const usesLightLogo = colorScheme === "dark";
+  const usesLightLogo = surface === "overlay" || colorScheme === "dark";
 
   const getNewOffsets = () => {
     const newOffsets = new Array(stickyRefs.length).fill(0);

@@ -26,8 +26,8 @@ const styles = {
     fontSize: "1.375rem",
     textDecoration: "none",
   }),
-  overlayLink: (theme: Theme) => ({ color: theme.vars!.palette.text.primary }),
-  solidLink: (theme: Theme) => ({ color: theme.vars!.palette.text.primary }),
+  overlayLink: (theme: Theme) => ({ color: theme.palette.chalk }),
+  solidLink: (theme: Theme) => ({ color: theme.palette.text.primary }),
   themeToggle: (theme: Theme) => ({
     display: "block",
     marginRight: theme.spacing(5),
